@@ -40,14 +40,14 @@ public class ResourcesManager
 	
 	public void loadResources()
 	{		
-		manager.load("backgrounds.pack", TextureAtlas.class);
-		manager.load("menu.pack", TextureAtlas.class);		
+		manager.load("atlas.pack", TextureAtlas.class);
+		manager.load("alien.pack", TextureAtlas.class);
 	}
 	
 	public void loadSkin()
 	{
 		manager.finishLoading();
-		skin = new Skin(Gdx.files.internal("skin.json"), manager.get("menu.pack", TextureAtlas.class));
+		skin = new Skin(Gdx.files.internal("skin.json"), manager.get("atlas.pack", TextureAtlas.class));
 	}
 	
 	public AtlasRegion getAtlasRegion(String regionName)

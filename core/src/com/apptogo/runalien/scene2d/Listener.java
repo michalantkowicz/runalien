@@ -14,6 +14,7 @@ public class Listener {
 			public void clicked(InputEvent event, float x, float y)
 			{
 				game.setScreen(screen);
+				System.out.println("GO");
 			}
 		};
 		

@@ -2,6 +2,8 @@ package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.scene2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
 public class GameScreen extends BasicScreen {
 
@@ -14,8 +16,7 @@ public class GameScreen extends BasicScreen {
 
 	@Override
 	void prepare() {
-		// TODO Auto-generated method stub
-		
+		stage.addActor(Animation.get(0.03f, "run", PlayMode.LOOP).position(-0, -0));
 	}
 
 	@Override

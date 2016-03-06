@@ -23,7 +23,7 @@ public abstract class BasicScreen implements Screen{
 	protected FillViewport viewport;
 	protected OrthographicCamera camera;
 	
-	protected String[] backgroundTextureNames;
+	protected String[] backgroundTextureNames = new String[]{};
 		
 	protected Array<Table> tables = new Array<Table>(new Table[]{new Table(), new Table(), new Table()});
 	
@@ -74,7 +74,7 @@ public abstract class BasicScreen implements Screen{
 			table.setSize(Main.SCREEN_WIDTH - 100f, Main.SCREEN_HEIGHT - 100f);
 			table.setPosition(-table.getWidth()/2f + i*Main.SCREEN_WIDTH, -table.getHeight()/2f);
 			
-			table.debug();
+			//table.debug();
 			
 			stage.addActor(table);
 		}

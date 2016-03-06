@@ -1,0 +1,37 @@
+{
+	com.badlogic.gdx.graphics.g2d.BitmapFont: 
+	{ 
+		small: { file: font_small.fnt },
+		medium: { file: font_medium.fnt },
+		big: { file: font_big.fnt }
+	},
+
+	com.badlogic.gdx.graphics.Color: 
+	{
+		white: { a: 1, b: 1, g: 1, r: 1 },
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: 
+	{
+	    default: { font: medium, fontColor: white },
+	    small: { font: small, fontColor: white },
+	    medium: { font: medium, fontColor: white },
+	    big: { font: big, fontColor: white },
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: 
+	{
+		default: { down: buttonDown, up: buttonUp },
+		play: { down: playButton, up: playButton },
+		rank: { down: rankButton, up: rankButton },
+		achievement: { down: achievement, up: achievement },
+		gplus: { down: gplus, up: gplus },
+		sound: { down: sound, up: sound },
+		vibration: { down: vibration, up: vibration },
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: 
+	{
+		default: { down: buttonDown, up: buttonUp, font: big, fontColor: white },
+	},
+}
