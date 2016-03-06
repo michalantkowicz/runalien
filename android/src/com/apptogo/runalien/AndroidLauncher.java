@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.apptogo.runalien.Main;
+import com.apptogo.runalien.main.Main;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

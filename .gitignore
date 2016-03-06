@@ -61,3 +61,12 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Custom directories
+.gradle/
+.settings/
+build/
+
+.classpath
+local.properties
+.project
