@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Scaling;
 
 public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
+	
+	private TextureRegion region;
+	
 	public static Image get(String regionName){
 		return new Image(ResourcesManager.getInstance().getAtlasRegion(regionName));
 	}
@@ -21,7 +24,7 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
 	
 	public Image(Texture region) {
 		super(region);
-		
+		this.region = new TextureRegion(region);
 		this.setScaling(Scaling.none);
 	}
 	
@@ -67,5 +70,9 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
 	{
 		setVisible(visible);
 		return this;
+	}
+
+	public TextureRegion getRegion() {
+		return region;
 	}
 }

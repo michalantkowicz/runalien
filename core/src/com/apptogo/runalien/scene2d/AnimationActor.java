@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
@@ -11,10 +12,10 @@ public class AnimationActor extends Actor{
 
 	com.badlogic.gdx.graphics.g2d.Animation animation;
 	
-	float frameWidth, frameHeight;
+	private float frameWidth, frameHeight;
 	float scaleBy = 1, stateTime = 0;
-	TextureRegion currentFrame;
-	
+	private TextureRegion currentFrame;
+	private Vector2 customOffset = new Vector2();
 	boolean doAnimate = true;
 	
 	public AnimationActor(float frameDuration, Array<? extends TextureRegion> keyFrames)
@@ -51,8 +52,8 @@ public class AnimationActor extends Actor{
 	{
 		batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, this.getColor().a * parentAlpha);
 		batch.draw(currentFrame, 
-				   getX() + ((AtlasRegion)currentFrame).offsetX, 
-				   getY() + ((AtlasRegion)currentFrame).offsetY, 
+				   getX() + ((AtlasRegion)currentFrame).offsetX * scaleBy + customOffset.x, 
+				   getY() + ((AtlasRegion)currentFrame).offsetY * scaleBy + customOffset.y, 
 				   getOriginX(), 
 				   getOriginY(), 
 				   getWidth(),
@@ -60,5 +61,23 @@ public class AnimationActor extends Actor{
 				   getScaleX(), 
 				   getScaleY(), 
 				   getRotation());
+	}
+
+	/**
+	 * @return in box2d units
+	 */
+	public Vector2 getCustomOffset() {
+		return customOffset;
+	}
+
+	/**
+	 * @param in box2d units
+	 */
+	public void setCustomOffset(Vector2 customOffset) {
+		this.customOffset = customOffset;
+	}
+
+	public TextureRegion getCurrentFrame() {
+		return currentFrame;
 	}
 }

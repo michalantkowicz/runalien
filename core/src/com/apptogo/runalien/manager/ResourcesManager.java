@@ -35,6 +35,7 @@ public class ResourcesManager
 		manager = new AssetManager();
 		
 		manager.load("logo.png", Texture.class);
+		manager.load("ground.png", Texture.class);
 		manager.finishLoading();	
 	}
 	

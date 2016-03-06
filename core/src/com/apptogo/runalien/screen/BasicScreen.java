@@ -32,7 +32,7 @@ public abstract class BasicScreen implements Screen{
 	
 	
 	abstract void prepare();
-	abstract void step();
+	abstract void step(float delta);
 	
 	public BasicScreen(Main game)
 	{
@@ -89,7 +89,7 @@ public abstract class BasicScreen implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		step();
+		step(delta);
 		
 		//HANDLING CAMERA MOVEMENT
 		if(movement.isRun())

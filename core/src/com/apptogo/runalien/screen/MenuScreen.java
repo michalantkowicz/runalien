@@ -38,7 +38,7 @@ public class MenuScreen extends BasicScreen {
 	}
 
 	@Override
-	void step() {
+	void step(float delta) {
 		// TODO Auto-generated method stub
 		
 	}
