@@ -7,18 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class Listener {
 
-	public static ClickListener click(final Main game, final Screen screen)
-	{
-		ClickListener listener = new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				game.setScreen(screen);
-				System.out.println("GO");
-			}
-		};
-		
-		return listener;
-	}
-	
+    public static ClickListener click(final Main game, final Screen screen)
+    {
+        ClickListener listener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen(screen);
+                System.out.println("GO");
+            }
+        };
+
+        return listener;
+    }
+
 }
