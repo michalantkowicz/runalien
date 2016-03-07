@@ -2,11 +2,10 @@ package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.main.Main;
-import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -30,19 +29,21 @@ public class GameScreen extends BasicScreen {
     void prepare() {
 
         GameActor player = new GameActor("player");
-        player.setAnimations(Animation.getAnimations(0.9f, -0.23f, "run", "jump"));
+        player.setAnimations(Animation.getAnimations(-2.3f, -3.4f, "run", "jump"));
         player.setCurrentAnimation("jump");
-        player.createBoxBody(BodyType.DynamicBody, new Vector2(0.3f, 0.8f));
-        player.getBody().setTransform(new Vector2(15, 2), 0);
+        player.createBoxBody(BodyType.DynamicBody, new Vector2(0.3f, 0.95f));
+        player.getBody().setTransform(new Vector2(10, 9), 0);
         player.modifyCustomOffsets(-0.4f, 0.2f);
         gameworldStage.addActor(player);
+        
+        player.addPlugin(new Running());
 
         GameActor ground = new GameActor("ground");
-        player.setAnimations(Animation.getAnimations(0, 0, "ground"));
-        player.setCurrentAnimation("ground");
-        ground.createBoxBody(BodyType.StaticBody, new Vector2(5f, 0.3f));
-        ground.getBody().setTransform(new Vector2(5, 2), 0);
-        ground.modifyCustomOffsets(-0.4f, 0.2f);
+        ground.setAnimations(Animation.getAnimations(0, 0, "ground"));
+        ground.setCurrentAnimation("ground");
+        ground.createBoxBody(BodyType.StaticBody, new Vector2(UnitConverter.toBox2dUnits(249), UnitConverter.toBox2dUnits(96)));
+        ground.getBody().setTransform(new Vector2(10, 5), 0);
+        //ground.modifyCustomOffsets(-0.4f, 0.2f);
         gameworldStage.addActor(ground);
     }
 

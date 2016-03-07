@@ -20,10 +20,10 @@ public class Main extends Game {
     @Override
     public void create() {
         ResourcesManager.create();
-        // ResourcesManager.getInstance().loadResources();
-        // /ResourcesManager.getInstance().manager.finishLoading();
-        // ResourcesManager.getInstance().loadSkin();
-        // this.setScreen(new MenuScreen(this));
+//         ResourcesManager.getInstance().loadResources();
+//         ResourcesManager.getInstance().manager.finishLoading();
+//         ResourcesManager.getInstance().loadSkin();
+//         this.setScreen(new GameScreen(this));
         this.setScreen(new SplashScreen(this));
     }
 

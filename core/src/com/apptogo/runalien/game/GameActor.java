@@ -1,8 +1,10 @@
 package com.apptogo.runalien.game;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
+import com.apptogo.runalien.plugin.AbstractPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.tools.UnitConverter;
@@ -28,6 +30,8 @@ public class GameActor extends Actor {
         setName(name);
         setDebug(true);
     }
+    
+    LinkedList<AbstractPlugin> plugins = new LinkedList<AbstractPlugin>();
 
     @Override
     public void act(float delta) {
@@ -38,6 +42,9 @@ public class GameActor extends Actor {
 
         currentAnimation.position(getX(), getY());
         currentAnimation.act(delta);
+        
+        for(AbstractPlugin plugin : plugins)
+        	plugin.run();
     }
 
     @Override
@@ -46,6 +53,12 @@ public class GameActor extends Actor {
         currentAnimation.draw(batch, parentAlpha);
     }
 
+    public void addPlugin(AbstractPlugin plugin)
+    {
+    	plugin.setActor(this);
+    	plugins.add(plugin);
+    }
+    
     public void createBoxBody(BodyType bodyType, Vector2 size) {
         customOffsetX = -size.x;
         customOffsetY = -size.y;

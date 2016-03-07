@@ -35,6 +35,7 @@ public class Animation extends AnimationActor {
         for (String animationName : animationNames) {
             animations.put(animationName, get(animationName).stop().customOffset(customOffsetX, customOffsetY));
         }
+        
         return animations;
     }
 

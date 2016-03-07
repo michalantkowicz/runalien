@@ -5,7 +5,7 @@ filter: Linear,Linear
 repeat: none
 achievement
   rotate: false
-  xy: 1797, 1
+  xy: 1792, 423
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
@@ -19,14 +19,14 @@ background_menu
   index: -1
 buttonDown
   rotate: false
-  xy: 1283, 515
+  xy: 1283, 619
   size: 400, 135
   orig: 400, 135
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 1283, 652
+  xy: 1283, 756
   size: 400, 135
   orig: 400, 135
   offset: 0, 0
@@ -34,55 +34,62 @@ buttonUp
 font_big
   rotate: false
   xy: 1283, 1
-  size: 512, 512
+  size: 507, 422
   orig: 512, 512
-  offset: 0, 0
+  offset: 0, 87
   index: -1
 font_medium
   rotate: false
-  xy: 1685, 515
-  size: 256, 512
+  xy: 1792, 1
+  size: 255, 420
   orig: 256, 512
-  offset: 0, 0
+  offset: 0, 89
   index: -1
 font_small
   rotate: false
-  xy: 1283, 789
-  size: 256, 256
+  xy: 1783, 515
+  size: 256, 193
   orig: 256, 256
-  offset: 0, 0
+  offset: 0, 60
   index: -1
 gplus
   rotate: false
-  xy: 1889, 1
+  xy: 1884, 423
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
+ground0
+  rotate: false
+  xy: 1283, 425
+  size: 498, 192
+  orig: 498, 192
+  offset: 0, 0
+  index: -1
 playButton
   rotate: false
-  xy: 1797, 93
+  xy: 1685, 619
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 rankButton
   rotate: false
-  xy: 1889, 93
+  xy: 1777, 710
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 sound
   rotate: false
-  xy: 1981, 53
+  xy: 1685, 711
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 vibration
   rotate: false
-  xy: 1981, 1
+  xy: 1976, 423
   size: 59, 50
   orig: 59, 50
   offset: 0, 0

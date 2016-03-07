@@ -52,8 +52,8 @@ public class AnimationActor extends Actor {
     {
         batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, this.getColor().a * parentAlpha);
         batch.draw(currentFrame,
-                getX() + ((AtlasRegion) currentFrame).offsetX * scaleBy - ((AtlasRegion) currentFrame).originalWidth / 2 * scaleBy + customOffsetX,
-                getY() + ((AtlasRegion) currentFrame).offsetY * scaleBy - ((AtlasRegion) currentFrame).originalHeight / 2 * scaleBy + customOffsetY,
+                getX() + ((AtlasRegion) currentFrame).offsetX * scaleBy + customOffsetX,
+                getY() + ((AtlasRegion) currentFrame).offsetY * scaleBy + customOffsetY,
                 getOriginX(),
                 getOriginY(),
                 getWidth(),
