@@ -22,16 +22,18 @@
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: 
 	{
 		default: { down: buttonDown, up: buttonUp },
-		play: { down: playButton, up: playButton },
-		rank: { down: rankButton, up: rankButton },
-		achievement: { down: achievement, up: achievement },
-		gplus: { down: gplus, up: gplus },
-		sound: { down: sound, up: sound },
-		vibration: { down: vibration, up: vibration },
+		achievement: { down: achievementDown, up: achievementUp },
+		gplus: { down: gplusDown, up: gplusUp },
+		sound: { down: soundDown, up: soundUp },
+		soundOff: { down: soundDownOff, up: soundUpOff },
+		vibration: { down: vibrationDown, up: vibrationUp },
+		vibrationOff: { down: vibrationDownOff, up: vibrationUpOff },
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: 
 	{
 		default: { down: buttonDown, up: buttonUp, font: big, fontColor: white },
+		play: { down: playButtonDown, up: playButtonUp, font: big, fontColor: white },
+		rank: { down: rankButtonDown, up: rankButtonUp, font: big, fontColor: white },
 	},
 }

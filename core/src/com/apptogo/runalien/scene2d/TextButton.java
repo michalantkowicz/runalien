@@ -15,6 +15,7 @@ public class TextButton extends com.badlogic.gdx.scenes.scene2d.ui.TextButton {
 
     public TextButton(String label, Skin skin, String buttonName) {
         super(label, skin, buttonName);
+        this.getLabelCell().padLeft(90).padBottom(14);
     }
 
     public TextButton(String label, Skin skin) {
