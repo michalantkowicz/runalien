@@ -6,9 +6,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 public abstract class AbstractPlugin {
 	protected GameActor actor;
 	protected Body body;
-		
+	
 	abstract public void run();
-
+	
+	public void postSetActor() {	
+	}
+	
 	public GameActor getActor() {
 		return actor;
 	}
@@ -16,5 +19,7 @@ public abstract class AbstractPlugin {
 	public void setActor(GameActor actor) {
 		this.actor = actor;
 		this.body = actor.getBody();
+		
+		postSetActor();
 	}
 }

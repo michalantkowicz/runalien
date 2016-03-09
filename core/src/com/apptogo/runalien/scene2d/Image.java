@@ -3,6 +3,7 @@ package com.apptogo.runalien.scene2d;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Scaling;
 
 public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
@@ -70,6 +71,12 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
     {
         setVisible(visible);
         return this;
+    }
+    
+    public Image scale(float scale)
+    {
+    	setSize(getWidth()*scale, getHeight()*scale);
+    	return this;
     }
 
     public TextureRegion getRegion() {

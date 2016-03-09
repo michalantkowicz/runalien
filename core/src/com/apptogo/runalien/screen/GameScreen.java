@@ -2,8 +2,11 @@ package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.plugin.CameraFollowing;
+import com.apptogo.runalien.plugin.GroundGenerating;
 import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.scene2d.Animation;
+import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -32,19 +35,15 @@ public class GameScreen extends BasicScreen {
         player.setAnimations(Animation.getAnimations(-2.3f, -3.4f, "run", "jump"));
         player.setCurrentAnimation("jump");
         player.createBoxBody(BodyType.DynamicBody, new Vector2(0.3f, 0.95f));
-        player.getBody().setTransform(new Vector2(10, 9), 0);
+        player.getBody().setTransform(new Vector2(0, 1), 0);
         player.modifyCustomOffsets(-0.4f, 0.2f);
         gameworldStage.addActor(player);
         
         player.addPlugin(new Running());
-
-        GameActor ground = new GameActor("ground");
-        ground.setAnimations(Animation.getAnimations(0, 0, "ground"));
-        ground.setCurrentAnimation("ground");
-        ground.createBoxBody(BodyType.StaticBody, new Vector2(UnitConverter.toBox2dUnits(249), UnitConverter.toBox2dUnits(96)));
-        ground.getBody().setTransform(new Vector2(10, 5), 0);
-        //ground.modifyCustomOffsets(-0.4f, 0.2f);
-        gameworldStage.addActor(ground);
+        player.addPlugin(new CameraFollowing());
+        player.addPlugin(new GroundGenerating());
+        
+        gameworldStage.addActor(Image.get("ground0").position(0, 0).scale(1/UnitConverter.PPM));
     }
 
     @Override
