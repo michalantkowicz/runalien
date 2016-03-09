@@ -34,7 +34,7 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
     }
 
     public Image size(float width, float height)
-    {System.out.println(width + " " + height);
+    {
         this.setSize(width, height);
 
         return this;

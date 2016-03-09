@@ -48,9 +48,8 @@ public class GroundRepeating extends AbstractPlugin {
 		groundBody.setTransform(body.getPosition().x, GameScreen.getGroundLevel(), groundBody.getAngle());
 		
 		for(int i = 0; i < ground.length; i++)
-			if(actor.getX() - ground[i].getX() > (ground.length-1)*ground[i].getWidth()){
+			if(actor.getX() - ground[i].getX() > (ground.length-1)*ground[i].getWidth())
 				ground[i].position(ground[i].getX() + (ground.length)*ground[i].getWidth(), ground[i].getY());
-				System.out.println("POSZLO");}
 	}
 
 }
