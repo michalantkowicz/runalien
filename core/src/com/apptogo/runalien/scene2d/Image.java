@@ -20,13 +20,11 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
 
     public Image(TextureRegion region) {
         super(region);
-        this.setScaling(Scaling.none);
     }
 
     public Image(Texture region) {
         super(region);
         this.region = new TextureRegion(region);
-        this.setScaling(Scaling.none);
     }
 
     public Image position(float x, float y)
@@ -36,8 +34,7 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
     }
 
     public Image size(float width, float height)
-    {
-        this.setScaling(Scaling.stretch);
+    {System.out.println(width + " " + height);
         this.setSize(width, height);
 
         return this;
