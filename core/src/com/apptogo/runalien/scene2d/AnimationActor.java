@@ -1,79 +1,125 @@
 package com.apptogo.runalien.scene2d;
 
+import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
 public class AnimationActor extends Actor {
 
-    com.badlogic.gdx.graphics.g2d.Animation animation;
+	protected com.badlogic.gdx.graphics.g2d.Animation animation;
 
-    private float frameWidth, frameHeight;
-    private TextureRegion currentFrame;
-    private float customOffsetX, customOffsetY;
+	private float frameWidth, frameHeight;
+	public TextureRegion currentFrame;
+	protected float scaleBy = 1, stateTime = 0;
+	protected boolean doAnimate = true;
 
-    protected float scaleBy = 1, stateTime = 0;
-    protected boolean doAnimate = true;
+	// values to calculate delta offset to prevent animation jittering caused by trimming
+	private Vector2 previousOffset = new Vector2();
+	private Vector2 currentOffset = new Vector2();
+	private Vector2 deltaOffset = new Vector2();
 
-    public AnimationActor(float frameDuration, Array<? extends TextureRegion> keyFrames)
-    {
-        this(frameDuration, keyFrames, PlayMode.NORMAL);
-    }
+	public AnimationActor(float frameDuration, Array<? extends TextureRegion> keyFrames) {
+		this(frameDuration, keyFrames, PlayMode.NORMAL);
+	}
 
-    public AnimationActor(float frameDuration, Array<? extends TextureRegion> keyFrames, PlayMode playMode)
-    {
-        animation = new com.badlogic.gdx.graphics.g2d.Animation(frameDuration, keyFrames, playMode);
-    }
+	public AnimationActor(float frameDuration, Array<? extends TextureRegion> keyFrames, PlayMode playMode) {
+		animation = new com.badlogic.gdx.graphics.g2d.Animation(frameDuration, keyFrames, playMode);
+	}
 
-    public void scaleFramesBy(float scale)
-    {
-        scaleBy = scale;
-    }
+	public void scaleFramesBy(float scale) {
+		scaleBy = scale;
+	}
 
-    @Override
-    public void act(float delta) {
-        super.act(delta);
+	@Override
+	public void act(float delta) {
+		super.act(delta);
 
-        if (doAnimate)
-            stateTime += delta;
+		if (doAnimate)
+			stateTime += delta;
 
-        currentFrame = animation.getKeyFrame(stateTime);
-        frameWidth = currentFrame.getRegionWidth();
-        frameHeight = currentFrame.getRegionHeight();
+		currentFrame = animation.getKeyFrame(stateTime);
+		frameWidth = currentFrame.getRegionWidth();
+		frameHeight = currentFrame.getRegionHeight();
 
-        setSize(frameWidth * scaleBy, frameHeight * scaleBy);
-    }
+		setSize(frameWidth * scaleBy, frameHeight * scaleBy);
+	}
 
-    @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
-        batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, this.getColor().a * parentAlpha);
-        batch.draw(currentFrame,
-                getX() + ((AtlasRegion) currentFrame).offsetX * scaleBy + customOffsetX,
-                getY() + ((AtlasRegion) currentFrame).offsetY * scaleBy + customOffsetY,
-                getOriginX(),
-                getOriginY(),
-                getWidth(),
-                getHeight(),
-                getScaleX(),
-                getScaleY(),
-                getRotation()); 
-       
-    }
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		calculateOffsets(true);
 
-    public TextureRegion getCurrentFrame() {
-        return currentFrame;
-    }
-    
-    public void setCurrentFrame(TextureRegion currentFrame) {
-        this.currentFrame = currentFrame;
-    }
+		batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, this.getColor().a * parentAlpha);
+		batch.draw(currentFrame, getX() + deltaOffset.x, getY() + deltaOffset.y, getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
 
-    public void setCustomOffset(float customOffsetX, float customOffsetY) {
-        this.customOffsetX = customOffsetX;
-        this.customOffsetY = customOffsetY;
-    }
+		calculateOffsets(false);
+	}
+
+	/**
+	 * calculates deltaOffset to prevent jittering caused by trimming. It takes
+	 * current and previous offset and then position is set based on calculated
+	 * value.
+	 * 
+	 * @param beforeDraw updates current or previous offset based on flag
+	 */
+	private void calculateOffsets(boolean beforeDraw) {
+		//check if we have current frame already
+		if (currentFrame != null) {
+			
+			//we call that method twice. Before and after draw. This flag is identifier where we are.
+			if (beforeDraw) {
+				currentOffset.x = UnitConverter.toBox2dUnits(((AtlasRegion) currentFrame).offsetX);
+				currentOffset.y = UnitConverter.toBox2dUnits(((AtlasRegion) currentFrame).offsetY);
+			} else {
+				previousOffset.x = UnitConverter.toBox2dUnits(((AtlasRegion) currentFrame).offsetX);
+				previousOffset.y = UnitConverter.toBox2dUnits(((AtlasRegion) currentFrame).offsetY);
+			}
+			
+			//if offset are equal we don't have to modify deltaOffset
+			if (!currentOffset.equals(previousOffset)) {
+				if (previousOffset.x == 0) {
+					//we enter here in first iteration when previousOffset is 0. 
+					//deltaOffset is set by gameActor (average of offsets of 1st frame from every animation).
+					//thanks that operation we don't start from deltaOffset 0. It's different for every animation
+					//thanks that every animation will start from the same place.
+					deltaOffset.x = -(deltaOffset.x - currentOffset.x);
+				} else {
+					//in every other case we just calculate delta by subtracting.
+					deltaOffset.x += currentOffset.x - previousOffset.x;
+				}
+				
+				//the same as in x axis
+				if (previousOffset.y == 0) {
+					deltaOffset.y = -(deltaOffset.y - currentOffset.y);
+				} else {
+					deltaOffset.y += currentOffset.y - previousOffset.y;
+				}
+
+			}
+		}
+	}
+
+	public TextureRegion getCurrentFrame() {
+		return currentFrame;
+	}
+
+	public void setCurrentFrame(TextureRegion currentFrame) {
+		this.currentFrame = currentFrame;
+	}
+
+	public Vector2 getDeltaOffset() {
+		return deltaOffset;
+	}
+
+	public void setDeltaOffset(Vector2 deltaOffset) {
+		this.deltaOffset = deltaOffset;
+	}
+
+	public com.badlogic.gdx.graphics.g2d.Animation getGdxAnimation() {
+		return animation;
+	}
 }

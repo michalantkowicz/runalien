@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Animation extends AnimationActor {
 
-    private static final float DEFAULT_FRAME_DURAITON = 0.3f;
+    private static final float DEFAULT_FRAME_DURAITON = 0.06f;
 
     public static Animation get(float frameDuration, String pattern)
     {
@@ -30,10 +30,10 @@ public class Animation extends AnimationActor {
 
     /** @param animationNames
      * @return Map of animations with name as key based on animationNames */
-    public static Map<String, Animation> getAnimations(float customOffsetX, float customOffsetY, String... animationNames) {
+    public static Map<String, Animation> getAnimations(String... animationNames) {
         Map<String, Animation> animations = new HashMap<String, Animation>();
         for (String animationName : animationNames) {
-            animations.put(animationName, get(animationName).stop().customOffset(customOffsetX, customOffsetY));
+            animations.put(animationName, get(animationName).stop());
         }
         
         return animations;
@@ -100,11 +100,6 @@ public class Animation extends AnimationActor {
     public Animation start()
     {
         doAnimate = true;
-        return this;
-    }
-    public Animation customOffset(float x, float y)
-    {
-        this.setCustomOffset(x, y);
         return this;
     }
 }

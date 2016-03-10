@@ -6,9 +6,7 @@ import com.apptogo.runalien.plugin.CameraFollowing;
 import com.apptogo.runalien.plugin.GroundRepeating;
 import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.scene2d.Animation;
-import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.tools.UnitConverter;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -29,16 +27,16 @@ public class GameScreen extends BasicScreen {
         world = new World(new Vector2(0, -5), true);
         createGameWorldStage();
     }
-FPSLogger logger = new FPSLogger();
+
     @Override
     void prepare() {
 
         GameActor player = new GameActor("player");
-        player.setAnimations(Animation.getAnimations(-2.3f, -3.4f, "run", "jump"));
-        player.setCurrentAnimation("jump");
+        player.setAnimations(Animation.getAnimations("blink", "breathe", "diebottom", "dietop", "jump", "land", "run", "slide", "standup", "startrunning"));
+        player.setCurrentAnimation("run");
         player.createBoxBody(BodyType.DynamicBody, new Vector2(0.3f, 0.95f));
         player.getBody().setTransform(new Vector2(0, GameScreen.getGroundLevel() + 1), 0);
-        player.modifyCustomOffsets(-0.4f, 0.2f);
+        player.modifyCustomOffsets(-0.4f, 0f);
         gameworldStage.addActor(player);
         
         player.addPlugin(new Running());

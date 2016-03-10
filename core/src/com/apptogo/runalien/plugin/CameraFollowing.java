@@ -14,7 +14,7 @@ public class CameraFollowing extends AbstractPlugin {
 	
 	@Override
 	public void run() { 
-		camera.position.set(actor.getX(), actor.getY() - GameScreen.getGroundLevel(), camera.position.z);
+		camera.position.set(actor.getBody().getPosition().x, actor.getBody().getPosition().y - GameScreen.getGroundLevel(), camera.position.z);
 	}
 
 }
