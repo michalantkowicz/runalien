@@ -70,5 +70,5 @@ build/
 .classpath
 local.properties
 .project
-android/bin/classes/.gitignore
-android/gen/.gitignore
+android/bin/
+android/gen/
