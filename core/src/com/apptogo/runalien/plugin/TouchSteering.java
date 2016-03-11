@@ -51,7 +51,7 @@ public class TouchSteering extends AbstractPlugin {
 	
 	@Override
 	public void run() {
-		if(GameScreen.contactsSnapshot.containsKey(0) && GameScreen.contactsSnapshot.get(0) == 1)
+		if(GameScreen.contactsSnapshot.containsKey("player") && GameScreen.contactsSnapshot.get("player").equals("ground"))
 			land();
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A))

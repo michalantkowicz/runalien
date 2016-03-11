@@ -4,28 +4,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import com.apptogo.runalien.physics.UserData;
-import com.apptogo.runalien.plugin.AbstractPlugin;
+import com.apptogo.runalien.procedures.AbstractProcedure;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 
-public class GameActor extends AbstractActor {
-
-	private Body body;
+public class ImmaterialGameActor extends AbstractActor {
 	private Map<String, Animation> animations = new HashMap<String, Animation>();
 	private Animation currentAnimation;
 	private float customOffsetX, customOffsetY;
 
 	
-	public GameActor(String name) {
+	public ImmaterialGameActor(String name) {
 		super(name);
 	}
 
-	LinkedList<AbstractPlugin> plugins = new LinkedList<AbstractPlugin>();
+	LinkedList<AbstractProcedure> procedures = new LinkedList<AbstractProcedure>();
 
 	
 	@Override
@@ -36,14 +32,13 @@ public class GameActor extends AbstractActor {
 		//we add animation deltaOffset and few lines below we subtracting it. Thanks that actor and graphic is always in the same position.
 		//more information about deltaOffset in AnimationActor
 		
-		setPosition(body.getPosition().x + customOffsetX + currentAnimation.getDeltaOffset().x, body.getPosition().y + customOffsetY + currentAnimation.getDeltaOffset().y);
 		setSize(currentAnimation.getWidth(), currentAnimation.getHeight());
 
 		currentAnimation.position(getX() - currentAnimation.getDeltaOffset().x, getY() - currentAnimation.getDeltaOffset().y);
 		currentAnimation.act(delta);
 
-		for (AbstractPlugin plugin : plugins)
-			plugin.run();
+		for (AbstractProcedure procedure : procedures)
+			procedure.run();
 	}
 
 	@Override
@@ -52,25 +47,14 @@ public class GameActor extends AbstractActor {
 		currentAnimation.draw(batch, parentAlpha);
 	}
 
-	public void addPlugin(AbstractPlugin plugin) {
-		plugin.setActor(this);
-		plugins.add(plugin);
+	public void addProcedure(AbstractProcedure procedure) {
+		procedure.setActor(this);
+		procedures.add(procedure);
 	}
 
 	public void modifyCustomOffsets(float deltaX, float deltaY) {
 		customOffsetX += deltaX;
 		customOffsetY += deltaY;
-	}
-
-	public Body getBody() {
-		return body;
-	}
-
-	public void setBody(Body body) {
-		this.body = body;
-		
-		customOffsetX = -((UserData)body.getUserData()).width/2f;
-		customOffsetY = -((UserData)body.getUserData()).height/2f;
 	}
 
 	public Map<String, Animation> getAnimations() {

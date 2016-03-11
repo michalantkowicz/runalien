@@ -29,7 +29,7 @@ public class GameScreen extends BasicScreen {
     private static Stage gameworldStage;
     private final static float GROUND_LEVEL = -3.2f;
     
-    public static Map<Integer, Integer> contactsSnapshot = new HashMap<Integer, Integer>();
+    public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
     
 	ContactListener contactListener = new ContactListener();
 
@@ -48,15 +48,17 @@ public class GameScreen extends BasicScreen {
         player.setAnimations(Animation.getAnimations("blink", "breathe", "diebottom", "dietop", "jump", "land", "run", "slide", "standup", "startrunning"));
         player.setCurrentAnimation("run");
         
-        player.setBody(BodyBuilder.get(world).name("player").type(BodyType.DynamicBody).box(0.6f,  1.9f).position(0, getGroundLevel()).friction(0).create());
+        player.setBody(BodyBuilder.get(world).name("player").type(BodyType.DynamicBody).box(0.6f,  1.9f).position(0, getGroundLevel() + 1).friction(0).create());
         
         player.modifyCustomOffsets(-0.4f, 0f);
         gameworldStage.addActor(player);
         
         player.addPlugin(new Running());
         player.addPlugin(new CameraFollowing());
-        player.addPlugin(new GroundRepeating());
+        //player.addPlugin(new GroundRepeating());
         player.addPlugin(new TouchSteering());
+        
+        BodyBuilder.get(world).name("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.5f).create();
     }
 
     @Override
