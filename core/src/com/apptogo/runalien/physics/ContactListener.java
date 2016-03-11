@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener
 {
-	Map<Integer, Integer> contacts = new HashMap<Integer, Integer>();
+	public Map<Integer, Integer> contacts = new HashMap<Integer, Integer>();
 	
 	@Override
 	public void beginContact(Contact contact)
@@ -27,14 +27,6 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 			contacts.put(ida, idb);
 			contacts.put(idb, ida);
 		}
-	}
-	
-	public Map<Integer, Integer> flush()
-	{
-		Map<Integer, Integer> temp = new HashMap<Integer, Integer>(contacts);
-		contacts.clear();
-		
-		return temp;
 	}
 
 	@Override

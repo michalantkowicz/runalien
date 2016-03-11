@@ -12,7 +12,6 @@ import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.plugin.TouchSteering;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -43,7 +42,7 @@ public class GameScreen extends BasicScreen {
 
         GameActor player = new GameActor("player");
         player.setAnimations(Animation.getAnimations("blink", "breathe", "diebottom", "dietop", "jump", "land", "run", "slide", "standup", "startrunning"));
-        player.setCurrentAnimation("slide");
+        player.setCurrentAnimation("run");
         player.createBoxBody(BodyType.DynamicBody, new Vector2(0.3f, 0.95f));
         player.getBody().setTransform(new Vector2(0, GameScreen.getGroundLevel() + 1), 0);
         player.modifyCustomOffsets(-0.4f, 0f);
@@ -57,9 +56,10 @@ public class GameScreen extends BasicScreen {
 
     @Override
     void step(float delta) {
-        world.step(delta, 3, 3);
+    	contactListener.contacts.clear();
+    	world.step(delta, 3, 3);
 
-        contactsSnapshot = contactListener.flush();
+        contactsSnapshot = contactListener.contacts;
         
         gameworldStage.act();
         gameworldStage.draw();
