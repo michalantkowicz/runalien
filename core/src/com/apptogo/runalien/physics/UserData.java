@@ -13,9 +13,6 @@ public class UserData {
 	public UserData()
 	{
 		id = nextId++;
-		
-		if(nextId >= Main.MAX_BODIES_COUNT)
-			throw new RuntimeException("You cannot create more than " + String.valueOf(Main.MAX_BODIES_COUNT) + " objects!");
 	}
 	
 	public UserData(String key)

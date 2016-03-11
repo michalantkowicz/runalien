@@ -66,26 +66,6 @@ public class GameActor extends Actor {
 		plugins.add(plugin);
 	}
 
-	public void createBoxBody(BodyType bodyType, Vector2 size) {
-		customOffsetX = -size.x;
-		customOffsetY = -size.y;
-
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = bodyType;
-
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(size.x, size.y);
-
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = shape;
-		fixtureDef.friction = 0f;
-
-		body = GameScreen.getWorld().createBody(bodyDef);
-		body.createFixture(fixtureDef).setUserData(new UserData("player"));
-
-		body.setUserData(getName());
-	}
-
 	public void modifyCustomOffsets(float deltaX, float deltaY) {
 		customOffsetX += deltaX;
 		customOffsetY += deltaY;
@@ -97,6 +77,9 @@ public class GameActor extends Actor {
 
 	public void setBody(Body body) {
 		this.body = body;
+		
+		customOffsetX = -((UserData)body.getUserData()).width/2f;
+		customOffsetY = -((UserData)body.getUserData()).height/2f;
 	}
 
 	public Map<String, Animation> getAnimations() {

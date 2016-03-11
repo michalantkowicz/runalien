@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowing;
 import com.apptogo.runalien.plugin.GroundRepeating;
@@ -20,6 +21,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
+
+//implement SINGLETON pattern!
 public class GameScreen extends BasicScreen {
     private static Box2DDebugRenderer debugRenderer;
     private static World world;
@@ -27,7 +30,8 @@ public class GameScreen extends BasicScreen {
     private final static float GROUND_LEVEL = -3.2f;
     
     public static Map<Integer, Integer> contactsSnapshot = new HashMap<Integer, Integer>();
-    ContactListener contactListener = new ContactListener();
+    
+	ContactListener contactListener = new ContactListener();
 
     public GameScreen(Main game) {
         super(game);
@@ -43,8 +47,9 @@ public class GameScreen extends BasicScreen {
         GameActor player = new GameActor("player");
         player.setAnimations(Animation.getAnimations("blink", "breathe", "diebottom", "dietop", "jump", "land", "run", "slide", "standup", "startrunning"));
         player.setCurrentAnimation("run");
-        player.createBoxBody(BodyType.DynamicBody, new Vector2(0.3f, 0.95f));
-        player.getBody().setTransform(new Vector2(0, GameScreen.getGroundLevel() + 1), 0);
+        
+        player.setBody(BodyBuilder.get(world).name("player").type(BodyType.DynamicBody).box(0.6f,  1.9f).position(0, getGroundLevel()).friction(0).create());
+        
         player.modifyCustomOffsets(-0.4f, 0f);
         gameworldStage.addActor(player);
         
@@ -93,5 +98,4 @@ public class GameScreen extends BasicScreen {
 	public static float getGroundLevel() {
 		return GROUND_LEVEL;
 	}
-
 }
