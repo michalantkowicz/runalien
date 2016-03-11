@@ -1,5 +1,6 @@
 package com.apptogo.runalien.plugin;
 
+import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.tools.UnitConverter;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Array;
 
 public class GroundRepeating extends AbstractPlugin {
 
@@ -33,7 +33,7 @@ public class GroundRepeating extends AbstractPlugin {
 		fixtureDef.shape = groundShape;
 		
 		groundBody = GameScreen.getWorld().createBody(bodyDef);
-		groundBody.createFixture(fixtureDef);
+		groundBody.createFixture(fixtureDef).setUserData(new UserData("ground"));;
 		
 		groundShape.dispose();
 		

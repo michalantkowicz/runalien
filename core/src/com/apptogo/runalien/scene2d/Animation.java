@@ -25,7 +25,7 @@ public class Animation extends AnimationActor {
 
     public static Animation get(String pattern)
     {
-        return new Animation(DEFAULT_FRAME_DURAITON, ResourcesManager.getInstance().getRegions(pattern), PlayMode.LOOP);
+        return new Animation(DEFAULT_FRAME_DURAITON, ResourcesManager.getInstance().getRegions(pattern), PlayMode.NORMAL);
     }
 
     /** @param animationNames

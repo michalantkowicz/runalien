@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.plugin.AbstractPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.screen.GameScreen;
@@ -77,9 +78,10 @@ public class GameActor extends Actor {
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
+		fixtureDef.friction = 0f;
 
 		body = GameScreen.getWorld().createBody(bodyDef);
-		body.createFixture(fixtureDef);
+		body.createFixture(fixtureDef).setUserData(new UserData("player"));
 
 		body.setUserData(getName());
 	}
