@@ -1,5 +1,6 @@
 package com.apptogo.runalien.physics;
 
+import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -18,9 +19,9 @@ public class BodyBuilder {
 	
 	UserData userData;
 	
-	public static BodyBuilder get(World world)
+	public static BodyBuilder get()
 	{
-		return new BodyBuilder(world);
+		return new BodyBuilder(GameScreen.getWorld());
 	}
 	
 	public BodyBuilder(World world)

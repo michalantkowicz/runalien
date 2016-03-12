@@ -1,7 +1,5 @@
 package com.apptogo.runalien.physics;
 
-import com.apptogo.runalien.main.Main;
-
 public class UserData {
 	private static int nextId = 0;
 	private int id;

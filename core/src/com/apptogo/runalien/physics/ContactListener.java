@@ -3,7 +3,6 @@ package com.apptogo.runalien.physics;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;

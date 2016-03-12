@@ -16,6 +16,7 @@ public class TouchSteering extends AbstractPlugin {
 		{	
 			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 30));
 			jumping = true;
+			actor.changeAnimation("jump");
 		}
 		else
 		{
@@ -41,12 +42,19 @@ public class TouchSteering extends AbstractPlugin {
 	}
 	
 	public void land()
-	{System.out.println("LAND");
+	{
 		if(jumping || doubleJumping)
 		{
 			jumping = false;
 			doubleJumping = false;
+			actor.changeAnimation("land");
+			actor.queueAnimation("run");
 		}
+	}
+	
+	public void startRunning(){
+		Running running = actor.getPlugin(Running.class.getSimpleName());
+		running.setStarted(true);
 	}
 	
 	@Override
@@ -58,6 +66,9 @@ public class TouchSteering extends AbstractPlugin {
 			jump();
 		if(Gdx.input.isKeyJustPressed(Keys.S))
 			chargeDown();
+		if(Gdx.input.isKeyJustPressed(Keys.SPACE))
+			startRunning();
+			
 	}
 
 }

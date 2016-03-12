@@ -11,25 +11,44 @@ import com.badlogic.gdx.utils.Array;
 
 public class Animation extends AnimationActor {
 
-    private static final float DEFAULT_FRAME_DURAITON = 0.06f;
-
+    private static final float DEFAULT_FRAME_DURAITON = 0.02f;
+    
+    /**
+     * @param pattern will be used as animation name if not overriden by name() method
+     * @return created animation
+     */
     public static Animation get(float frameDuration, String pattern)
     {
-        return new Animation(frameDuration, ResourcesManager.getInstance().getRegions(pattern));
+    	Animation animation = new Animation(frameDuration, ResourcesManager.getInstance().getRegions(pattern), PlayMode.NORMAL);
+    	animation.setName(pattern);
+        return animation;
     }
 
+    /**
+     * @param pattern will be used as animation name if not overriden by name() method
+     * @return created animation
+     */
     public static Animation get(float frameDuration, String pattern, PlayMode playMode)
     {
-        return new Animation(frameDuration, ResourcesManager.getInstance().getRegions(pattern), playMode);
+		Animation animation = new Animation(frameDuration, ResourcesManager.getInstance().getRegions(pattern), playMode);
+		animation.setName(pattern);
+        return animation;
     }
-
+    
+    /**
+     * @param pattern will be used as animation name if not overriden by name() method
+     * @return created animation
+     */
     public static Animation get(String pattern)
     {
-        return new Animation(DEFAULT_FRAME_DURAITON, ResourcesManager.getInstance().getRegions(pattern), PlayMode.NORMAL);
+    	Animation animation = new Animation(DEFAULT_FRAME_DURAITON, ResourcesManager.getInstance().getRegions(pattern), PlayMode.NORMAL);
+    	animation.setName(pattern);
+        return animation;
     }
 
     /** @param animationNames
-     * @return Map of animations with name as key based on animationNames */
+     * @return Map of animations with name as key based on animationNames 
+     */
     public static Map<String, Animation> getAnimations(String... animationNames) {
         Map<String, Animation> animations = new HashMap<String, Animation>();
         for (String animationName : animationNames) {
@@ -39,6 +58,8 @@ public class Animation extends AnimationActor {
         return animations;
     }
 
+    /**-------- CONSTRUCTORS -------- **/
+    
     public Animation(float frameDuration, Array<? extends TextureRegion> keyFrames)
     {
         super(frameDuration, keyFrames);
@@ -49,6 +70,14 @@ public class Animation extends AnimationActor {
         super(frameDuration, keyFrames, playMode);
     }
 
+    
+    
+    /**-------- CHAIN METHODS -------- **/
+    public Animation name(String name){
+    	setName(name);
+    	return this;
+    }
+    
     public Animation scaleFrames(float scale)
     {
         super.scaleFramesBy(scale);

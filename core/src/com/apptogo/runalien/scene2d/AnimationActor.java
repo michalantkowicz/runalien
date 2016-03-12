@@ -17,7 +17,8 @@ public class AnimationActor extends Actor {
 	public TextureRegion currentFrame;
 	protected float scaleBy = 1, stateTime = 0;
 	protected boolean doAnimate = true;
-
+	private boolean finished;
+	
 	// values to calculate delta offset to prevent animation jittering caused by trimming
 	private Vector2 previousOffset = new Vector2();
 	private Vector2 currentOffset = new Vector2();
@@ -39,9 +40,17 @@ public class AnimationActor extends Actor {
 	public void act(float delta) {
 		super.act(delta);
 
-		if (doAnimate)
+		if (doAnimate){
 			stateTime += delta;
-
+	
+			//set status to finished. In looping it's true only in one frame
+			float frameIndex = animation.getKeyFrameIndex(stateTime);
+			if(animation.getKeyFrames().length == frameIndex+1)
+				finished = true;
+			else
+				finished = false;
+		}
+			
 		currentFrame = animation.getKeyFrame(stateTime);
 		frameWidth = currentFrame.getRegionWidth();
 		frameHeight = currentFrame.getRegionHeight();
@@ -59,6 +68,15 @@ public class AnimationActor extends Actor {
 		calculateOffsets(false);
 	}
 
+	
+	/**
+	 * true when animation is finished.
+	 * It's also true at every loops end
+	 */
+	public boolean isFinished(){
+		return finished;
+	}
+	
 	/**
 	 * calculates deltaOffset to prevent jittering caused by trimming. It takes
 	 * current and previous offset and then position is set based on calculated
@@ -121,5 +139,10 @@ public class AnimationActor extends Actor {
 
 	public com.badlogic.gdx.graphics.g2d.Animation getGdxAnimation() {
 		return animation;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+		stateTime = 0;
 	}
 }

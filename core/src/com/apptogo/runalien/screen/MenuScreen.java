@@ -1,11 +1,9 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
-import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class MenuScreen extends BasicScreen {

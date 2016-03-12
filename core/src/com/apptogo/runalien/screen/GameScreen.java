@@ -14,6 +14,7 @@ import com.apptogo.runalien.plugin.TouchSteering;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -45,20 +46,22 @@ public class GameScreen extends BasicScreen {
     void prepare() {
 
         GameActor player = new GameActor("player");
-        player.setAnimations(Animation.getAnimations("blink", "breathe", "diebottom", "dietop", "jump", "land", "run", "slide", "standup", "startrunning"));
-        player.setCurrentAnimation("run");
+        player.setAvailableAnimations("diebottom", "dietop", "jump", "land", "slide", "standup", "startrunning");
+        player.addAvailableAnimation(Animation.get(0.03f, "run", PlayMode.LOOP));
+        player.addAvailableAnimation(Animation.get(0.04f, "idle", PlayMode.LOOP));
+        player.queueAnimation("idle");
         
-        player.setBody(BodyBuilder.get(world).name("player").type(BodyType.DynamicBody).box(0.6f,  1.9f).position(0, getGroundLevel() + 1).friction(0).create());
+        player.setBody(BodyBuilder.get().name("player").type(BodyType.DynamicBody).box(0.6f,  1.9f).position(0, getGroundLevel() + 1).friction(0).create());
         
         player.modifyCustomOffsets(-0.4f, 0f);
         gameworldStage.addActor(player);
         
         player.addPlugin(new Running());
         player.addPlugin(new CameraFollowing());
-        //player.addPlugin(new GroundRepeating());
+        player.addPlugin(new GroundRepeating());
         player.addPlugin(new TouchSteering());
         
-        BodyBuilder.get(world).name("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.5f).create();
+        BodyBuilder.get().name("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.5f).create();
     }
 
     @Override
@@ -88,7 +91,7 @@ public class GameScreen extends BasicScreen {
         ((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
     }
 
-    // ------ COMMONS ------//
+    /** ------ COMMONS ------ **/
     public static World getWorld() {
         return world;
     }
