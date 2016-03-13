@@ -4,7 +4,6 @@ import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
@@ -15,7 +14,9 @@ public class TouchSteering extends AbstractPlugin {
 	protected boolean sliding = false;
 	
 	protected SequenceAction standUpAction = Actions.sequence(); 
-	
+	private SoundHandler soundHandler;
+	private Running running;
+
 	protected void jump()
 	{
 		sliding = false;
@@ -25,6 +26,10 @@ public class TouchSteering extends AbstractPlugin {
 			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 30));
 			jumping = true;
 			actor.changeAnimation("jump");
+
+			soundHandler.pauseSound("scream");
+			soundHandler.playSound("jump");
+			
 		}
 		else
 		{
@@ -38,6 +43,7 @@ public class TouchSteering extends AbstractPlugin {
 		{
 			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 25));
 			doubleJumping = true;
+			soundHandler.playSound("doubleJump");
 		}
 	}
 	
@@ -46,6 +52,7 @@ public class TouchSteering extends AbstractPlugin {
 		if(jumping)
 		{
 			this.body.setLinearVelocity(body.getLinearVelocity().x, -35);
+			soundHandler.playSound("chargeDown");
 		}
 		else
 		{
@@ -55,8 +62,11 @@ public class TouchSteering extends AbstractPlugin {
 	
 	public void slide()
 	{		
-		if(!sliding)
+		if(!sliding){
 			actor.changeAnimation("slide");
+			soundHandler.playSound("slide");
+			soundHandler.pauseSound("scream");
+		}
 		
 		sliding = true;
 		
@@ -77,6 +87,8 @@ public class TouchSteering extends AbstractPlugin {
 		sliding = false;
 		actor.changeAnimation("standup");
 		actor.queueAnimation("run");
+		
+		soundHandler.playSound("scream");
 	}
 	
 	public void land()
@@ -87,23 +99,32 @@ public class TouchSteering extends AbstractPlugin {
 			doubleJumping = false;
 			actor.changeAnimation("land");
 			actor.queueAnimation("run");
+			
+			soundHandler.playSound("land");
+			soundHandler.playSound("scream");
 		}
 	}
 	
-	public void startRunning(){
-		Running running = actor.getPlugin(Running.class.getSimpleName());
+	public void startRunning(){		
 		running.setStarted(true);
 	}
 	
 	@Override
 	public void run() {
+		if(soundHandler == null || running == null){
+			soundHandler = actor.getPlugin(SoundHandler.class.getSimpleName());
+			running = actor.getPlugin(Running.class.getSimpleName());
+		}
+		
 		if(GameScreen.contactsSnapshot.containsKey("player") && GameScreen.contactsSnapshot.get("player").equals("ground"))
 			land();
 		
-		if(Gdx.input.isKeyJustPressed(Keys.A))
-			jump();
-		if(Gdx.input.isKeyJustPressed(Keys.S))
-			chargeDown();
+		if(running.isStarted()){
+			if(Gdx.input.isKeyJustPressed(Keys.A))
+				jump();
+			if(Gdx.input.isKeyJustPressed(Keys.S))
+				chargeDown();
+		}
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE))
 			startRunning();
 			

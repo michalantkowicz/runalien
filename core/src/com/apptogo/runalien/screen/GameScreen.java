@@ -10,6 +10,7 @@ import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowing;
 import com.apptogo.runalien.plugin.GroundRepeating;
 import com.apptogo.runalien.plugin.Running;
+import com.apptogo.runalien.plugin.SoundHandler;
 import com.apptogo.runalien.plugin.TouchSteering;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
@@ -60,6 +61,7 @@ public class GameScreen extends BasicScreen {
         player.addPlugin(new CameraFollowing());
         player.addPlugin(new GroundRepeating());
         player.addPlugin(new TouchSteering());
+        player.addPlugin(new SoundHandler("scream", "slide", "chargeDown", "land", "jump", "doubleJump"));
         
         //BodyBuilder.get().name("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.5f).create();
     }

@@ -20,6 +20,10 @@ public class Running extends AbstractPlugin {
 
 	public void setStarted(boolean started) {
 		actor.changeAnimation("run");
+		
+		SoundHandler soundHandler = actor.getPlugin(SoundHandler.class.getSimpleName());
+		soundHandler.loopSound("scream");
+		
 		this.started = started;
 	}
 
