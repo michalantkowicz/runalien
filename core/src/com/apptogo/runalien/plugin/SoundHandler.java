@@ -64,6 +64,10 @@ public class SoundHandler extends AbstractPlugin {
 		get(soundName).pause();
 	}
 	
+	public void resumeSound(String soundName){
+		get(soundName).resume();
+	}
+	
 	private Sound get(String soundName){
 		Sound sound = sounds.get(soundName);
 		if(sound == null)

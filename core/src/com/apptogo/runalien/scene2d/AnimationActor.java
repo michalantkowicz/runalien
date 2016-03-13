@@ -68,6 +68,13 @@ public class AnimationActor extends Actor {
 		calculateOffsets(false);
 	}
 
+	public void setFrameDuration(float frameDuration){
+		animation.setFrameDuration(frameDuration);	
+	}
+	
+	public float getFrameDuration(){
+		return animation.getFrameDuration();
+	}
 	
 	/**
 	 * true when animation is finished.

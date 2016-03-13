@@ -61,7 +61,7 @@ public class GameScreen extends BasicScreen {
         player.addPlugin(new CameraFollowing());
         player.addPlugin(new GroundRepeating());
         player.addPlugin(new TouchSteering());
-        player.addPlugin(new SoundHandler("scream", "slide", "chargeDown", "land", "jump", "doubleJump"));
+        player.addPlugin(new SoundHandler("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
         
         //BodyBuilder.get().name("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.5f).create();
     }

@@ -28,6 +28,7 @@ public class TouchSteering extends AbstractPlugin {
 			actor.changeAnimation("jump");
 
 			soundHandler.pauseSound("scream");
+			soundHandler.pauseSound("run");
 			soundHandler.playSound("jump");
 			
 		}
@@ -43,6 +44,7 @@ public class TouchSteering extends AbstractPlugin {
 		{
 			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 25));
 			doubleJumping = true;
+			
 			soundHandler.playSound("doubleJump");
 		}
 	}
@@ -66,6 +68,7 @@ public class TouchSteering extends AbstractPlugin {
 			actor.changeAnimation("slide");
 			soundHandler.playSound("slide");
 			soundHandler.pauseSound("scream");
+			soundHandler.pauseSound("run");
 		}
 		
 		sliding = true;
@@ -88,7 +91,8 @@ public class TouchSteering extends AbstractPlugin {
 		actor.changeAnimation("standup");
 		actor.queueAnimation("run");
 		
-		soundHandler.playSound("scream");
+		soundHandler.resumeSound("scream");
+		soundHandler.resumeSound("run");
 	}
 	
 	public void land()
@@ -101,12 +105,15 @@ public class TouchSteering extends AbstractPlugin {
 			actor.queueAnimation("run");
 			
 			soundHandler.playSound("land");
-			soundHandler.playSound("scream");
+			soundHandler.resumeSound("scream");
+			soundHandler.resumeSound("run");
 		}
 	}
 	
 	public void startRunning(){		
 		running.setStarted(true);
+		soundHandler.loopSound("scream");
+		soundHandler.loopSound("run");
 	}
 	
 	@Override

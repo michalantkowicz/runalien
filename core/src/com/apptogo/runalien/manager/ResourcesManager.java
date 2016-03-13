@@ -48,6 +48,7 @@ public class ResourcesManager {
 		manager.load("doubleJump.ogg", Sound.class);
 		manager.load("land.ogg", Sound.class);
 		manager.load("chargeDown.ogg", Sound.class);
+		manager.load("run.ogg", Sound.class);
 	}
 
 	public void loadSkin() {
