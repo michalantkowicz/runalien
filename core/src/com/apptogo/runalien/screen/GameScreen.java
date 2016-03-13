@@ -8,12 +8,16 @@ import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowing;
-import com.apptogo.runalien.plugin.GroundRepeating;
+import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.plugin.SoundHandler;
 import com.apptogo.runalien.plugin.TouchSteering;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Vector2;
@@ -34,10 +38,12 @@ public class GameScreen extends BasicScreen {
     public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
     
 	ContactListener contactListener = new ContactListener();
-
+FPSLogger logger = new FPSLogger();
     public GameScreen(Main game) {
         super(game);
         debugRenderer = new Box2DDebugRenderer();
+        debugRenderer.SHAPE_AWAKE.set(Color.PINK);
+        
         world = new World(new Vector2(0, -100), true);
         world.setContactListener(contactListener);
         createGameWorldStage();
@@ -52,18 +58,29 @@ public class GameScreen extends BasicScreen {
         player.addAvailableAnimation(Animation.get(0.04f, "idle", PlayMode.LOOP));
         player.queueAnimation("idle");
         
-        player.setBody(BodyBuilder.get().name("player").type(BodyType.DynamicBody).box(0.6f,  1.9f).position(0, getGroundLevel() + 1).friction(0).create());
+        player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, getGroundLevel() + 1)
+        		.addFixture("player").box(0.6f,  1.9f).friction(0)
+        		.addFixture("player_sliding").box(1.9f,  0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0).create());
         
         player.modifyCustomOffsets(-0.4f, 0f);
         gameworldStage.addActor(player);
         
+        player.addPlugin(new SoundHandler("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
+        player.addPlugin(new DeathPlugin());
         player.addPlugin(new Running());
         player.addPlugin(new CameraFollowing());
-        player.addPlugin(new GroundRepeating());
+        //player.addPlugin(new GroundRepeating());
         player.addPlugin(new TouchSteering());
-        player.addPlugin(new SoundHandler("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
         
-        //BodyBuilder.get().name("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.5f).create();
+        BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.2f).create();
+        
+        //TEMPORARY CREATED OBSTACLES
+        for(int i = 0; i < 10; i++)
+        	BodyBuilder.get().type(BodyType.StaticBody).position(23 + 23*i, getGroundLevel() + 0.2f).addFixture("killingBottom").box(0.4f, 0.4f).create();
+        
+        for(int i = 0; i < 10; i++)
+        	BodyBuilder.get().type(BodyType.StaticBody).position(11 + 23*i, getGroundLevel()  + 1.8f).addFixture("killingTop").box(0.4f, 0.4f).create();
+        //--END OF TEMP
     }
 
     @Override
@@ -72,10 +89,12 @@ public class GameScreen extends BasicScreen {
     	world.step(delta, 3, 3);
 
         contactsSnapshot = contactListener.contacts;
-        
+
         gameworldStage.act();
         gameworldStage.draw();
         debugRenderer.render(world, gameworldStage.getCamera().combined);
+        
+        logger.log();
     }
 
     @Override

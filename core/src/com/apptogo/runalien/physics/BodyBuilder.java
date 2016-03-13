@@ -1,6 +1,7 @@
 package com.apptogo.runalien.physics;
 
 import com.apptogo.runalien.screen.GameScreen;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -17,9 +18,7 @@ public class BodyBuilder {
 	
 	BodyDef bodyDef;
 	Array<FixtureDef> fixtureDefs = new Array<FixtureDef>();
-	Array<String> fixturePostfixes = new Array<String>();
-	
-	UserData userData;
+	Array<UserData> fixtureDatas = new Array<UserData>();
 	
 	public static BodyBuilder get()
 	{
@@ -30,17 +29,8 @@ public class BodyBuilder {
 	{
 		this.world = world;
 		this.bodyDef = new BodyDef();
-		fixtureDefs.add(new FixtureDef());
-		fixturePostfixes.add("");
-		this.userData = new UserData();
 	}
-	
-	public BodyBuilder name(String name)
-	{
-		userData.key = name;
-		return this;
-	}
-	
+		
 	public BodyBuilder type(BodyType type)
 	{
 		bodyDef.type = type;
@@ -52,6 +42,16 @@ public class BodyBuilder {
 		bodyDef.position.set(x, y);
 		return this;
 	}
+		
+	public BodyBuilder addFixture(String name)
+	{
+		fixtureDatas.add( new UserData() );
+		fixtureDatas.peek().key = name;
+		
+		fixtureDefs.add(new FixtureDef());
+		
+		return this;
+	}
 	
 	public BodyBuilder circle(float radius)
 	{
@@ -60,21 +60,26 @@ public class BodyBuilder {
 		
 		fixtureDefs.peek().shape = circle;
 		
-		userData.width = radius;
-		userData.height = radius;
+		fixtureDatas.peek().width = radius;
+		fixtureDatas.peek().height = radius;
 		
 		return this;
 	}
 	
 	public BodyBuilder box(float width, float height)
 	{
+		return box(width, height, 0, 0);
+	}
+	
+	public BodyBuilder box(float width, float height, float offsetX, float offsetY)
+	{
 		PolygonShape polygon = new PolygonShape();
-		polygon.setAsBox(width/2f, height/2f);
+		polygon.setAsBox(width/2f, height/2f, new Vector2(offsetX, offsetY), 0);
 		
 		fixtureDefs.peek().shape = polygon;
 		
-		userData.width = width;
-		userData.height = height;
+		fixtureDatas.peek().width = width;
+		fixtureDatas.peek().height = height;
 		
 		return this;
 	}
@@ -98,8 +103,8 @@ public class BodyBuilder {
 			if(vertices[i + 1] > max_y) max_y = vertices[i];				
 		}
 			
-		userData.width = max_x - min_x;
-		userData.height = max_y - min_y;
+		fixtureDatas.peek().width = max_x - min_x;
+		fixtureDatas.peek().height = max_y - min_y;
 		
 		return this;
 	}
@@ -128,29 +133,25 @@ public class BodyBuilder {
 		return this;
 	}
 	
+	public BodyBuilder ignore(boolean ignore)
+	{
+		fixtureDatas.peek().ignore = ignore;
+		return this;
+	}
+	
 	public BodyBuilder origin(float x, float y)
 	{
 		//set fixture position
 		return this;
 	}
-	
-	public BodyBuilder addFixture(String postfix)
-	{
-		fixtureDefs.add(new FixtureDef());
-		fixturePostfixes.add(postfix);
-		return this;
-	}
-	
+		
 	public Body create()
 	{
 		Body body = world.createBody(bodyDef);
-		body.setUserData(userData);
-		
-		String name = userData.key;
+		body.setUserData( fixtureDatas.first() );
 		
 		for(int i = 0; i < fixtureDefs.size; i++) {
-			userData.key = name + fixturePostfixes.get(i);
-			body.createFixture(fixtureDefs.get(i)).setUserData(userData);
+			body.createFixture(fixtureDefs.get(i)).setUserData(fixtureDatas.get(i));
 		}
 		
 		return body;

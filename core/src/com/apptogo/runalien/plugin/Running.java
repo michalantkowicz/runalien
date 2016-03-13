@@ -1,11 +1,20 @@
 package com.apptogo.runalien.plugin;
 
+import com.apptogo.runalien.exception.PluginDependencyException;
+import com.apptogo.runalien.exception.PluginException;
+import com.badlogic.gdx.math.Vector2;
+
 public class Running extends AbstractPlugin {
 
 	private boolean started;
+	private DeathPlugin deathPlugin;
+	
 	@Override
 	public void run() { 
-		if(started){
+		if(deathPlugin.dead) {
+			started = false;
+		}
+		else if(started){
 			if (body.getLinearVelocity().x < 10)
 				body.setLinearVelocity(10, 0);
 
@@ -28,6 +37,16 @@ public class Running extends AbstractPlugin {
 		actor.changeAnimation("run");
 		actor.getAvailableAnimations().get("run").setFrameDuration(0.017f);
 		this.started = started;
+	}
+
+	@Override
+	public void setUpDependencies() {
+		try {
+			deathPlugin = actor.getPlugin(DeathPlugin.class.getSimpleName());
+		}
+		catch(PluginException e) {
+			throw new PluginDependencyException("Actor must have DeathPlugin plugin attached!");
+		}		
 	}
 
 }
