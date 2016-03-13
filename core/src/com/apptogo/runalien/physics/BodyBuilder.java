@@ -9,13 +9,15 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class BodyBuilder {
 
 	World world;
 	
 	BodyDef bodyDef;
-	FixtureDef fixtureDef;
+	Array<FixtureDef> fixtureDefs = new Array<FixtureDef>();
+	Array<String> fixturePostfixes = new Array<String>();
 	
 	UserData userData;
 	
@@ -28,7 +30,8 @@ public class BodyBuilder {
 	{
 		this.world = world;
 		this.bodyDef = new BodyDef();
-		this.fixtureDef = new FixtureDef();
+		fixtureDefs.add(new FixtureDef());
+		fixturePostfixes.add("");
 		this.userData = new UserData();
 	}
 	
@@ -55,7 +58,7 @@ public class BodyBuilder {
 		CircleShape circle = new CircleShape();
 		circle.setRadius(radius);
 		
-		fixtureDef.shape = circle;
+		fixtureDefs.peek().shape = circle;
 		
 		userData.width = radius;
 		userData.height = radius;
@@ -68,7 +71,7 @@ public class BodyBuilder {
 		PolygonShape polygon = new PolygonShape();
 		polygon.setAsBox(width/2f, height/2f);
 		
-		fixtureDef.shape = polygon;
+		fixtureDefs.peek().shape = polygon;
 		
 		userData.width = width;
 		userData.height = height;
@@ -81,7 +84,7 @@ public class BodyBuilder {
 		ChainShape chain = new ChainShape();
 		chain.createLoop(vertices);
 		
-		fixtureDef.shape = chain;
+		fixtureDefs.peek().shape = chain;
 		
 		//Calculating width/height (looking for min/max x and y in the vertices array)
 		float min_x = vertices[0], max_x = vertices[0];
@@ -103,19 +106,38 @@ public class BodyBuilder {
 	
 	public BodyBuilder friction(float friction)
 	{
-		fixtureDef.friction = friction;
+		fixtureDefs.peek().friction = friction;
 		return this;
 	}
 	
 	public BodyBuilder restitution(float restitution)
 	{
-		fixtureDef.restitution = restitution;
+		fixtureDefs.peek().restitution = restitution;
 		return this;
 	}
 	
 	public BodyBuilder density(float density)
 	{
-		fixtureDef.density = density;
+		fixtureDefs.peek().density = density;
+		return this;
+	}
+	
+	public BodyBuilder sensor(boolean sensor)
+	{
+		fixtureDefs.peek().isSensor = sensor;
+		return this;
+	}
+	
+	public BodyBuilder origin(float x, float y)
+	{
+		//set fixture position
+		return this;
+	}
+	
+	public BodyBuilder addFixture(String postfix)
+	{
+		fixtureDefs.add(new FixtureDef());
+		fixturePostfixes.add(postfix);
 		return this;
 	}
 	
@@ -124,7 +146,12 @@ public class BodyBuilder {
 		Body body = world.createBody(bodyDef);
 		body.setUserData(userData);
 		
-		body.createFixture(fixtureDef).setUserData(userData);
+		String name = userData.key;
+		
+		for(int i = 0; i < fixtureDefs.size; i++) {
+			userData.key = name + fixturePostfixes.get(i);
+			body.createFixture(fixtureDefs.get(i)).setUserData(userData);
+		}
 		
 		return body;
 	}
