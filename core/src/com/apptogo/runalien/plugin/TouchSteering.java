@@ -4,14 +4,22 @@ import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class TouchSteering extends AbstractPlugin {
 
 	protected boolean jumping = false;
 	protected boolean doubleJumping = false;
+	protected boolean sliding = false;
+	
+	protected SequenceAction standUpAction = Actions.sequence(); 
 	
 	protected void jump()
 	{
+		sliding = false;
+		
 		if(!jumping)
 		{	
 			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 30));
@@ -39,6 +47,36 @@ public class TouchSteering extends AbstractPlugin {
 		{
 			this.body.setLinearVelocity(body.getLinearVelocity().x, -35);
 		}
+		else
+		{
+			slide();
+		}
+	}
+	
+	public void slide()
+	{		
+		if(!sliding)
+			actor.changeAnimation("slide");
+		
+		sliding = true;
+		
+		actor.removeAction(standUpAction);
+		
+		standUpAction = Actions.sequence(Actions.delay(0.4f), Actions.run(new Runnable() {
+							@Override
+							public void run() {
+								if(sliding)
+									standUp();
+						}}));
+		
+		actor.addAction(standUpAction);
+	}
+	
+	public void standUp()
+	{
+		sliding = false;
+		actor.changeAnimation("standup");
+		actor.queueAnimation("run");
 	}
 	
 	public void land()

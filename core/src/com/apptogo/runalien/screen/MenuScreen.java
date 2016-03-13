@@ -4,6 +4,7 @@ import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class MenuScreen extends BasicScreen {
@@ -15,8 +16,24 @@ public class MenuScreen extends BasicScreen {
     @Override
     void prepare() {
         Group group = new Group();
-        group.addActor(Button.get("sound").position(-130, -50));
-        group.addActor(Button.get("vibration").position(-50, -50));
+        
+        if(Gdx.app.getPreferences("SETTINGS").getBoolean("SOUND"))
+        	group.addActor(Button.get("sound").position(-130, -70)
+        									  .setListener(Listener.preferences("SETTINGS", "SOUND", false))
+        									  .setListener(Listener.click(game, new MenuScreen(game))));
+        else
+        	group.addActor(Button.get("soundOff").position(-130, -70)
+        										 .setListener(Listener.preferences("SETTINGS", "SOUND", true))
+        										 .setListener(Listener.click(game, new MenuScreen(game))));
+        
+        if(Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
+        	group.addActor(Button.get("vibration").position(-50, -70)
+        										  .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", false))
+        										  .setListener(Listener.click(game, new MenuScreen(game))));
+        else
+        	group.addActor(Button.get("vibrationOff").position(-50, -70)
+        											 .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", true))
+        											 .setListener(Listener.click(game, new MenuScreen(game))));
 
         tables.get(0).add(group).right().row();
         tables.get(0).add().height(300).row();

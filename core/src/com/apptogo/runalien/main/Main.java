@@ -8,12 +8,15 @@ import com.badlogic.gdx.Screen;
 public class Main extends Game {
     // 20x40 in box2d units
     public static final float SCREEN_WIDTH = 1280f, SCREEN_HEIGHT = 800f;
+    public static boolean fadeIn = true;
 
     @Override
     public void setScreen(Screen screen) {
-        if (this.screen != null)
+        if (this.screen != null) {
             this.screen.dispose();
-
+        	fadeIn = (this.screen.getClass() == screen.getClass()) ? false : true;
+        }
+        
         super.setScreen(screen);
     }
 
