@@ -2,7 +2,6 @@ package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
-import com.badlogic.gdx.math.Vector2;
 
 public class Running extends AbstractPlugin {
 

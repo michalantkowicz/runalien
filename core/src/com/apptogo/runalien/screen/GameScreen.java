@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
+import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
@@ -12,12 +13,10 @@ import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.plugin.SoundHandler;
 import com.apptogo.runalien.plugin.TouchSteering;
+import com.apptogo.runalien.procedures.RepeatProcedure;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Vector2;
@@ -38,7 +37,7 @@ public class GameScreen extends BasicScreen {
     public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
     
 	ContactListener contactListener = new ContactListener();
-FPSLogger logger = new FPSLogger();
+
     public GameScreen(Main game) {
         super(game);
         debugRenderer = new Box2DDebugRenderer();
@@ -74,6 +73,15 @@ FPSLogger logger = new FPSLogger();
         
         BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.2f).create();
         
+        ImmaterialGameActor clouds = new ImmaterialGameActor("clouds");
+        gameworldStage.addActor(clouds);
+        clouds.setAvailableAnimations("clouds");
+        clouds.queueAnimation("clouds");
+        clouds.setPosition(UnitConverter.toBox2dUnits(-600), UnitConverter.toBox2dUnits(200));
+        clouds.setSize(UnitConverter.toBox2dUnits(1280), UnitConverter.toBox2dUnits(200));
+        clouds.addProcedure(new RepeatProcedure("clouds"));
+        
+        
         //TEMPORARY CREATED OBSTACLES
         for(int i = 0; i < 10; i++)
         	BodyBuilder.get().type(BodyType.StaticBody).position(23 + 23*i, getGroundLevel() + 0.2f).addFixture("killingBottom").box(0.4f, 0.4f).create();
@@ -93,8 +101,6 @@ FPSLogger logger = new FPSLogger();
         gameworldStage.act();
         gameworldStage.draw();
         debugRenderer.render(world, gameworldStage.getCamera().combined);
-        
-        logger.log();
     }
 
     @Override

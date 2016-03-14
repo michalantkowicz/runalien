@@ -1,44 +1,37 @@
 package com.apptogo.runalien.game;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
+import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.procedures.AbstractProcedure;
-import com.apptogo.runalien.scene2d.Animation;
-import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.math.Vector2;
 
 public class ImmaterialGameActor extends AbstractActor {
-	private Map<String, Animation> animations = new HashMap<String, Animation>();
-	private Animation currentAnimation;
-	private float customOffsetX, customOffsetY;
 
+	Map<String, AbstractProcedure> procedures = new HashMap<String, AbstractProcedure>();
 	
 	public ImmaterialGameActor(String name) {
 		super(name);
 	}
-
-	LinkedList<AbstractProcedure> procedures = new LinkedList<AbstractProcedure>();
-
 	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		
+
+		setCurrentAnimation();
+
 		//we add customOffset to adjust animation position (and actor) with body to make game enjoyable
 		//we add animation deltaOffset and few lines below we subtracting it. Thanks that actor and graphic is always in the same position.
 		//more information about deltaOffset in AnimationActor
-		
-		setSize(currentAnimation.getWidth(), currentAnimation.getHeight());
+
+		if(getWidth() == 0 && getHeight() == 0)
+			setSize(currentAnimation.getWidth(), currentAnimation.getHeight());
 
 		currentAnimation.position(getX() - currentAnimation.getDeltaOffset().x, getY() - currentAnimation.getDeltaOffset().y);
 		currentAnimation.act(delta);
 
-		for (AbstractProcedure procedure : procedures)
-			procedure.run();
+		procedures.forEach((k, v) -> v.run());
 	}
 
 	@Override
@@ -49,47 +42,19 @@ public class ImmaterialGameActor extends AbstractActor {
 
 	public void addProcedure(AbstractProcedure procedure) {
 		procedure.setActor(this);
-		procedures.add(procedure);
-	}
-
-	public void modifyCustomOffsets(float deltaX, float deltaY) {
-		customOffsetX += deltaX;
-		customOffsetY += deltaY;
-	}
-
-	public Map<String, Animation> getAnimations() {
-		return animations;
-	}
-
-	public void setAnimations(Map<String, Animation> animations) {
-		animations.forEach((k, v) -> v.scaleFrames(1 / UnitConverter.PPM));
-		this.animations = animations;
-		calculateAverageOffset();
+		procedures.put(procedure.getClass().getSimpleName(), procedure);
 	}
 	
 	/**
-	 * we calculate average offset of all 1st frames from all animations.
-	 * thanks that every animation will be positioned in the same place
+	 * @param plugin name. Always getSimpleName() of plugin class
+	 * @return plugin
+	 * @throws PluginException 
 	 */
-	private void calculateAverageOffset(){
-		Vector2 averageOffset = new Vector2();
-		Vector2 offsetSum = new Vector2();
-		for(Animation animation : animations.values()){
-			AtlasRegion atlasRegion = ((AtlasRegion)animation.getGdxAnimation().getKeyFrames()[0]);
-			offsetSum.x += UnitConverter.toBox2dUnits(atlasRegion.offsetX);
-			offsetSum.y += UnitConverter.toBox2dUnits(atlasRegion.offsetY);
-		}
-		averageOffset.x = offsetSum.x/animations.size();
-		averageOffset.y = offsetSum.y/animations.size();
-		animations.forEach((k, v) -> v.setDeltaOffset(averageOffset));
-	}
-
-	public Animation getCurrentAnimation() {
-		return currentAnimation;
-	}
-
-	public void setCurrentAnimation(String currentAnimationName) {
-		this.currentAnimation = animations.get(currentAnimationName);
-		this.currentAnimation.start();
+	public <T extends AbstractProcedure> T getProcedure(String name) throws PluginException{
+		@SuppressWarnings("unchecked")
+		T plugin = (T) procedures.get(name);
+		if(plugin == null)
+			throw new PluginException("Actor: '" + getName() + "' doesn't have procedure: '" + name);
+		return plugin;
 	}
 }

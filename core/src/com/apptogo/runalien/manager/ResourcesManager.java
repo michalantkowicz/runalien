@@ -82,7 +82,7 @@ public class ResourcesManager {
 		AtlasRegionComparator comparator = new AtlasRegionComparator();
 
 		regions.sort(comparator);
-
+		
 		return regions;
 	}
 
