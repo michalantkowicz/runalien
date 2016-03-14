@@ -53,7 +53,11 @@ public class TouchSteering extends AbstractPlugin {
 			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 25));
 			doubleJumping = true;
 			
-			soundHandler.playSound("doubleJump");
+			//50% chance to play scream sound
+			if(Math.random() > 0.5f)
+				soundHandler.playSound("doubleJump");
+			else
+				soundHandler.playSound("jump");
 		}
 	}
 	
