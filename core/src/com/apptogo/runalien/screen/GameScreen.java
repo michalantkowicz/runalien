@@ -6,6 +6,7 @@ import java.util.Map;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.manager.ObstacleGenerator;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowing;
@@ -29,14 +30,17 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 
 //implement SINGLETON pattern!
 public class GameScreen extends BasicScreen {
+    private final static float GROUND_LEVEL = -3.2f;
+    
     private static Box2DDebugRenderer debugRenderer;
     private static World world;
     private static Stage gameworldStage;
-    private final static float GROUND_LEVEL = -3.2f;
-    
+
+	private ContactListener contactListener = new ContactListener();
+	private ObstacleGenerator obstacleGenerator;
     public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
     
-	ContactListener contactListener = new ContactListener();
+
 
     public GameScreen(Main game) {
         super(game);
@@ -51,6 +55,7 @@ public class GameScreen extends BasicScreen {
     @Override
     void prepare() {
 
+    	//create player
         GameActor player = new GameActor("player");
         player.setAvailableAnimations("diebottom", "dietop", "jump", "land", "slide", "standup", "startrunning");
         player.addAvailableAnimation(Animation.get(0.03f, "run", PlayMode.LOOP));
@@ -71,8 +76,11 @@ public class GameScreen extends BasicScreen {
         //player.addPlugin(new GroundRepeating());
         player.addPlugin(new TouchSteering());
         
+        //create infinite ground body
+        //TODO should be polyline
         BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.2f).create();
         
+        //create clouds
         ImmaterialGameActor clouds = new ImmaterialGameActor("clouds");
         gameworldStage.addActor(clouds);
         clouds.setAvailableAnimations("clouds");
@@ -81,25 +89,36 @@ public class GameScreen extends BasicScreen {
         clouds.setSize(UnitConverter.toBox2dUnits(1280), UnitConverter.toBox2dUnits(200));
         clouds.addProcedure(new RepeatProcedure("clouds"));
         
+        //create obstacle generator
+        obstacleGenerator = new ObstacleGenerator(player);
         
         //TEMPORARY CREATED OBSTACLES
-        for(int i = 0; i < 10; i++)
-        	BodyBuilder.get().type(BodyType.StaticBody).position(23 + 23*i, getGroundLevel() + 0.2f).addFixture("killingBottom").box(0.4f, 0.4f).create();
-        
-        for(int i = 0; i < 10; i++)
-        	BodyBuilder.get().type(BodyType.StaticBody).position(11 + 23*i, getGroundLevel()  + 1.8f).addFixture("killingTop").box(0.4f, 0.4f).create();
+//        for(int i = 0; i < 10; i++)
+//        	BodyBuilder.get().type(BodyType.StaticBody).position(23 + 23*i, getGroundLevel() + 0.2f).addFixture("killingBottom").box(0.4f, 0.4f).create();
+//        
+//        for(int i = 0; i < 10; i++)
+//        	BodyBuilder.get().type(BodyType.StaticBody).position(11 + 23*i, getGroundLevel()  + 1.8f).addFixture("killingTop").box(0.4f, 0.4f).create();
         //--END OF TEMP
+        
+        
     }
 
     @Override
     void step(float delta) {
+    	
+    	//simulate physics and handle body contacts
     	contactListener.contacts.clear();
     	world.step(delta, 3, 3);
-
         contactsSnapshot = contactListener.contacts;
 
+        //generate obstacles
+        obstacleGenerator.generate();
+        
+        //act and draw main stage
         gameworldStage.act();
         gameworldStage.draw();
+        
+        //debug renderer
         debugRenderer.render(world, gameworldStage.getCamera().combined);
     }
 

@@ -23,8 +23,20 @@ public class AbstractActor extends Actor {
 		setDebug(true);
 	}
 	
-	/**-------- ANIMATIONS -------- **/
+	/**-------- ANIMATIONS/STATIC IMAGE -------- **/
 
+	/**
+	 * sets static image. It uses animation mechanism to achieve that
+	 */
+	public void setStaticImage(String imageName){
+		//it's in fact 1 frame animation
+		Animation animation = Animation.get(imageName).scaleFrames(1/UnitConverter.PPM);
+		currentAnimation = animation;
+		calculateAverageOffset();
+		
+		currentAnimation.start();
+	}
+	
 	public Animation getCurrentAnimation() {
 		return currentAnimation;
 	}
