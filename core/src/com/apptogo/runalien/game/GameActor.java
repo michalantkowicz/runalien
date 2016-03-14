@@ -79,8 +79,9 @@ public class GameActor extends AbstractActor {
 	/**
 	 * @param plugin name. Always getSimpleName() of plugin class
 	 * @return plugin
+	 * @throws PluginException 
 	 */
-	public <T extends AbstractPlugin> T getPlugin(String name){
+	public <T extends AbstractPlugin> T getPlugin(String name) throws PluginException{
 		@SuppressWarnings("unchecked")
 		T plugin = (T) plugins.get(name);
 		if(plugin == null)

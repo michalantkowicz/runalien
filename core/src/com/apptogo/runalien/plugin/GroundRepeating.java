@@ -52,4 +52,10 @@ public class GroundRepeating extends AbstractPlugin {
 				ground[i].position(ground[i].getX() + (ground.length)*ground[i].getWidth(), ground[i].getY());
 	}
 
+	@Override
+	public void setUpDependencies() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -18,4 +18,10 @@ public class CameraFollowing extends AbstractPlugin {
 		camera.position.set(actor.getBody().getPosition().x, camera.position.y, camera.position.z);
 	}
 
+	@Override
+	public void setUpDependencies() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

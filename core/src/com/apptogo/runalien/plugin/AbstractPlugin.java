@@ -7,6 +7,7 @@ public abstract class AbstractPlugin {
 	protected GameActor actor;
 	protected Body body;
 	
+	abstract public void setUpDependencies();
 	abstract public void run();
 	
 	public void postSetActor() {	
@@ -20,6 +21,7 @@ public abstract class AbstractPlugin {
 		this.actor = actor;
 		this.body = actor.getBody();
 		
+		setUpDependencies();
 		postSetActor();
 	}
 }

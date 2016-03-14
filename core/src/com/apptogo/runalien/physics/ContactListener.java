@@ -21,10 +21,11 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 		String keyA = ((UserData)fa.getUserData()).key;
 		String keyB = ((UserData)fb.getUserData()).key;
 		
-		if( contacts.get(keyA) == null )
-		{
-			contacts.put(keyA, keyB);
-			contacts.put(keyB, keyA);
+		if(!((UserData)fa.getUserData()).ignore && !((UserData)fb.getUserData()).ignore) {
+			if( contacts.get(keyA) == null ) {
+				contacts.put(keyA, keyB);
+				contacts.put(keyB, keyA);
+			}
 		}
 	}
 

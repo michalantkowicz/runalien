@@ -8,6 +8,8 @@ public class UserData {
 	public float width;
 	public float height;
 	
+	public boolean ignore = false;
+	
 	public UserData()
 	{
 		id = nextId++;

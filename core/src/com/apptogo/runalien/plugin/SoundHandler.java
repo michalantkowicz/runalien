@@ -74,4 +74,10 @@ public class SoundHandler extends AbstractPlugin {
 			throw new SoundException("Sound: '" + soundName + "' not registered in SoundHandler of: '" + actor.getName() + "'");
 		return sound;
 	}
+
+	@Override
+	public void setUpDependencies() {
+		// TODO Auto-generated method stub
+		
+	}
 }
