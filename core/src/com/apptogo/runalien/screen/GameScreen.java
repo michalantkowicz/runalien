@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
-import com.apptogo.runalien.game.ImmaterialGameActor;
+import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowing;
@@ -13,11 +14,11 @@ import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.plugin.SoundHandler;
 import com.apptogo.runalien.plugin.TouchSteering;
-import com.apptogo.runalien.procedures.RepeatProcedure;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -37,7 +38,7 @@ public class GameScreen extends BasicScreen {
     public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
     
 	ContactListener contactListener = new ContactListener();
-
+    
     public GameScreen(Main game) {
         super(game);
         debugRenderer = new Box2DDebugRenderer();
@@ -73,14 +74,19 @@ public class GameScreen extends BasicScreen {
         
         BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.2f).create();
         
-        ImmaterialGameActor clouds = new ImmaterialGameActor("clouds");
+        /*ImmaterialGameActor clouds = new ImmaterialGameActor("clouds");
         gameworldStage.addActor(clouds);
         clouds.setAvailableAnimations("clouds");
         clouds.queueAnimation("clouds");
         clouds.setPosition(UnitConverter.toBox2dUnits(-600), UnitConverter.toBox2dUnits(200));
         clouds.setSize(UnitConverter.toBox2dUnits(1280), UnitConverter.toBox2dUnits(200));
-        clouds.addProcedure(new RepeatProcedure("clouds"));
+        clouds.addProcedure(new RepeatProcedure("clouds"));*/
         
+        ParallaxActor clouds = new ParallaxActor(gameworldStage.getCamera(), "clouds");
+        clouds.debug();
+        clouds.setSize(1280/UnitConverter.PPM, 200/UnitConverter.PPM);
+        clouds.setPosition(-640/UnitConverter.PPM, 100/UnitConverter.PPM);
+        gameworldStage.addActor(clouds);
         
         //TEMPORARY CREATED OBSTACLES
         for(int i = 0; i < 10; i++)
