@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
-import com.apptogo.runalien.game.ImmaterialGameActor;
+import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ObstacleGenerator;
 import com.apptogo.runalien.physics.BodyBuilder;
@@ -14,7 +14,6 @@ import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.Running;
 import com.apptogo.runalien.plugin.SoundHandler;
 import com.apptogo.runalien.plugin.TouchSteering;
-import com.apptogo.runalien.procedures.RepeatProcedure;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.Color;
@@ -81,16 +80,22 @@ public class GameScreen extends BasicScreen {
         BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.2f).create();
         
         //create clouds
-        ImmaterialGameActor clouds = new ImmaterialGameActor("clouds");
+        /*ImmaterialGameActor clouds = new ImmaterialGameActor("clouds");
         gameworldStage.addActor(clouds);
         clouds.setAvailableAnimations("clouds");
         clouds.queueAnimation("clouds");
         clouds.setPosition(UnitConverter.toBox2dUnits(-600), UnitConverter.toBox2dUnits(200));
         clouds.setSize(UnitConverter.toBox2dUnits(1280), UnitConverter.toBox2dUnits(200));
-        clouds.addProcedure(new RepeatProcedure("clouds"));
+        clouds.addProcedure(new RepeatProcedure("clouds"));*/
         
         //create obstacle generator
         obstacleGenerator = new ObstacleGenerator(player);
+        
+        ParallaxActor clouds = new ParallaxActor(gameworldStage.getCamera(), "clouds");
+        clouds.debug();
+        clouds.setSize(1280/UnitConverter.PPM, 200/UnitConverter.PPM);
+        clouds.setPosition(-640/UnitConverter.PPM, 100/UnitConverter.PPM);
+        gameworldStage.addActor(clouds);
         
         //TEMPORARY CREATED OBSTACLES
 //        for(int i = 0; i < 10; i++)
