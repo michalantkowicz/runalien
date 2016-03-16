@@ -3,7 +3,7 @@ package com.apptogo.runalien.plugin;
 import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class CameraFollowing extends AbstractPlugin {
+public class CameraFollowingPlugin extends AbstractPlugin {
 
 	OrthographicCamera camera;
 	

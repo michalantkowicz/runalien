@@ -3,7 +3,7 @@ package com.apptogo.runalien.plugin;
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
 
-public class Running extends AbstractPlugin {
+public class RunningPlugin extends AbstractPlugin {
 
 	private boolean started;
 	private DeathPlugin deathPlugin;

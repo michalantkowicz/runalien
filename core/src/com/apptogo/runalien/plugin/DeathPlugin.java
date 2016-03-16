@@ -8,7 +8,7 @@ public class DeathPlugin extends AbstractPlugin {
 
 	protected boolean dead = false;
 
-	private SoundHandler soundHandler;
+	private SoundPlugin soundHandler;
 	
 	@Override
 	public void run() {		
@@ -32,7 +32,7 @@ public class DeathPlugin extends AbstractPlugin {
 	@Override
 	public void setUpDependencies() {	
 		try {
-			soundHandler = actor.getPlugin(SoundHandler.class.getSimpleName());
+			soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
 		}
 		catch(PluginException e) {
 			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");

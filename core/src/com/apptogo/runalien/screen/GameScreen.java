@@ -10,11 +10,11 @@ import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ObstacleGenerator;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
-import com.apptogo.runalien.plugin.CameraFollowing;
+import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
-import com.apptogo.runalien.plugin.Running;
-import com.apptogo.runalien.plugin.SoundHandler;
-import com.apptogo.runalien.plugin.TouchSteering;
+import com.apptogo.runalien.plugin.RunningPlugin;
+import com.apptogo.runalien.plugin.SoundPlugin;
+import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.Color;
@@ -68,12 +68,12 @@ public class GameScreen extends BasicScreen {
 		player.modifyCustomOffsets(-0.4f, 0f);
 		gameworldStage.addActor(player);
 
-		player.addPlugin(new SoundHandler("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
+		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
 		player.addPlugin(new DeathPlugin());
-		player.addPlugin(new Running());
-		player.addPlugin(new CameraFollowing());
+		player.addPlugin(new RunningPlugin());
+		player.addPlugin(new CameraFollowingPlugin());
 		//player.addPlugin(new GroundRepeating());
-		player.addPlugin(new TouchSteering());
+		player.addPlugin(new TouchSteeringPlugin());
 
 		//create infinite ground body
 		//TODO should be polyline

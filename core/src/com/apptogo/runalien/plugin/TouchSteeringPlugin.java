@@ -11,15 +11,15 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-public class TouchSteering extends AbstractPlugin {
+public class TouchSteeringPlugin extends AbstractPlugin {
 
 	protected boolean jumping = false;
 	protected boolean doubleJumping = false;
 	protected boolean sliding = false;
 	
 	protected SequenceAction standUpAction = Actions.sequence(); 
-	private SoundHandler soundHandler;
-	private Running running;
+	private SoundPlugin soundHandler;
+	private RunningPlugin running;
 	
 	private Fixture defaultFixture, slidingFixture;
 	private boolean doStandUp = false;
@@ -159,14 +159,14 @@ public class TouchSteering extends AbstractPlugin {
 	@Override
 	public void setUpDependencies() {
 		try {
-			soundHandler = actor.getPlugin(SoundHandler.class.getSimpleName());
+			soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
 		}
 		catch(PluginException e) {
 			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");
 		}
 		
 		try {
-			running = actor.getPlugin(Running.class.getSimpleName());
+			running = actor.getPlugin(RunningPlugin.class.getSimpleName());
 		}
 		catch(PluginException e) {
 			throw new PluginDependencyException("Actor must have Running plugin attached!");

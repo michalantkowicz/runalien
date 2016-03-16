@@ -7,13 +7,13 @@ import com.apptogo.runalien.exception.SoundException;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.badlogic.gdx.audio.Sound;
 
-public class SoundHandler extends AbstractPlugin {
+public class SoundPlugin extends AbstractPlugin {
 
 	private Map<String, Sound> sounds = new HashMap<String, Sound>();
 
 	//trzeba dodac zmiane glosnosci sounda w zaleznosci od pozycji kamery
 
-	public SoundHandler(String... soundNames) {
+	public SoundPlugin(String... soundNames) {
 		for (String soundName : soundNames)
 			addSound(soundName);
 	}
