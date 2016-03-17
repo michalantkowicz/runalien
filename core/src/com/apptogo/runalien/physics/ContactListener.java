@@ -18,10 +18,10 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 		Fixture fa = contact.getFixtureA();
 		Fixture fb = contact.getFixtureB();
 		
-		String keyA = ((UserData)fa.getUserData()).key;
-		String keyB = ((UserData)fb.getUserData()).key;
+		String keyA = UserData.get(fa).key;
+		String keyB = UserData.get(fb).key;
 		
-		if(!((UserData)fa.getUserData()).ignore && !((UserData)fb.getUserData()).ignore) {
+		if(!UserData.get(fa).ignore && !UserData.get(fb).ignore) {
 			if( contacts.get(keyA) == null ) {
 				contacts.put(keyA, keyB);
 				contacts.put(keyB, keyA);
@@ -56,15 +56,15 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 			if //wiem polecialem ale tego gowna nie da sie inaczej rozczytac
 			(
 				( 
-						((UserData)fixtureA.getUserData()).key.equals( typeA ) 
+						UserData.get(fixtureA).key.equals( typeA ) 
 						&& 
-						((UserData)fixtureB.getUserData()).key.equals( typeB ) 
+						UserData.get(fixtureB).key.equals( typeB ) 
 				) 
 				|| 
 				( 
-						((UserData)fixtureA.getUserData()).key.equals( typeB ) 
+						UserData.get(fixtureA).key.equals( typeB ) 
 						&& 
-						((UserData)fixtureB.getUserData()).key.equals( typeA ) 
+						UserData.get(fixtureB).key.equals( typeA ) 
 				)
 			)
 			{
@@ -80,9 +80,9 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 		if(fixtureA.getUserData() != null && fixtureB.getUserData() != null){
 			if
 			(
-					((UserData)fixtureA.getUserData()).key.equals( type ) 
+					UserData.get(fixtureA).key.equals( type ) 
 					||
-					((UserData)fixtureB.getUserData()).key.equals( type ) 
+					UserData.get(fixtureB).key.equals( type ) 
 			)
 			{
 				return true;
@@ -94,6 +94,6 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 		
 	private Fixture getFixtureByType(Fixture fixtureA, Fixture fixtureB, String type)
 	{
-		return ((UserData)fixtureA.getUserData()).key.equals(type) ? fixtureA : fixtureB;
+		return UserData.get(fixtureA).key.equals(type) ? fixtureA : fixtureB;
 	}
 }

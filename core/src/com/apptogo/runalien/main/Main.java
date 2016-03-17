@@ -28,10 +28,10 @@ public class Main extends Game {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
         ResourcesManager.create();
-//         ResourcesManager.getInstance().loadResources();
-//         ResourcesManager.getInstance().manager.finishLoading();
-//         ResourcesManager.getInstance().loadSkin();
-//         this.setScreen(new GameScreen(this));
+        //ResourcesManager.getInstance().loadResources();
+        //ResourcesManager.getInstance().manager.finishLoading();
+        //ResourcesManager.getInstance().loadSkin();
+        //this.setScreen(new GameScreen(this));
         this.setScreen(new SplashScreen(this));
     }
 

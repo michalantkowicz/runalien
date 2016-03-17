@@ -13,21 +13,22 @@ public class RunningPlugin extends AbstractPlugin {
 		if(deathPlugin.dead) {
 			started = false;
 		}
-		else if(started){
-			if (body.getLinearVelocity().x < 10)
-				body.setLinearVelocity(10, 0);
-
-			body.setLinearVelocity((body.getLinearVelocity().x < 24) ? body.getLinearVelocity().x + 0.005f : 24, body.getLinearVelocity().y);
-			
+		
+		float vx = body.getLinearVelocity().x;
+		float vy = body.getLinearVelocity().y;
+		
+		if(started){
+			body.setLinearVelocity( (vx < 10) ? 10 : ((vx < 24) ? vx + 0.005f : 24), vy );
+						
 			//animation and sound speed
 			//TODO funkcja kwadratowa. Musimy zrobi mechanizm zwiekszajacy szybkosc czasowo i wtedy bedzie dzialac jak
 			//TODO obliczymy wartosc funkcji. Narazie jak zmienia sie co klatke to animacja sie buguje.
-//			actor.getAvailableAnimations().get("run").setFrameDuration(-0.002f * body.getLinearVelocity().x + 0.07f);
+			//actor.getAvailableAnimations().get("run").setFrameDuration(-0.002f * body.getLinearVelocity().x + 0.07f);
 		}
-		else if(!started){
-			body.setLinearVelocity(0, 0);
+		else{
+			body.setLinearVelocity( (vx < 0.5f) ? 0 : 0.9f * vx, (vy > 0) ? 0 : vy);
+			//TODO test czy 0.9 to wystarczajacy wspolczynnik tlumienia!
 		}
-			
 	}
 
 	public boolean isStarted() {
@@ -35,14 +36,15 @@ public class RunningPlugin extends AbstractPlugin {
 	}
 
 	public void setStarted(boolean started) {
-		if(started){
-			actor.changeAnimation("run");
-			actor.getAvailableAnimations().get("run").setFrameDuration(0.017f);
+		if(!deathPlugin.dead)
+		{
+			if(started)
+				actor.changeAnimation("run").setFrameDuration(0.017f);
+			else
+				actor.changeAnimation("idle");
+			
+			this.started = started;
 		}
-		else{
-			actor.changeAnimation("idle");
-		}
-		this.started = started;
 	}
 
 	@Override

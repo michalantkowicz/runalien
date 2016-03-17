@@ -97,7 +97,7 @@ public class AbstractActor extends Actor {
 	/**
 	 * immediately changes animation. Be careful, any previously queued animation will be removed 
 	 */
-	public void changeAnimation(String animationName) {
+	public Animation changeAnimation(String animationName) {
 		Animation animation = availableAnimations.get(animationName);
 		if (animation == null) {
 			throw new AnimationException("Animation: '" + animationName + "' is not available for GameActor: '" + getName() + "' Possible choices are: " + availableAnimations.keySet());
@@ -105,6 +105,8 @@ public class AbstractActor extends Actor {
 		animationQueue.clear();
 		animationQueue.add(animation);
 		currentAnimation.setFinished(true);
+		
+		return animation;
 	}
 	
 	/**

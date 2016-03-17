@@ -38,8 +38,8 @@ public class ResourcesManager {
 
 	public void loadResources() {
 		//textures
-		manager.load("atlas.pack", TextureAtlas.class);
-		manager.load("alien.pack", TextureAtlas.class);
+		manager.load("menu_atlas.pack", TextureAtlas.class);
+		manager.load("game_atlas.pack", TextureAtlas.class);
 
 		//sounds
 		manager.load("scream.ogg", Sound.class);
@@ -53,7 +53,7 @@ public class ResourcesManager {
 
 	public void loadSkin() {
 		manager.finishLoading();
-		skin = new Skin(Gdx.files.internal("skin.json"), manager.get("atlas.pack", TextureAtlas.class));
+		skin = new Skin(Gdx.files.internal("skin.json"), manager.get("menu_atlas.pack", TextureAtlas.class));
 	}
 
 	public AtlasRegion getAtlasRegion(String regionName) {

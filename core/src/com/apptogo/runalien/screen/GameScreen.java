@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -62,9 +63,11 @@ public class GameScreen extends BasicScreen {
 		player.addAvailableAnimation(Animation.get(0.04f, "idle", PlayMode.LOOP));
 		player.queueAnimation("idle");
 
-		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, getGroundLevel() + 1).addFixture("player").box(0.6f, 1.9f).friction(0).addFixture("player_sliding")
-				.box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0).create());
-
+		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, getGroundLevel() + 1)
+				                        .addFixture("player").box(0.6f, 1.9f).friction(0)
+				                        .addFixture("player_sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0)
+				                        .create());
+		
 		player.modifyCustomOffsets(-0.4f, 0f);
 		gameworldStage.addActor(player);
 
@@ -72,7 +75,6 @@ public class GameScreen extends BasicScreen {
 		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
 		player.addPlugin(new CameraFollowingPlugin());
-		//player.addPlugin(new GroundRepeating());
 		player.addPlugin(new TouchSteeringPlugin());
 
 		//create infinite ground body
@@ -85,8 +87,8 @@ public class GameScreen extends BasicScreen {
 		//create clouds
 		ParallaxActor clouds = new ParallaxActor(gameworldStage.getCamera(), "clouds");
 		clouds.debug();
-		clouds.setSize(1280 / UnitConverter.PPM, 200 / UnitConverter.PPM);
-		clouds.setPosition(-640 / UnitConverter.PPM, 100 / UnitConverter.PPM);
+		//clouds.setSize(1280 / UnitConverter.PPM, 200 / UnitConverter.PPM);
+		//clouds.setPosition(-640 / UnitConverter.PPM, 100 / UnitConverter.PPM);
 		gameworldStage.addActor(clouds);
 	}
 
