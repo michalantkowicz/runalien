@@ -2,7 +2,9 @@ package com.apptogo.runalien.main;
 
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.screen.SplashScreen;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 public class Main extends Game {
@@ -22,6 +24,9 @@ public class Main extends Game {
 
     @Override
     public void create() {
+    	//use this to define log level. It overrides local settings
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		
         ResourcesManager.create();
 //         ResourcesManager.getInstance().loadResources();
 //         ResourcesManager.getInstance().manager.finishLoading();

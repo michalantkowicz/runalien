@@ -138,6 +138,12 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 		soundHandler.loopSound("run");
 	}
 	
+	public void stopRunning(){		
+		running.setStarted(false);
+		soundHandler.pauseSound("scream");
+		soundHandler.pauseSound("run");
+	}
+	
 	@Override
 	public void run() {		
 		if(GameScreen.contactsSnapshot.containsKey("player") && GameScreen.contactsSnapshot.get("player").equals("ground"))
@@ -152,8 +158,13 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 			if(Gdx.input.isKeyJustPressed(Keys.S))
 				chargeDown();
 		}
-		if(Gdx.input.isKeyJustPressed(Keys.SPACE))
-			startRunning();
+		if(Gdx.input.isKeyJustPressed(Keys.SPACE)){
+			if(!running.isStarted())
+				startRunning();
+			else{
+				stopRunning();
+			}
+		}
 	}
 
 	@Override

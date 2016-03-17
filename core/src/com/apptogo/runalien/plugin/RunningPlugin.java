@@ -23,9 +23,11 @@ public class RunningPlugin extends AbstractPlugin {
 			//TODO funkcja kwadratowa. Musimy zrobi mechanizm zwiekszajacy szybkosc czasowo i wtedy bedzie dzialac jak
 			//TODO obliczymy wartosc funkcji. Narazie jak zmienia sie co klatke to animacja sie buguje.
 //			actor.getAvailableAnimations().get("run").setFrameDuration(-0.002f * body.getLinearVelocity().x + 0.07f);
-
-			
 		}
+		else if(!started){
+			body.setLinearVelocity(0, 0);
+		}
+			
 	}
 
 	public boolean isStarted() {
@@ -33,8 +35,13 @@ public class RunningPlugin extends AbstractPlugin {
 	}
 
 	public void setStarted(boolean started) {
-		actor.changeAnimation("run");
-		actor.getAvailableAnimations().get("run").setFrameDuration(0.017f);
+		if(started){
+			actor.changeAnimation("run");
+			actor.getAvailableAnimations().get("run").setFrameDuration(0.017f);
+		}
+		else{
+			actor.changeAnimation("idle");
+		}
 		this.started = started;
 	}
 
