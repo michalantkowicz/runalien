@@ -90,12 +90,14 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	
 	@Override
 	public void reset() {
-		body.setTransform(new Vector2(-100, 0), 0);
+//		body.setTransform(new Vector2(-100, 0), 0);
+		body.setActive(false);
 		remove();
 	}
 
-	public void init(Vector2 position) {
-		body.setTransform(position, 0);
+	public void init() {
+		setAlive(true);
+		body.setActive(true);
 		GameScreen.getGameworldStage().addActor(this);
 	}
 

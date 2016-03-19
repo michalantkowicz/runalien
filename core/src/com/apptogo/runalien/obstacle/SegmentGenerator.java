@@ -1,101 +1,113 @@
 package com.apptogo.runalien.obstacle;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.apptogo.runalien.obstacle.ObstacleDefinitions.*;
+import static com.apptogo.runalien.obstacle.ObstacleDefinitions.OBSTACLE_SIZE;
+import static com.apptogo.runalien.obstacle.SegmentDefinitions.*;
+import static com.apptogo.runalien.obstacle.SegmentDefinitions.EMPTY;
 
 import com.apptogo.runalien.game.GameActor;
-import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.screen.GameScreen;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import static com.apptogo.runalien.obstacle.SegmentDefinitions.*;
+import com.badlogic.gdx.math.Vector2;
 
 public class SegmentGenerator {
 
-	public List<GameActor> get(int[][] content) {
-		//TODO add pool support
-		List<GameActor> actors = new ArrayList<GameActor>();
+	public Segment getSegment(int[][] content) {
+		Segment segment = new Segment();
 
-		for (int i = 0; i < content.length; i++) {
+		for (int i = 0; i < content[0].length; i++) {
 			for (int j = content.length - 1; j >= 0; j--) {
-				//iteration through columns->rows because we need column blocks like bells
+				//iteration through columns(bottom->top) -> rows(left->right) because we need column blocks like bells or logs
 				int value = content[j][i];
 				float positionX = i * OBSTACLE_SIZE;
 				float positionY = (content.length - j - 1) * OBSTACLE_SIZE;
 
-				Body body;
+				GameActor obstacle = null;
 
 				switch (value) {
 				case (EMPTY):
 					break;
-				case (CRATE):
-					body = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel() + 0.2f).addFixture("killingBottom")
-							.box(OBSTACLE_SIZE, OBSTACLE_SIZE, positionX, positionY).sensor(true).create();
 
-					GameActor obstacleActor = new GameActor("obstacle");
-					obstacleActor.setStaticImage("crate");
-					obstacleActor.setName("crate");
-					obstacleActor.setBody(body);
-					obstacleActor.modifyCustomOffsets(positionX, positionY);
-
-					actors.add(obstacleActor);
+				case (CRATE_BOT):
+					obstacle = GameScreen.getObstaclesPool().getObstacle(CRATE);
+					obstacle.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
+					obstacle.getBody().setTransform(new Vector2(positionX, positionY), 0);
+					segment.addObstacle(obstacle);
 					break;
+
+				case (CRATE_TOP):
+					obstacle = GameScreen.getObstaclesPool().getObstacle(CRATE);
+					obstacle.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
+					obstacle.getBody().setTransform(new Vector2(positionX, positionY), 0);
+					segment.addObstacle(obstacle);
+					break;
+
 				case (LOG):
-
-					body = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel() + 0.2f).addFixture("killingBottom")
-							.box(OBSTACLE_SIZE, OBSTACLE_SIZE, positionX, positionY).sensor(true).create();
-
-					//if previous one also log then join them
-					if (j < content.length - 3 && content[j + 3][i] == LOG) {
-						addLog(4, positionX, positionY, actors, body);
-					} else if (j < content.length - 2 && content[j + 2][i] == LOG) {
-						addLog(3, positionX, positionY, actors, body);
-					} else if (j < content.length - 1 && content[j + 1][i] == LOG) {
-						addLog(2, positionX, positionY, actors, body);
-					} else {
-						addLog(1, positionX, positionY, actors, body);
+					//check how many in column
+					int columnCounter = 1;
+					for (int k = j - 1; k >= 0; k--) {
+						if (content[k][i] == LOG && columnCounter < 4) {
+							columnCounter++;
+						} else {
+							break;
+						}
 					}
+					//modify column index (jump to the top of current obstacle)
+					j -= (columnCounter - 1);
+					
+					switch (columnCounter) {
+					case 1:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(LOG_1);
+						break;
+					case 2:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(LOG_2);
+						break;
+					case 3:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(LOG_3);
+						break;
+					case 4:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(LOG_4);
+						break;
+					}
+
+					obstacle.getBody().setTransform(new Vector2(positionX, positionY + OBSTACLE_SIZE * columnCounter / 2 - OBSTACLE_SIZE / 2), 0);
+					segment.addObstacle(obstacle);
 					break;
 				case (BELL):
-
-					body = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel() + 0.2f).addFixture("killingTop")
-							.box(OBSTACLE_SIZE, OBSTACLE_SIZE, positionX, positionY).sensor(true).create();
-
-					if (j >= 3 && content[j - 3][i] == BELL) {
-						addBell(4, positionX, positionY, actors, body);
-					} else if (j >= 2 && content[j - 2][i] == BELL) {
-						addBell(3, positionX, positionY, actors, body);
-					} else if (j >= 1 && content[j - 1][i] == BELL) {
-						addBell(2, positionX, positionY, actors, body);
-					} else {
-						addBell(1, positionX, positionY, actors, body);
+					//check how many in column
+					columnCounter = 1;
+					for (int k = j - 1; k >= 0; k--) {
+						if (content[k][i] == BELL && columnCounter < 4) {
+							columnCounter++;
+						} else {
+							break;
+						}
 					}
+					//modify column index (jump to the top of current obstacle)
+					j -= (columnCounter - 1);
+					
+					switch (columnCounter) {
+					case 1:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(BELL_1);
+						break;
+					case 2:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(BELL_2);
+						break;
+					case 3:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(BELL_3);
+						break;
+					case 4:
+						obstacle = GameScreen.getObstaclesPool().getObstacle(BELL_4);
+						break;
+					}
+
+					obstacle.getBody().setTransform(new Vector2(positionX, positionY + columnCounter * OBSTACLE_SIZE/2), 0);
+					segment.addObstacle(obstacle);
 					break;
 				}
 			}
 		}
-		return actors;
+		return segment;
 
-	}
-
-	private void addBell(int size, float positionX, float positionY, List<GameActor> actors, Body body) {
-		GameActor obstacleActor = new GameActor("upper" + size);
-		obstacleActor.setStaticImage("upper" + size);
-		obstacleActor.setBody(body);
-		obstacleActor.modifyCustomOffsets(positionX, positionY);
-		if (!actors.isEmpty() && actors.get(actors.size() - 1).getName().equals("upper" + (size + 1))) {
-			obstacleActor.setVisible(false);
-		}
-		actors.add(obstacleActor);
-	}
-
-	private void addLog(int size, float positionX, float positionY, List<GameActor> actors, Body body) {
-		GameActor obstacleActor = new GameActor("bottom" + size);
-		if (!actors.isEmpty() && size != 1)
-			actors.get(actors.size() - (size - 1)).setVisible(false);
-		obstacleActor.setStaticImage("bottom" + size);
-		obstacleActor.setBody(body);
-		obstacleActor.modifyCustomOffsets(positionX, positionY - (size - 1) * OBSTACLE_SIZE);
-		actors.add(obstacleActor);
 	}
 }
