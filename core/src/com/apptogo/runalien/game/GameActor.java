@@ -67,8 +67,8 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	public void setBody(Body body) {
 		this.body = body;
 
-		customOffsetX = -((UserData) body.getUserData()).width / 2f;
-		customOffsetY = -((UserData) body.getUserData()).height / 2f;
+		customOffsetX = -UserData.get(body).width / 2f;
+		customOffsetY = -UserData.get(body).height / 2f;
 	}
 	
 	/**

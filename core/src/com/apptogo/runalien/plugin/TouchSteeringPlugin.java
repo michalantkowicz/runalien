@@ -85,9 +85,9 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 		
 		sliding = true;
 		
-		((UserData)slidingFixture.getUserData()).ignore = false;
+		UserData.get(slidingFixture).ignore = false;
 		slidingFixture.setSensor(false);
-		((UserData)defaultFixture.getUserData()).ignore = true;
+		UserData.get(defaultFixture).ignore = true;
 		defaultFixture.setSensor(true);
 		
 		actor.removeAction(standUpAction);
@@ -111,9 +111,9 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 		soundHandler.resumeSound("scream");
 		soundHandler.resumeSound("run");
 		
-		((UserData)slidingFixture.getUserData()).ignore = true;
+		UserData.get(slidingFixture).ignore = true;
 		slidingFixture.setSensor(true);
-		((UserData)defaultFixture.getUserData()).ignore = false;
+		UserData.get(defaultFixture).ignore = false;
 		defaultFixture.setSensor(false);
 	}
 	
