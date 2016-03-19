@@ -1,19 +1,24 @@
 package com.apptogo.runalien.game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.plugin.AbstractPlugin;
+import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class GameActor extends AbstractActor {
-
+public class GameActor extends AbstractActor implements Poolable, Serializable{
+	private static final long serialVersionUID = -2249455026755833379L;
+	
 	private Body body;
 	private float customOffsetX, customOffsetY;
-
+	
 	public GameActor(String name) {
 		super(name);
 	}
@@ -77,5 +82,28 @@ public class GameActor extends AbstractActor {
 		if(plugin == null)
 			throw new PluginException("Actor: '" + getName() + "' doesn't have plugin: '" + name);
 		return plugin;
+	}
+	
+
+	/* ----------- POOL STUFF ----------- */
+	private boolean alive;
+	
+	@Override
+	public void reset() {
+		body.setTransform(new Vector2(-100, 0), 0);
+		remove();
+	}
+
+	public void init(Vector2 position) {
+		body.setTransform(position, 0);
+		GameScreen.getGameworldStage().addActor(this);
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
 	}
 }

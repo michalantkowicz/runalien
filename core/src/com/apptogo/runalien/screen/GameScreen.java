@@ -8,6 +8,7 @@ import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.obstacle.ObstacleGenerator;
+import com.apptogo.runalien.obstacle.ObstaclesPool;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
@@ -37,6 +38,7 @@ public class GameScreen extends BasicScreen {
 
 	private ContactListener contactListener = new ContactListener();
 	private ObstacleGenerator obstacleGenerator;
+	private static ObstaclesPool obstaclesPool;
 	public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
 
 	public GameScreen(Main game) {
@@ -79,6 +81,9 @@ public class GameScreen extends BasicScreen {
 		//TODO should be polyline
 		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.2f).create();
 
+		//create obstacle pool
+		obstaclesPool = new ObstaclesPool();
+		
 		//create obstacle generator
 		obstacleGenerator = new ObstacleGenerator(player);
 
@@ -98,6 +103,9 @@ public class GameScreen extends BasicScreen {
 		world.step(delta, 3, 3);
 		contactsSnapshot = contactListener.contacts;
 
+		//update pools
+		obstaclesPool.freePools();
+		
 		//generate obstacles
 		obstacleGenerator.generate();
 
@@ -121,6 +129,8 @@ public class GameScreen extends BasicScreen {
 
 		gameworldStage.dispose();
 		gameworldStage = null;
+		
+		obstaclesPool = null;
 	}
 
 	private void createGameWorldStage() {
