@@ -1,15 +1,15 @@
-package com.apptogo.runalien.obstacle;
+package com.apptogo.runalien.level.segment;
 
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class ObstacleDefinitions {
+public class SegmentFieldDefinitions {
 
-	//size of one block in segment
+	//size of one field in segment
 	public static final float OBSTACLE_SIZE = 0.7f;
 	
-	//names of actors and corresponding images
+	//names of fields and corresponding images
 	public static final String CRATE = "crate";
 	public static final String LOG_1 = "bottom1";
 	public static final String LOG_2 = "bottom2";

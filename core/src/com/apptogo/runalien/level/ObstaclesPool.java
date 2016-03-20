@@ -1,7 +1,6 @@
-package com.apptogo.runalien.obstacle;
+package com.apptogo.runalien.level;
 
-import static com.apptogo.runalien.obstacle.ObstacleDefinitions.CRATE;
-import static com.apptogo.runalien.obstacle.ObstacleDefinitions.*;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.*;
 
 import java.util.ArrayList;
 import java.util.Collection;

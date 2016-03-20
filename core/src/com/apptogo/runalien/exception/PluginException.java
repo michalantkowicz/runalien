@@ -1,6 +1,6 @@
 package com.apptogo.runalien.exception;
 
-public class PluginException extends Exception{
+public class PluginException extends RuntimeException{
 
 	private static final long serialVersionUID = -8150539479242480270L;
 	

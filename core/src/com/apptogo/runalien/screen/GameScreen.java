@@ -5,10 +5,10 @@ import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ParallaxActor;
+import com.apptogo.runalien.level.LevelGenerator;
+import com.apptogo.runalien.level.ObstaclesPool;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomActionManager;
-import com.apptogo.runalien.obstacle.LevelGenerator;
-import com.apptogo.runalien.obstacle.ObstaclesPool;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
