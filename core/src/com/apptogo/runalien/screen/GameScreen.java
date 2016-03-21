@@ -66,8 +66,8 @@ public class GameScreen extends BasicScreen {
 		player.queueAnimation("idle");
 
 		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, getGroundLevel())
-				                        .addFixture("player").box(0.6f, 1.9f).friction(0)
-				                        .addFixture("player_sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0)
+				                        .addFixture("player").box(0.6f, 1.9f).friction(0.1f)
+				                        .addFixture("player_sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.1f)
 				                        .create());
 		
 		player.modifyCustomOffsets(-0.4f, 0f);
@@ -81,7 +81,7 @@ public class GameScreen extends BasicScreen {
 
 		//create infinite ground body
 		//TODO should be polyline
-		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.4f).create();
+		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, getGroundLevel() - 0.4f).friction(0.1f).create();
 
 		//create obstacle pool
 		obstaclesPool = new ObstaclesPool();

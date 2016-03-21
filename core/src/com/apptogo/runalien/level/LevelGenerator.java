@@ -67,7 +67,7 @@ public class LevelGenerator {
 			// 				if(actor.getBody().getPosition().x < player.getBody().getPosition().x + 1)
 			//					actor.setAlive(false);
 			//			}
-			segment.getFields().stream().filter(o -> o.getBody().getPosition().x < player.getBody().getPosition().x + 1).forEach(o -> o.setAlive(false));
+			segment.getFields().stream().filter(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - 1).forEach(o -> o.setAlive(false));
 		}
 	}
 

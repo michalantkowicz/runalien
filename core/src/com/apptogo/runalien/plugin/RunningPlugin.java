@@ -11,8 +11,8 @@ public class RunningPlugin extends AbstractPlugin {
 	private DeathPlugin deathPlugin;
 	private float runningSpeed = 10;
 	private CustomAction speedingAction;
-	
-	public RunningPlugin(){
+
+	public RunningPlugin() {
 		super();
 		speedingAction = new CustomAction(2f, 15) {
 
@@ -22,10 +22,10 @@ public class RunningPlugin extends AbstractPlugin {
 			}
 		};
 	}
-	
+
 	@Override
 	public void run() {
-		if (deathPlugin.dead) {
+		if (deathPlugin.dead && started) {
 			setStarted(false);
 		}
 		if (started) {
@@ -38,19 +38,18 @@ public class RunningPlugin extends AbstractPlugin {
 	}
 
 	public void setStarted(boolean started) {
-		if (!deathPlugin.dead) {
-			if (started) {
-				body.setLinearDamping(0);
-				actor.changeAnimation("run").setFrameDuration(0.017f);
-				CustomActionManager.getInstance().registerAction(speedingAction);
-			} else{
-				body.setLinearDamping(3f);
-				actor.changeAnimation("idle");
-				CustomActionManager.getInstance().unregisterAction(speedingAction);
-			}
 
-			this.started = started;
+		if (started) {
+			actor.changeAnimation("run").setFrameDuration(0.017f);
+			CustomActionManager.getInstance().registerAction(speedingAction);
+		} else {
+			if(!deathPlugin.dead)
+				actor.changeAnimation("idle");
+			CustomActionManager.getInstance().unregisterAction(speedingAction);
 		}
+
+		this.started = started;
+
 	}
 
 	@Override
