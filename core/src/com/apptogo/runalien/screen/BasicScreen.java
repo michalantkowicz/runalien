@@ -89,8 +89,6 @@ public abstract class BasicScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        step(delta);
-
         // HANDLING CAMERA MOVEMENT
         if (movement.isRun())
         {
@@ -99,6 +97,8 @@ public abstract class BasicScreen implements Screen {
 
         this.stage.act();
         this.stage.draw();
+        
+        step(delta);
     }
 
     protected void changeScreen(final Screen screen)

@@ -43,7 +43,7 @@ public class GameScreen extends BasicScreen {
 	private GameActor player;
 	
 	public GameScreen(Main game) {
-		super(game);
+		super(game, "background_game");
 		debugRenderer = new Box2DDebugRenderer();
 		debugRenderer.SHAPE_AWAKE.set(Color.PINK);
 
@@ -90,11 +90,15 @@ public class GameScreen extends BasicScreen {
 		levelGenerator = new LevelGenerator(player);
 
 		//create clouds
-		ParallaxActor clouds = new ParallaxActor(gameworldStage.getCamera(), "clouds");
-		clouds.debug();
+		//ParallaxActor clouds = new ParallaxActor(gameworldStage.getCamera(), "clouds");
+		//clouds.debug();
 		//clouds.setSize(1280 / UnitConverter.PPM, 200 / UnitConverter.PPM);
 		//clouds.setPosition(-640 / UnitConverter.PPM, 100 / UnitConverter.PPM);
-		gameworldStage.addActor(clouds);
+		//gameworldStage.addActor(clouds);
+		
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.001f).moveToY(2) );
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(getGroundLevel()-0.5f).setSpeedModifier(0.5f) );
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "ground").moveToY(getGroundLevel()-3.3f) );
 	}
 
 	@Override

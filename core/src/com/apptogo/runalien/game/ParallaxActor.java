@@ -1,8 +1,10 @@
 package com.apptogo.runalien.game;
 
+import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,67 +12,178 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParallaxActor extends Actor {
-
+	
+	private TextureRegion textureRegion;
 	private OrthographicCamera camera;
-	private TextureRegion tr;
 		
-	float swidth, width, height, uu, w2u, speed = 0.0001f;
-	//TODO refactor + uzaleznienie predkosci od szybkosci playera
+	/**
+	 * Previous camera X coordinate's value - used for calculating how to change current U
+	 */
+	private float previousCameraX;
+	
+	/**
+	 * Camera's speed modifier (if you want to scroll parallax a little bit slower or faster than camera)
+	 */
+	private float speedModifier = 1;
+		
+	/**
+	 * Full width of texture in Box2D units (should be equal to device screen's width)
+	 * Texture's width also should be equal to device screen's width (in other case it will be stretched)
+	 */
+	private float FULL_WIDTH = Main.SCREEN_WIDTH / UnitConverter.PPM;
+	
+	/**
+	 * Width and height of textureRegion (width is being ste up using FULL_WIDTH) - used for drawing
+	 */
+	private float width, height;
+	
+	/**
+	 * Factors to cast xy to uv coordinates
+	 */
+	private float x2u, u2x;
+	
+	/**
+	 * Current U coordinate's value (used for "splitting" the region)
+	 */
+	private float currentU;
+	
+	/**
+	 * Fixed speed set up by setfixedSpeed() (when non-zero region's moving does not depend on camera speed)
+	 */
+	private float fixedSpeed = 0;	
+	
+	/**
+	 * 
+	 * @param camera - camera to follow
+	 * @param textureRegionName - name of region (in texture atlas)
+	 */
 	public ParallaxActor(Camera camera, String textureRegionName) {
+		this.textureRegion = ResourcesManager.getInstance().getAtlasRegion(textureRegionName);
+		
 		this.camera = (OrthographicCamera)camera;
-		this.tr = ResourcesManager.getInstance().getAtlasRegion(textureRegionName);
+		previousCameraX = camera.position.x;
+		
+		//Setting size (should be as small as possible)
 		setSize(0.01f,0.01f);
 		
-		width = 1280/64f;
-		swidth = width;
+		//Calculating width and height
+		width = FULL_WIDTH;
+		height = textureRegion.getRegionHeight()/64f;
 		
-		height = tr.getRegionHeight()/64f;
-		uu = tr.getU();
-		w2u = width / tr.getU2();
+		//Calculating factors
+		x2u = width / textureRegion.getU2();
+		u2x = textureRegion.getU2() / width;
 		
-		startMoving();
+		//Setting currentU (should be 0 at the beginning by default)
+		currentU = textureRegion.getU();
+		
+		//Setting up moving action 
+		CustomActionManager.getInstance().registerAction(parallaxAction);
 	}
 	
-	
-	
-	
-	private void startMoving() {
-
-		CustomAction cloudMovingAction = new CustomAction(0, 0) {
-
-			@Override
-			public void perform() {
-				uu += speed;
-				width -= speed * w2u;
-				
-				if( uu >= tr.getU2())
-				{
-					uu = uu - tr.getU2();
-					width = swidth - (uu * w2u);
-				}
+	/**
+	 * This action updates texture position due to camera's position (if fixedSpeed == 0)
+	 * or moving it by fixed offset (id fixedSpeed != 0)
+	 */
+	CustomAction parallaxAction = new CustomAction(0, 0) {
+		@Override
+		public void perform() {
+			//Calculating left part width and currentU value
+			if(fixedSpeed == 0) {
+				float cameraSpeed = speedModifier * (camera.position.x - previousCameraX);
+				width -= cameraSpeed;			
+				currentU += cameraSpeed * u2x;
 			}
-		};
-
-		CustomActionManager.getInstance().registerAction(cloudMovingAction);
-	}
+			else {
+				width -= fixedSpeed;
+				currentU += fixedSpeed * u2x;
+			}
+			
+			//Backuping camera.position.x value
+			previousCameraX = camera.position.x;
+			
+			//Resetting region when left part is 0 or lesser
+			if( currentU >= textureRegion.getU2())
+			{
+				currentU = currentU - textureRegion.getU2();
+				width = FULL_WIDTH - (currentU * x2u);
+			}
+		}
+	};
 	
-	
-	
+	/**
+	 * Updates actor's position due to camera's positin (so it will be alway at the center of screen)
+	 */
 	@Override
 	public void act(float delta) {
-		setPosition(camera.position.x, camera.position.y + 2);
 	}
 	
+	/**
+	 * Draws left and right part of regions (due to calculated left region's width and region's offset)
+	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 		
-		tr.setU(uu);
-		batch.draw(tr, getX() -640/64f, getY(), width, height);
+		//Setting up current U (equal to currentU's value)
+		textureRegion.setU(currentU);
 		
-		TextureRegion r = new TextureRegion(tr);
-		r.setU(0);
-		r.setU2(uu);
-		batch.draw(r, getX() -640/64f + width, getY(), swidth - width, height);
+		//Drawing left part of region
+		batch.draw(textureRegion, camera.position.x - FULL_WIDTH/2f, camera.position.y + getY(), width, height);
+		
+		//Backuping current U and U2 coordinates
+		float backupU = textureRegion.getU();
+		float backupU2 = textureRegion.getU2();
+		
+		//Setting up U and U2 values for right region temporarily
+		textureRegion.setU(0);
+		textureRegion.setU2(currentU);
+
+		//Drawing right part of region
+		batch.draw(textureRegion, camera.position.x - FULL_WIDTH/2f + width, camera.position.y + getY(), FULL_WIDTH - width, height);
+		
+		//Restoring backed up U and U2 coordinates
+		textureRegion.setU(backupU);
+		textureRegion.setU2(backupU2);
+	}
+	
+	/**
+	 * Wrapper get method for chaining purposes
+	 * @param camera - camera to follow
+	 * @param textureRegionName - name of region (in texture atlas)
+	 * @return ParallaxActor instance
+	 */
+	public static ParallaxActor get(Camera camera, String textureRegionName){
+		return new ParallaxActor(camera, textureRegionName);
+	}
+	
+	/**
+	 * Wrapper of setY() Actor's method for chaining purposes
+	 * @param y - y coordinate (in Box2D coordinates)
+	 * @return ParallaxActor instance
+	 */
+	public ParallaxActor moveToY(float y) {
+		setY(y);
+		return this;
+	}
+	
+	/**
+	 * Setting fixed speed of scrolling texture (region will not follow camera anymore)
+	 * @param speed - fixed speed (gt 0 will texture move forward)
+	 * @return ParallaxActor instance
+	 */
+	public ParallaxActor setFixedSpeed(float speed) {
+		this.fixedSpeed = speed;
+		return this;
+	}
+	
+	/**
+	 * Setting camera's speed modifier (if you want to scroll parallax slower/faster than camera)
+	 * @param modifier - modifier's value (it will be multiplying camera's speed)
+	 * @return ParallaxActor instance
+	 */
+	public ParallaxActor setSpeedModifier(float modifier) {
+		this.speedModifier = modifier;
+		return this;
 	}
 }
