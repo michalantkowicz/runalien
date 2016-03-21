@@ -17,9 +17,12 @@ import com.badlogic.gdx.utils.Logger;
 
 public class LevelGenerator {
 	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
-	private final float DISTANCE_TO_EDGE = 7f;
-	private final float INITIAL_SPEED = 10f;
 
+	private final float INITIAL_SPEED = 10f;
+	
+	private final float SPAWN_DISTANCE = 15f;
+	private final float DISAPPEAR_DISTANCE = 5f;
+	
 	private GameActor player;
 	private SegmentGenerator segmentGenerator;
 
@@ -32,7 +35,7 @@ public class LevelGenerator {
 
 		this.player = player;
 		this.segmentGenerator = new SegmentGenerator();
-		this.nextPosition = 10f;
+		this.nextPosition = 17f;
 	}
 
 	/**
@@ -42,7 +45,7 @@ public class LevelGenerator {
 		//calculate level
 		calculateLevel();
 		
-		if (player.getBody().getPosition().x + DISTANCE_TO_EDGE >= nextPosition) {
+		if (player.getBody().getPosition().x + SPAWN_DISTANCE >= nextPosition) {
 			generateRandomSegmentMeetingLevelRequirements();
 		}
 
@@ -57,7 +60,7 @@ public class LevelGenerator {
 		segment.setPosition(nextPosition);
 		activeSegments.add(segment);
 
-		this.nextPosition += segmentDefinition.getBaseOffset();
+		this.nextPosition += segmentDefinition.getBaseOffset() + level;
 	}
 
 	private void freeSegments() {
@@ -67,7 +70,7 @@ public class LevelGenerator {
 			// 				if(actor.getBody().getPosition().x < player.getBody().getPosition().x + 1)
 			//					actor.setAlive(false);
 			//			}
-			segment.getFields().stream().filter(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - 1).forEach(o -> o.setAlive(false));
+			segment.getFields().stream().filter(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE).forEach(o -> o.setAlive(false));
 		}
 	}
 

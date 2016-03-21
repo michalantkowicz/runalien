@@ -14,7 +14,7 @@ public class RunningPlugin extends AbstractPlugin {
 
 	public RunningPlugin() {
 		super();
-		speedingAction = new CustomAction(2f, 15) {
+		speedingAction = new CustomAction(3f, 15) {
 
 			@Override
 			public void perform() {
