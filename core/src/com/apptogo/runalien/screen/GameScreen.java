@@ -47,7 +47,7 @@ public class GameScreen extends BasicScreen {
 		debugRenderer = new Box2DDebugRenderer();
 		debugRenderer.SHAPE_AWAKE.set(Color.PINK);
 
-		world = new World(new Vector2(0, -100), true);
+		world = new World(new Vector2(0, -130), true);
 		world.setContactListener(contactListener);
 		createGameWorldStage();
 	}
@@ -99,6 +99,7 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.001f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(getGroundLevel()-0.5f).setSpeedModifier(0.5f) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "ground").moveToY(getGroundLevel()-3.3f) );
+
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 		
 		if(!jumping)
 		{	
-			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 30));
+			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 35));
 			jumping = true;
 			actor.changeAnimation("jump");
 
@@ -50,7 +50,7 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 	{
 		if(!doubleJumping)
 		{
-			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 25));
+			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 30));
 			doubleJumping = true;
 			
 			//50% chance to play scream sound
@@ -155,7 +155,7 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 		if(running.isStarted()){
 			if(Gdx.input.isKeyJustPressed(Keys.A))
 				jump();
-			if(Gdx.input.isKeyJustPressed(Keys.S))
+			if(Gdx.input.isKeyJustPressed(Keys.L))
 				chargeDown();
 		}
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE)){

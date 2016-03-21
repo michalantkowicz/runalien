@@ -1,6 +1,7 @@
 package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.screen.GameScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class CameraFollowingPlugin extends AbstractPlugin {
@@ -15,7 +16,7 @@ public class CameraFollowingPlugin extends AbstractPlugin {
 	
 	@Override
 	public void run() { 
-		camera.position.set(actor.getBody().getPosition().x, camera.position.y, camera.position.z);
+		camera.position.set(actor.getBody().getPosition().x + 5f, camera.position.y, camera.position.z);
 	}
 
 	@Override
