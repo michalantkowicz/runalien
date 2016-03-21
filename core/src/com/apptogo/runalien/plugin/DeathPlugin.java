@@ -2,15 +2,27 @@ package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
+import com.apptogo.runalien.manager.CustomAction;
+import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class DeathPlugin extends AbstractPlugin {
 
-	protected boolean dead = false;
+	public boolean dead = false;
 
 	private SoundPlugin soundHandler;
+	private GameScreen screen;
+	
+	public DeathPlugin() {
+		super();
+	}
+	//TODO przerobic GameScreen do singletona lub zastosowac inny mechanizm - musi byc dostep do instancji GameScreen!
+	public DeathPlugin(GameScreen screen) {
+		this();
+		this.screen = screen;
+	}
 	
 	@Override
 	public void run() {		
@@ -27,6 +39,8 @@ public class DeathPlugin extends AbstractPlugin {
 				actor.changeAnimation("dietop");
 			else
 				actor.changeAnimation("diebottom");
+			
+			screen.endGame();
 			
 			//TODO set up showing end screen with some delay - or rather pass info to gamescreen
 		}

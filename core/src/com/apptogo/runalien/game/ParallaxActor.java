@@ -59,6 +59,7 @@ public class ParallaxActor extends Actor {
 	 */
 	public ParallaxActor(Camera camera, String textureRegionName) {
 		this.textureRegion = ResourcesManager.getInstance().getAtlasRegion(textureRegionName);
+		this.setName(textureRegionName);
 		
 		this.camera = (OrthographicCamera)camera;
 		previousCameraX = camera.position.x;
@@ -116,6 +117,8 @@ public class ParallaxActor extends Actor {
 	 */
 	@Override
 	public void act(float delta) {
+		if(getName() == "clouds")
+			System.out.println(getActions().size);
 	}
 	
 	/**

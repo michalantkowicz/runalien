@@ -1,7 +1,7 @@
 package com.apptogo.runalien.level.segment;
 
+import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.BodyBuilder;
-import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class SegmentFieldDefinitions {
@@ -20,24 +20,24 @@ public class SegmentFieldDefinitions {
 	public static final String BELL_3 = "upper3";
 	public static final String BELL_4 = "upper4";
 	
-	public final static BodyBuilder CRATE_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder CRATE_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingBottom").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
 	
-	public final static BodyBuilder LOG1_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder LOG1_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingBottom").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
-	public final static BodyBuilder LOG2_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder LOG2_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingBottom").box(OBSTACLE_SIZE, 2 * OBSTACLE_SIZE).sensor(true);
-	public final static BodyBuilder LOG3_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder LOG3_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingBottom").box(OBSTACLE_SIZE, 3 * OBSTACLE_SIZE).sensor(true);
-	public final static BodyBuilder LOG4_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder LOG4_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingBottom").box(OBSTACLE_SIZE, 4 * OBSTACLE_SIZE).sensor(true);
 	
-	public final static BodyBuilder BELL1_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder BELL1_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingTop").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
-	public final static BodyBuilder BELL2_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder BELL2_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingTop").box(OBSTACLE_SIZE, 2 * OBSTACLE_SIZE).sensor(true);
-	public final static BodyBuilder BELL3_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder BELL3_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingTop").box(OBSTACLE_SIZE, 3 * OBSTACLE_SIZE).sensor(true);
-	public final static BodyBuilder BELL4_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, GameScreen.getGroundLevel())
+	public final static BodyBuilder BELL4_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
 			.addFixture("killingTop").box(OBSTACLE_SIZE, 4 * OBSTACLE_SIZE).sensor(true);
 }

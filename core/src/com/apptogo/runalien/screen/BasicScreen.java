@@ -95,7 +95,7 @@ public abstract class BasicScreen implements Screen {
             this.camera.position.set(movement.getCurrent());
         }
 
-        this.stage.act();
+        this.stage.act(delta);
         this.stage.draw();
         
         step(delta);

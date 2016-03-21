@@ -53,6 +53,14 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		plugin.setActor(this);
 		plugins.put(plugin.getClass().getSimpleName(), plugin);
 	}
+	
+	public void removePlugin(String name) throws PluginException{
+		AbstractPlugin plugin = plugins.get(name);
+		if(plugin == null)
+			throw new PluginException("Actor: '" + getName() + "' doesn't have plugin: '" + name);
+		
+		plugins.remove(name);
+	}
 
 	public void modifyCustomOffsets(float deltaX, float deltaY) {
 		customOffsetX += deltaX;
