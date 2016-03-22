@@ -3,7 +3,6 @@ package com.apptogo.runalien.screen;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.apptogo.runalien.exception.ScreenException;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.level.LevelGenerator;
@@ -18,7 +17,9 @@ import com.apptogo.runalien.plugin.RunningPlugin;
 import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Animation;
+import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Image;
+import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -32,26 +33,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
-//TODO implement SINGLETON pattern!
-public class GameScreen extends BasicScreen {
-	
-	private static GameScreen INSTANCE = null;
-	public static GameScreen getInstance() {
-		if(INSTANCE == null)
-			throw new ScreenException("GameScreen hasn't been instantiated yet!");
-		else
-			return INSTANCE;
-	}
-		
-	private static Box2DDebugRenderer debugRenderer;
-	private static World world;
-	private static Stage gameworldStage;
-	private static ObstaclesPool obstaclesPool;
-	public static Map<String, String> contactsSnapshot = new HashMap<String, String>();
-	
+public class GameScreen extends BasicScreen {		
+	private Box2DDebugRenderer debugRenderer;
+	private World world;
+	private Stage gameworldStage;
+	private ObstaclesPool obstaclesPool;
+	private Map<String, String> contactsSnapshot = new HashMap<String, String>();
 	private ContactListener contactListener = new ContactListener();
 	private LevelGenerator levelGenerator;
 	private GameActor player;
+	
+	private boolean endGame = false;
 	
 	public GameScreen(Main game) {
 		super(game, "background_game");
@@ -61,16 +53,14 @@ public class GameScreen extends BasicScreen {
 		world = new World(new Vector2(0, -130), true);
 		world.setContactListener(contactListener);
 		createGameWorldStage();
-		
-		INSTANCE = this;
 	}
 	
 	@Override
 	void prepare() {
 		stage.addActor(Image.get("space").size(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT).position(0, Main.SCREEN_HEIGHT/2f).centerX());
-		stage.addActor(Image.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 300).centerX());
-		stage.addActor(Image.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 150).centerX());
-		stage.addActor(Image.get("replay").position(0,  Main.SCREEN_HEIGHT/2f).centerX());
+		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 300).centerX().setListener(Listener.click(game, new MenuScreen(game))));
+		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 150).centerX());
+		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f).centerX().setListener(Listener.click(game, new GameScreen(game))));
 		
 		//prepare CustomActionManager
 		gameworldStage.addActor(CustomActionManager.getInstance());
@@ -109,7 +99,7 @@ public class GameScreen extends BasicScreen {
 		//create Parallaxes
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.001f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-0.5f).setSpeedModifier(0.5f) );
-		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-0.5f).setSpeedModifier(0.5f) );
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "ground").moveToY(Main.GROUND_LEVEL-3.3f) );
 	}
 	
 	@Override
@@ -134,6 +124,18 @@ public class GameScreen extends BasicScreen {
 		
 		//make player always on top
 		player.toFront();
+		
+		if(endGame) {
+			player.removePlugin("CameraFollowingPlugin");
+			
+			gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-600), 3, Interpolation.pow5),
+	                Actions.moveBy(0, UnitConverter.toBox2dUnits(-100), 60)));
+			
+			stage.addAction(Actions.sequence(Actions.moveBy(0, -600, 3, Interpolation.pow5),
+			       Actions.moveBy(0,  -100, 60)));
+			
+			endGame = false;
+		}
 	}
 
 	@Override
@@ -159,27 +161,24 @@ public class GameScreen extends BasicScreen {
 		((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
 	}
 
-	/** ------ FOR INSTANCE ------**/
-	public void endGame() {
-		player.removePlugin("CameraFollowingPlugin");
-		
-		gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-600), 3, Interpolation.pow5),
-                Actions.moveBy(0, UnitConverter.toBox2dUnits(-100), 60)));
-		
-		stage.addAction(Actions.sequence(Actions.moveBy(0, -600, 3, Interpolation.pow5),
-		       Actions.moveBy(0,  -100, 60)));
+	/**------ GETTERS / SETTERS ------**/
+	public void setEndGame(boolean state) {
+		endGame = state;
 	}
 	
-	/** ------ COMMONS ------ **/
-	public static World getWorld() {
+	public World getWorld() {
 		return world;
 	}
 
-	public static Stage getGameworldStage() {
+	public Stage getGameworldStage() {
 		return gameworldStage;
 	}
 
-	public static ObstaclesPool getObstaclesPool() {
+	public ObstaclesPool getObstaclesPool() {
 		return obstaclesPool;
+	}
+	
+	public Map<String, String> getContactsSnapshot() {
+		return contactsSnapshot;
 	}
 }

@@ -1,6 +1,7 @@
 package com.apptogo.runalien.main;
 
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.screen.SplashScreen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
@@ -11,15 +12,23 @@ public class Main extends Game {
     // 20x40 in box2d units
     public static final float SCREEN_WIDTH = 1280f, SCREEN_HEIGHT = 800f;
     public final static float GROUND_LEVEL = -3f;
-    public static boolean fadeIn = true;
+    public static boolean FADE_IN = true;
 
+    public static Main getInstance() {
+    	return (Main)Gdx.app.getApplicationListener();
+    }
+    
+    public GameScreen getGameScreen() {
+    	return (GameScreen)getScreen();
+    }
+    
     @Override
     public void setScreen(Screen screen) {
         if (this.screen != null) {
             this.screen.dispose();
-        	fadeIn = (this.screen.getClass() == screen.getClass()) ? false : true;
+        	FADE_IN = (this.screen.getClass() == screen.getClass()) ? false : true;
         }
-        
+         
         super.setScreen(screen);
     }
 

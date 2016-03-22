@@ -80,7 +80,7 @@ public abstract class BasicScreen implements Screen {
 
         prepare();
 
-        if(Main.fadeIn)
+        if(Main.FADE_IN)
         	this.stage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.2f)));
     }
 

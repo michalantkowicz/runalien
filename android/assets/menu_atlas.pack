@@ -17,40 +17,26 @@ achievementUp
   orig: 90, 90
   offset: 0, 0
   index: -1
-background_game
+background_menu
   rotate: false
   xy: 1, 1
   size: 1280, 800
   orig: 1280, 800
   offset: 0, 0
   index: -1
-background_menu
-  rotate: false
-  xy: 1, 803
-  size: 1280, 800
-  orig: 1280, 800
-  offset: 0, 0
-  index: -1
 buttonDown
   rotate: false
-  xy: 1, 1778
+  xy: 483, 803
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 1, 1912
+  xy: 874, 803
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
-  index: -1
-clouds
-  rotate: false
-  xy: 1, 1605
-  size: 1208, 171
-  orig: 1280, 200
-  offset: 25, 7
   index: -1
 font_big
   rotate: false
@@ -87,6 +73,13 @@ gplusUp
   orig: 90, 90
   offset: 0, 0
   index: -1
+menu
+  rotate: false
+  xy: 483, 937
+  size: 284, 70
+  orig: 285, 72
+  offset: 1, 1
+  index: -1
 playButtonDown
   rotate: false
   xy: 1283, 425
@@ -110,9 +103,16 @@ rankButtonDown
   index: -1
 rankButtonUp
   rotate: false
-  xy: 1283, 863
+  xy: 1, 803
   size: 480, 144
   orig: 480, 144
+  offset: 0, 0
+  index: -1
+replay
+  rotate: false
+  xy: 1265, 863
+  size: 389, 72
+  orig: 389, 72
   offset: 0, 0
   index: -1
 soundDown
@@ -142,6 +142,13 @@ soundUpOff
   size: 36, 51
   orig: 50, 51
   offset: 0, 0
+  index: -1
+submit
+  rotate: false
+  xy: 1656, 907
+  size: 376, 71
+  orig: 377, 72
+  offset: 1, 0
   index: -1
 vibrationDown
   rotate: false

@@ -42,6 +42,7 @@ public class ResourcesManager {
 		manager.load("game_atlas.pack", TextureAtlas.class);
 
 		//sounds
+		//TODO muzyka w podfolderze i funkcja do zwracania instancji (jak przy regionach)
 		manager.load("scream.ogg", Sound.class);
 		manager.load("slide.ogg", Sound.class);
 		manager.load("jump.ogg", Sound.class);

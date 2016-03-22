@@ -1,11 +1,24 @@
 package com.apptogo.runalien.level.segment;
 
-import static com.apptogo.runalien.level.segment.SegmentDefinitions.*;
-import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.*;
+import static com.apptogo.runalien.level.segment.SegmentDefinitions.BELL;
+import static com.apptogo.runalien.level.segment.SegmentDefinitions.CRATE_BOT;
+import static com.apptogo.runalien.level.segment.SegmentDefinitions.CRATE_TOP;
+import static com.apptogo.runalien.level.segment.SegmentDefinitions.EMPTY;
+import static com.apptogo.runalien.level.segment.SegmentDefinitions.LOG;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.BELL_1;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.BELL_2;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.BELL_3;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.BELL_4;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.CRATE;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.LOG_1;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.LOG_2;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.LOG_3;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.LOG_4;
+import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.OBSTACLE_SIZE;
 
 import com.apptogo.runalien.game.GameActor;
+import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
-import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.math.Vector2;
 
 public class SegmentGenerator {
@@ -29,14 +42,14 @@ public class SegmentGenerator {
 					break;
 
 				case (CRATE_BOT):
-					field = GameScreen.getObstaclesPool().getObstacle(CRATE);
+					field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(CRATE);
 					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 					break;
 
 				case (CRATE_TOP):
-					field = GameScreen.getObstaclesPool().getObstacle(CRATE);
+					field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(CRATE);
 					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
@@ -57,16 +70,16 @@ public class SegmentGenerator {
 					
 					switch (columnCounter) {
 					case 1:
-						field = GameScreen.getObstaclesPool().getObstacle(LOG_1);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(LOG_1);
 						break;
 					case 2:
-						field = GameScreen.getObstaclesPool().getObstacle(LOG_2);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(LOG_2);
 						break;
 					case 3:
-						field = GameScreen.getObstaclesPool().getObstacle(LOG_3);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(LOG_3);
 						break;
 					case 4:
-						field = GameScreen.getObstaclesPool().getObstacle(LOG_4);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(LOG_4);
 						break;
 					}
 
@@ -88,16 +101,16 @@ public class SegmentGenerator {
 					
 					switch (columnCounter) {
 					case 1:
-						field = GameScreen.getObstaclesPool().getObstacle(BELL_1);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(BELL_1);
 						break;
 					case 2:
-						field = GameScreen.getObstaclesPool().getObstacle(BELL_2);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(BELL_2);
 						break;
 					case 3:
-						field = GameScreen.getObstaclesPool().getObstacle(BELL_3);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(BELL_3);
 						break;
 					case 4:
-						field = GameScreen.getObstaclesPool().getObstacle(BELL_4);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(BELL_4);
 						break;
 					}
 

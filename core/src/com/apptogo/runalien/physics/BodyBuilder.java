@@ -1,6 +1,6 @@
 package com.apptogo.runalien.physics;
 
-import com.apptogo.runalien.screen.GameScreen;
+import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -22,7 +22,7 @@ public class BodyBuilder {
 	
 	public static BodyBuilder get()
 	{
-		return new BodyBuilder(GameScreen.getWorld());
+		return new BodyBuilder(Main.getInstance().getGameScreen().getWorld());
 	}
 	
 	public BodyBuilder(World world)

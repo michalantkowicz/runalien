@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.exception.PluginException;
+import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.plugin.AbstractPlugin;
-import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -105,7 +105,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	public void init() {
 		setAlive(true);
 		body.setActive(true);
-		GameScreen.getGameworldStage().addActor(this);
+		Main.getInstance().getGameScreen().getGameworldStage().addActor(this);
 	}
 
 	public boolean isAlive() {

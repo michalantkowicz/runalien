@@ -2,6 +2,7 @@ package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
+import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
@@ -146,7 +147,7 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 	
 	@Override
 	public void run() {		
-		if(GameScreen.contactsSnapshot.containsKey("player") && GameScreen.contactsSnapshot.get("player").equals("ground"))
+		if(Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").equals("ground"))
 			land();
 		
 		if(doStandUp )

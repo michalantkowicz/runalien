@@ -28,6 +28,9 @@
 		soundOff: { down: soundDownOff, up: soundUpOff },
 		vibration: { down: vibrationDown, up: vibrationUp },
 		vibrationOff: { down: vibrationDownOff, up: vibrationUpOff },
+		menu: { down: menu, up: menu },
+		submit: { down: submit, up: submit },
+		replay: { down: replay, up: replay },
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: 

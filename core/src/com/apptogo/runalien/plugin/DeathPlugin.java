@@ -2,8 +2,7 @@ package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
-import com.apptogo.runalien.manager.CustomAction;
-import com.apptogo.runalien.manager.CustomActionManager;
+import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -26,7 +25,7 @@ public class DeathPlugin extends AbstractPlugin {
 	
 	@Override
 	public void run() {		
-		if(GameScreen.contactsSnapshot.containsKey("player") && GameScreen.contactsSnapshot.get("player").startsWith("killing")) {
+		if(Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").startsWith("killing")) {
 			dead = true;
 			
 			//TODO soundHandler.stopSounds();
@@ -35,12 +34,12 @@ public class DeathPlugin extends AbstractPlugin {
 			for(Fixture fixture : body.getFixtureList())
 				UserData.get(fixture).ignore = true;
 			
-			if(GameScreen.contactsSnapshot.get("player").equals("killingTop"))
+			if(Main.getInstance().getGameScreen().getContactsSnapshot().get("player").equals("killingTop"))
 				actor.changeAnimation("dietop");
 			else
 				actor.changeAnimation("diebottom");
 			
-			screen.endGame();
+			Main.getInstance().getGameScreen().setEndGame(true);
 			
 			//TODO set up showing end screen with some delay - or rather pass info to gamescreen
 		}

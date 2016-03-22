@@ -117,8 +117,6 @@ public class ParallaxActor extends Actor {
 	 */
 	@Override
 	public void act(float delta) {
-		if(getName() == "clouds")
-			System.out.println(getActions().size);
 	}
 	
 	/**
