@@ -70,6 +70,7 @@ public class ParallaxActor extends Actor {
 		//Calculating width and height
 		width = FULL_WIDTH;
 		height = textureRegion.getRegionHeight()/64f;
+		setSize(width, height);
 		
 		//Calculating factors
 		x2u = width / textureRegion.getU2();

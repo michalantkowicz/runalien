@@ -12,7 +12,6 @@ import com.apptogo.runalien.level.segment.Segment;
 import com.apptogo.runalien.level.segment.SegmentDefinition;
 import com.apptogo.runalien.level.segment.SegmentDefinitions;
 import com.apptogo.runalien.level.segment.SegmentGenerator;
-import com.apptogo.runalien.plugin.RunningPlugin;
 import com.badlogic.gdx.utils.Logger;
 
 public class LevelGenerator {
@@ -21,13 +20,13 @@ public class LevelGenerator {
 	private final float INITIAL_SPEED = 10f;
 	
 	private final float SPAWN_DISTANCE = 15f;
-	private final float DISAPPEAR_DISTANCE = 5f;
+	private final float DISAPPEAR_DISTANCE = 8f;
 	
 	private GameActor player;
 	private SegmentGenerator segmentGenerator;
 
 	private float nextPosition;
-	private int level;
+	private float level;
 
 	private List<Segment> activeSegments = new ArrayList<Segment>();
 
@@ -90,11 +89,13 @@ public class LevelGenerator {
 			}
 		}
 		
-		//get random segment def
-		Random random = new Random();
-		SegmentDefinition segmentToSpawn = segmentDefinitions.get(random.nextInt(segmentDefinitions.size()));
-		
-		generateSegment(segmentToSpawn);
+		if(segmentDefinitions.size() > 0){
+			//get random segment def
+			Random random = new Random();
+			SegmentDefinition segmentToSpawn = segmentDefinitions.get(random.nextInt(segmentDefinitions.size()));
+			generateSegment(segmentToSpawn);
+		}
+
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class LevelGenerator {
 	}
 
 	private void calculateLevel() {
-		this.level = (int) (((RunningPlugin) player.getPlugin(RunningPlugin.class.getSimpleName())).getRunningSpeed() - INITIAL_SPEED);
+		this.level = player.getBody().getLinearVelocity().x - INITIAL_SPEED;
 	}
 
 }

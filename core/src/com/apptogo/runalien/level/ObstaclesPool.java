@@ -24,6 +24,7 @@ public class ObstaclesPool {
 	 */
 	public ObstaclesPool() {
 		createPool(segmentFieldDefinitions.CRATE, segmentFieldDefinitions.CRATE_BODY, 36);
+		createPool(segmentFieldDefinitions.BIG_CRATE, segmentFieldDefinitions.BIG_CRATE_BODY, 8);
 		
 		createPool(segmentFieldDefinitions.LOG_1, segmentFieldDefinitions.LOG1_BODY, 8);
 		createPool(segmentFieldDefinitions.LOG_2, segmentFieldDefinitions.LOG2_BODY, 8);
@@ -34,6 +35,9 @@ public class ObstaclesPool {
 		createPool(segmentFieldDefinitions.BELL_2, segmentFieldDefinitions.BELL2_BODY, 8);
 		createPool(segmentFieldDefinitions.BELL_3, segmentFieldDefinitions.BELL3_BODY, 8);
 		createPool(segmentFieldDefinitions.BELL_4, segmentFieldDefinitions.BELL4_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_5, segmentFieldDefinitions.BELL5_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_6, segmentFieldDefinitions.BELL6_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_7, segmentFieldDefinitions.BELL7_BODY, 8);
 	}
 
 	/**

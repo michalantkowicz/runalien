@@ -86,7 +86,7 @@ public class GameScreen extends BasicScreen {
 		
 		//create infinite ground body
 		//TODO should be polyline
-		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.4f).friction(0.1f).create();
+		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).create();
 
 		//create obstacle pool
 		obstaclesPool = new ObstaclesPool();
@@ -95,9 +95,10 @@ public class GameScreen extends BasicScreen {
 		levelGenerator = new LevelGenerator(player);
 
 		//create Parallaxes
+		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.001f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
-		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "ground").moveToY(Main.GROUND_LEVEL-3.3f) );
+		gameworldStage.addActor( ground.moveToY(Main.GROUND_LEVEL - ground.getHeight()) );
 	}
 	
 	@Override

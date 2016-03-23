@@ -97,7 +97,6 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	
 	@Override
 	public void reset() {
-//		body.setTransform(new Vector2(-100, 0), 0);
 		body.setActive(false);
 		remove();
 	}

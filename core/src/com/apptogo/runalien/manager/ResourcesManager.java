@@ -74,6 +74,7 @@ public class ResourcesManager {
 	public Array<AtlasRegion> getRegions(String pattern) {
 		Array<AtlasRegion> regions = new Array<AtlasRegion>();
 
+		//TODO handle pattern with same beginning sorting without numbers
 		for (TextureAtlas atlas : manager.getAll(TextureAtlas.class, new Array<TextureAtlas>())) {
 			for (AtlasRegion region : atlas.getRegions())
 				if (region.name.startsWith(pattern))

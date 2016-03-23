@@ -11,7 +11,7 @@ public class SegmentDefinition {
 		this.definition = definition;
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
-		this.baseOffset = basicOffset;
+		this.baseOffset = basicOffset + definition.length;
 	}
 
 	/**

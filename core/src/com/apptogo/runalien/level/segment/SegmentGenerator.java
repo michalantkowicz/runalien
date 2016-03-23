@@ -1,5 +1,7 @@
 package com.apptogo.runalien.level.segment;
 
+import java.util.Arrays;
+
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
@@ -9,8 +11,11 @@ public class SegmentGenerator {
 	private final SegmentFieldDefinitions segmentFieldDefinitions = new SegmentFieldDefinitions();
 	
 	public Segment getSegment(SegmentDefinition segmentDefinition) {
-		int definition[][] = segmentDefinition.getDefinition();
+		int[][] definition = Arrays.stream(segmentDefinition.getDefinition())
+	             .map((int[] row) -> row.clone())
+	             .toArray((int length) -> new int[length][]);
 		
+		//TODO exception for maximum size
 		Segment segment = new Segment(segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset());
 
 		for (int i = 0; i < definition[0].length; i++) {
@@ -31,12 +36,42 @@ public class SegmentGenerator {
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
-
 				else if(value == SegmentDefinitions.CRATE_TOP) {
 					field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.CRATE);
 					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
+				}
+				else if(value == SegmentDefinitions.BIG_CRATE_BOT){
+					if(j-1>=0 && i+1<definition[0].length && definition[j-1][i] == SegmentDefinitions.BIG_CRATE_BOT
+							&& definition[j][i+1] == SegmentDefinitions.BIG_CRATE_BOT
+							&& definition[j-1][i+1] == SegmentDefinitions.BIG_CRATE_BOT){
+						
+						//clear fields when big crate already used it
+						definition[j-1][i] = SegmentDefinitions.EMPTY;
+						definition[j][i+1] = SegmentDefinitions.EMPTY;
+						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
+						
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BIG_CRATE);
+						field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
+						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
+						segment.addField(field);	
+					}
+				}
+				else if(value == SegmentDefinitions.BIG_CRATE_TOP){
+					if(j-1>=0 && i+1<definition[0].length && definition[j-1][i] == SegmentDefinitions.BIG_CRATE_TOP
+							&& definition[j][i+1] == SegmentDefinitions.BIG_CRATE_TOP
+							&& definition[j-1][i+1] == SegmentDefinitions.BIG_CRATE_TOP){
+						
+						definition[j-1][i] = SegmentDefinitions.EMPTY;
+						definition[j][i+1] = SegmentDefinitions.EMPTY;
+						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
+						
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BIG_CRATE);
+						field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
+						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
+						segment.addField(field);	
+					}
 				}
 				else if(value == SegmentDefinitions.LOG) {
 					//check how many in column
@@ -66,14 +101,14 @@ public class SegmentGenerator {
 						break;
 					}
 
-					field.getBody().setTransform(new Vector2(positionX, positionY + segmentFieldDefinitions.OBSTACLE_SIZE * columnCounter / 2 - segmentFieldDefinitions.OBSTACLE_SIZE / 2), 0);
+					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
 				else if(value == SegmentDefinitions.BELL) {
 					//check how many in column
 					int columnCounter = 1;
 					for (int k = j - 1; k >= 0; k--) {
-						if (definition[k][i] == SegmentDefinitions.BELL && columnCounter < 4) {
+						if (definition[k][i] == SegmentDefinitions.BELL && columnCounter < 7) {
 							columnCounter++;
 						} else {
 							break;
@@ -95,9 +130,18 @@ public class SegmentGenerator {
 					case 4:
 						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_4);
 						break;
+					case 5:
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_5);
+						break;
+					case 6:
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_6);
+						break;
+					case 7:
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_7);
+						break;
 					}
 
-					field.getBody().setTransform(new Vector2(positionX, positionY + columnCounter * segmentFieldDefinitions.OBSTACLE_SIZE/2), 0);
+					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
 			}

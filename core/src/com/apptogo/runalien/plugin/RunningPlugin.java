@@ -2,34 +2,24 @@ package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
-import com.apptogo.runalien.manager.CustomAction;
-import com.apptogo.runalien.manager.CustomActionManager;
 
 public class RunningPlugin extends AbstractPlugin {
-
 	private boolean started;
 	private DeathPlugin deathPlugin;
-	private float runningSpeed = 10;
-	private CustomAction speedingAction;
-
-	public RunningPlugin() {
-		super();
-		speedingAction = new CustomAction(3f, 15) {
-
-			@Override
-			public void perform() {
-				runningSpeed++;
-			}
-		};
-	}
-
+	private final float MAX_SPEED = 25;
+	
 	@Override
 	public void run() {
 		if (deathPlugin.dead && started) {
 			setStarted(false);
 		}
 		if (started) {
-			body.setLinearVelocity(runningSpeed, body.getLinearVelocity().y);
+			if(body.getLinearVelocity().x >= MAX_SPEED - 1){
+				body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
+			}
+			else{
+				body.setLinearVelocity(10 + body.getPosition().x * 0.1f , body.getLinearVelocity().y);
+			}
 		}
 	}
 
@@ -41,11 +31,9 @@ public class RunningPlugin extends AbstractPlugin {
 
 		if (started) {
 			actor.changeAnimation("run").setFrameDuration(0.017f);
-			CustomActionManager.getInstance().registerAction(speedingAction);
 		} else {
 			if(!deathPlugin.dead)
 				actor.changeAnimation("idle");
-			CustomActionManager.getInstance().unregisterAction(speedingAction);
 		}
 
 		this.started = started;
@@ -60,9 +48,4 @@ public class RunningPlugin extends AbstractPlugin {
 			throw new PluginDependencyException("Actor must have DeathPlugin plugin attached!");
 		}
 	}
-
-	public float getRunningSpeed() {
-		return runningSpeed;
-	}
-
 }
