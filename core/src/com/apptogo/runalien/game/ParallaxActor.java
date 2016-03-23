@@ -58,7 +58,7 @@ public class ParallaxActor extends Actor {
 	 * @param textureRegionName - name of region (in texture atlas)
 	 */
 	public ParallaxActor(Camera camera, String textureRegionName) {
-		this.textureRegion = ResourcesManager.getInstance().getAtlasRegion(textureRegionName);
+		this.textureRegion = new TextureRegion(ResourcesManager.getInstance().getAtlasRegion(textureRegionName));
 		this.setName(textureRegionName);
 		
 		this.camera = (OrthographicCamera)camera;

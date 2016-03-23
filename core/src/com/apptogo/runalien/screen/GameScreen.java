@@ -14,14 +14,12 @@ import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
-import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Interpolation;
@@ -34,29 +32,29 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
 public class GameScreen extends BasicScreen {		
-	private Box2DDebugRenderer debugRenderer;
-	private World world;
-	private Stage gameworldStage;
-	private ObstaclesPool obstaclesPool;
-	private Map<String, String> contactsSnapshot = new HashMap<String, String>();
-	private ContactListener contactListener = new ContactListener();
-	private LevelGenerator levelGenerator;
-	private GameActor player;
+	protected Box2DDebugRenderer debugRenderer;
+	protected World world;
+	protected Stage gameworldStage;
+	protected ObstaclesPool obstaclesPool;
+	protected Map<String, String> contactsSnapshot = new HashMap<String, String>();
+	protected ContactListener contactListener = new ContactListener();
+	protected LevelGenerator levelGenerator;
+	protected GameActor player;
 	
-	private boolean endGame = false;
+	protected boolean endGame = false;
 	
 	public GameScreen(Main game) {
 		super(game, "background_game");
-		debugRenderer = new Box2DDebugRenderer();
-		debugRenderer.SHAPE_AWAKE.set(Color.PINK);
-
-		world = new World(new Vector2(0, -130), true);
-		world.setContactListener(contactListener);
-		createGameWorldStage();
 	}
 	
 	@Override
 	void prepare() {
+		debugRenderer = new Box2DDebugRenderer();
+
+		world = new World(new Vector2(0, -130), true);
+		world.setContactListener(contactListener);
+		createGameWorldStage();
+		
 		stage.addActor(Image.get("space").size(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT).position(0, Main.SCREEN_HEIGHT/2f).centerX());
 		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 300).centerX().setListener(Listener.click(game, new MenuScreen(game))));
 		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 150).centerX());
@@ -80,7 +78,7 @@ public class GameScreen extends BasicScreen {
 		player.modifyCustomOffsets(-0.4f, 0f);
 		gameworldStage.addActor(player);
 		
-		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
+		//player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
 		player.addPlugin(new CameraFollowingPlugin());		
 		player.addPlugin(new DeathPlugin(this));
 		player.addPlugin(new RunningPlugin());
@@ -98,7 +96,7 @@ public class GameScreen extends BasicScreen {
 
 		//create Parallaxes
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.001f).moveToY(2) );
-		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-0.5f).setSpeedModifier(0.5f) );
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "ground").moveToY(Main.GROUND_LEVEL-3.3f) );
 	}
 	
@@ -141,20 +139,13 @@ public class GameScreen extends BasicScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-
-		debugRenderer.dispose();
-		debugRenderer = null;
-
-		world.dispose();
-		world = null;
-
-		gameworldStage.dispose();
-		gameworldStage = null;
 		
-		obstaclesPool = null;
+		debugRenderer.dispose();
+		world.dispose();
+		gameworldStage.dispose();
 	}
 
-	private void createGameWorldStage() {
+	protected void createGameWorldStage() {
 		gameworldStage = new Stage();
 		gameworldStage.setViewport(new FillViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
 		((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));

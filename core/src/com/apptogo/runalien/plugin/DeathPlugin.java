@@ -11,7 +11,7 @@ public class DeathPlugin extends AbstractPlugin {
 
 	public boolean dead = false;
 
-	private SoundPlugin soundHandler;
+//	private SoundPlugin soundHandler;
 	private GameScreen screen;
 	
 	public DeathPlugin() {
@@ -47,12 +47,12 @@ public class DeathPlugin extends AbstractPlugin {
 
 	@Override
 	public void setUpDependencies() {	
-		try {
-			soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
-		}
-		catch(PluginException e) {
-			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");
-		}
+//		try {
+//			soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
+//		}
+//		catch(PluginException e) {
+//			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");
+//		}
 		
 		if(body.getFixtureList().size <= 0)
 			throw new PluginDependencyException("Actor's body must have at least one (default) fixture!");

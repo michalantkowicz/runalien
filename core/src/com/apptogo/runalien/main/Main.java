@@ -1,5 +1,6 @@
 package com.apptogo.runalien.main;
 
+import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.screen.SplashScreen;
@@ -38,6 +39,7 @@ public class Main extends Game {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
         ResourcesManager.create();
+        CustomActionManager.create();
         //ResourcesManager.getInstance().loadResources();
         //ResourcesManager.getInstance().manager.finishLoading();
         //ResourcesManager.getInstance().loadSkin();
@@ -53,5 +55,6 @@ public class Main extends Game {
     @Override
     public void dispose() {
         ResourcesManager.destroy();
+        CustomActionManager.destroy();
     }
 }

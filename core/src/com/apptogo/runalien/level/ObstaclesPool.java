@@ -1,13 +1,12 @@
 package com.apptogo.runalien.level;
 
-import static com.apptogo.runalien.level.segment.SegmentFieldDefinitions.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
+import com.apptogo.runalien.level.segment.SegmentFieldDefinitions;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
@@ -18,21 +17,23 @@ public class ObstaclesPool {
 	private final Map<String, Pool<GameActor>> pools = new HashMap<String, Pool<GameActor>>();
 	private final Collection<GameActor> activeActors = new ArrayList<GameActor>();
 
+	private final SegmentFieldDefinitions segmentFieldDefinitions = new SegmentFieldDefinitions();
+	
 	/**
 	 * Constructor creates and fill all pools with obstacles at start
 	 */
 	public ObstaclesPool() {
-		createPool(CRATE, CRATE_BODY, 36);
+		createPool(segmentFieldDefinitions.CRATE, segmentFieldDefinitions.CRATE_BODY, 36);
 		
-		createPool(LOG_1, LOG1_BODY, 8);
-		createPool(LOG_2, LOG2_BODY, 8);
-		createPool(LOG_3, LOG3_BODY, 8);
-		createPool(LOG_4, LOG4_BODY, 8);
+		createPool(segmentFieldDefinitions.LOG_1, segmentFieldDefinitions.LOG1_BODY, 8);
+		createPool(segmentFieldDefinitions.LOG_2, segmentFieldDefinitions.LOG2_BODY, 8);
+		createPool(segmentFieldDefinitions.LOG_3, segmentFieldDefinitions.LOG3_BODY, 8);
+		createPool(segmentFieldDefinitions.LOG_4, segmentFieldDefinitions.LOG4_BODY, 8);
 		
-		createPool(BELL_1, BELL1_BODY, 8);
-		createPool(BELL_2, BELL2_BODY, 8);
-		createPool(BELL_3, BELL3_BODY, 8);
-		createPool(BELL_4, BELL4_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_1, segmentFieldDefinitions.BELL1_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_2, segmentFieldDefinitions.BELL2_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_3, segmentFieldDefinitions.BELL3_BODY, 8);
+		createPool(segmentFieldDefinitions.BELL_4, segmentFieldDefinitions.BELL4_BODY, 8);
 	}
 
 	/**

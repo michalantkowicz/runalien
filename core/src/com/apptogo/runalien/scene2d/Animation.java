@@ -10,9 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
 
 public class Animation extends AnimationActor {
-
-    private static final float DEFAULT_FRAME_DURAITON = 0.02f;
-    
     /**
      * @param pattern will be used as animation name if not overriden by name() method
      * @return created animation
@@ -41,7 +38,7 @@ public class Animation extends AnimationActor {
      */
     public static Animation get(String pattern)
     {
-    	Animation animation = new Animation(DEFAULT_FRAME_DURAITON, ResourcesManager.getInstance().getRegions(pattern), PlayMode.NORMAL);
+    	Animation animation = new Animation(0.02f, ResourcesManager.getInstance().getRegions(pattern), PlayMode.NORMAL);
     	animation.setName(pattern);
         return animation;
     }

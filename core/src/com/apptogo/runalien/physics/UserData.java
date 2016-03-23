@@ -3,19 +3,14 @@ package com.apptogo.runalien.physics;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
-public class UserData {
-	private static int nextId = 0;
-	private int id;
-	
+public class UserData {	
 	public String key;
 	public float width;
 	public float height;
 	
 	public boolean ignore = false;
 	
-	public UserData()
-	{
-		id = nextId++;
+	public UserData() {
 	}
 	
 	public UserData(String key)
@@ -23,10 +18,6 @@ public class UserData {
 		this();
 		this.key = key;
 	}
-	
-	public int getId() {
-		return id;
-	}	
 	
 	public static UserData get(Fixture fixture)
 	{

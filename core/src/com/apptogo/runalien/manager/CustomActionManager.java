@@ -5,7 +5,15 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class CustomActionManager extends Group {
 
-	private static CustomActionManager INSTANCE = new CustomActionManager();
+	private static CustomActionManager INSTANCE;
+
+	public static void create() {
+		INSTANCE = new CustomActionManager();
+	}
+
+	public static void destroy() {
+		INSTANCE = null;
+	}
 
 	public static CustomActionManager getInstance() {
 		return INSTANCE;
