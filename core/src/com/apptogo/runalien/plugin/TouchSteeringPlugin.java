@@ -198,4 +198,8 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 		if(slidingFixture == null)
 			throw new PluginDependencyException("Actor's body must have fixture that contains 'sliding' in userData's key!");
 	}
+
+	public boolean isSliding() {
+		return sliding;
+	}
 }

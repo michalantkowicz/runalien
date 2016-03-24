@@ -1,9 +1,9 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.scene2d.Label;
-import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -89,6 +89,8 @@ public class TutorialScreen extends GameScreen {
 		//Setting alpha of tutorial stage's actors to 0
 		for(Actor actor : tutorialStage.getActors())
 			actor.setColor(actor.getColor().r, actor.getColor().g, actor.getColor().b, 0);
+		
+		welcomeLabel.addAction(Actions.sequence(Actions.alpha(1, 2), Actions.delay(2), Actions.alpha(0, 2)));
 	}
 	
 	@Override
@@ -113,11 +115,22 @@ public class TutorialScreen extends GameScreen {
 	}
 	
 	private void handleTutorialPhase() {
-		if(currentPhase == TutorialPhase.WELCOME) {
+		if(currentPhase == TutorialPhase.WELCOME && welcomeLabel.getActions().size == 0) {
+			slideLabel.addAction(Actions.alpha(1, 2));
 			
+			rightHalf.addAction(Actions.sequence(Actions.delay(1), Actions.alpha(0.1f, 1)));
+			
+			tapOnce.restart();
+			leftHand.addAction(Actions.sequence(Actions.delay(1), Actions.alpha(1f, 1), tapOnce));
+			
+			currentPhase = TutorialPhase.SLIDE;
 		}
-		else if(currentPhase == TutorialPhase.SLIDE) {
+		else if(currentPhase == TutorialPhase.SLIDE && rightHalf.getActions().size == 0 && ((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding() ) {
+			slideLabel.addAction(Actions.alpha(0, 1));
+			rightHalf.addAction(Actions.alpha(0, 1));
 			
+			leftHand.clearActions();
+			leftHand.addAction(Actions.alpha(0, 1));
 		}
 	}
 }
