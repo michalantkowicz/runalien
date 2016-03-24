@@ -39,10 +39,22 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label {
         this.setPosition(-this.getWidth() / 2f, this.getY());
         return this;
     }
+    
+    public Label centerX(float offset)
+    {
+        this.setPosition(-this.getWidth() / 2f + offset, this.getY());
+        return this;
+    }
 
     public Label centerY()
     {
         this.setPosition(this.getX(), -this.getHeight() / 2f);
+        return this;
+    }
+    
+    public Label centerY(float offset)
+    {
+        this.setPosition(this.getX(), -this.getHeight() / 2f + offset);
         return this;
     }
 

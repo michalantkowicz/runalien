@@ -3,7 +3,8 @@
 	{ 
 		small: { file: font_small.fnt },
 		medium: { file: font_medium.fnt },
-		big: { file: font_big.fnt }
+		big: { file: font_big.fnt },
+		tutorial: { file: font_tutorial.fnt },
 	},
 
 	com.badlogic.gdx.graphics.Color: 
@@ -17,6 +18,7 @@
 	    small: { font: small, fontColor: white },
 	    medium: { font: medium, fontColor: white },
 	    big: { font: big, fontColor: white },
+	    tutorial: { font: tutorial },
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: 

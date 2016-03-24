@@ -5,14 +5,14 @@ filter: Linear,Linear
 repeat: none
 achievementDown
   rotate: false
-  xy: 1792, 423
+  xy: 1794, 1
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 achievementUp
   rotate: false
-  xy: 1884, 423
+  xy: 1886, 1
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
@@ -26,154 +26,161 @@ background_menu
   index: -1
 buttonDown
   rotate: false
-  xy: 483, 803
+  xy: 965, 921
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 874, 803
+  xy: 1356, 921
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
   index: -1
 font_big
   rotate: false
-  xy: 1283, 1
+  xy: 1283, 205
   size: 507, 422
   orig: 512, 512
   offset: 0, 87
   index: -1
 font_medium
   rotate: false
-  xy: 1792, 1
+  xy: 1792, 237
   size: 255, 420
   orig: 256, 512
   offset: 0, 89
   index: -1
 font_small
   rotate: false
-  xy: 1765, 515
+  xy: 1765, 659
   size: 256, 193
   orig: 256, 256
   offset: 0, 60
   index: -1
+font_tutorial
+  rotate: false
+  xy: 1283, 1
+  size: 509, 202
+  orig: 512, 512
+  offset: 0, 310
+  index: -1
 gplusDown
   rotate: false
-  xy: 1765, 710
+  xy: 1794, 93
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 gplusUp
   rotate: false
-  xy: 1857, 710
+  xy: 1886, 93
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 menu
   rotate: false
-  xy: 483, 937
+  xy: 965, 803
   size: 284, 70
   orig: 285, 72
   offset: 1, 1
   index: -1
 playButtonDown
   rotate: false
-  xy: 1283, 425
+  xy: 1283, 629
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 playButtonUp
   rotate: false
-  xy: 1283, 571
+  xy: 1283, 775
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 rankButtonDown
   rotate: false
-  xy: 1283, 717
+  xy: 1, 803
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 rankButtonUp
   rotate: false
-  xy: 1, 803
+  xy: 483, 803
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 replay
   rotate: false
-  xy: 1265, 863
+  xy: 1, 949
   size: 389, 72
   orig: 389, 72
   offset: 0, 0
   index: -1
 soundDown
   rotate: false
-  xy: 1949, 762
+  xy: 1978, 105
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 soundDownOff
   rotate: false
-  xy: 1817, 802
+  xy: 1765, 854
   size: 36, 51
   orig: 50, 51
   offset: 0, 0
   index: -1
 soundUp
   rotate: false
-  xy: 1765, 802
+  xy: 1978, 157
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 soundUpOff
   rotate: false
-  xy: 1765, 854
+  xy: 1803, 854
   size: 36, 51
   orig: 50, 51
   offset: 0, 0
   index: -1
 submit
   rotate: false
-  xy: 1656, 907
+  xy: 392, 949
   size: 376, 71
   orig: 377, 72
   offset: 1, 0
   index: -1
 vibrationDown
   rotate: false
-  xy: 1976, 423
+  xy: 1978, 1
   size: 59, 50
   orig: 59, 50
   offset: 0, 0
   index: -1
 vibrationDownOff
   rotate: false
-  xy: 2010, 710
+  xy: 1794, 185
   size: 37, 50
   orig: 57, 50
   offset: 10, 0
   index: -1
 vibrationUp
   rotate: false
-  xy: 1949, 710
+  xy: 1978, 53
   size: 59, 50
   orig: 59, 50
   offset: 0, 0
   index: -1
 vibrationUpOff
   rotate: false
-  xy: 2001, 762
+  xy: 1833, 185
   size: 37, 50
   orig: 57, 50
   offset: 10, 0

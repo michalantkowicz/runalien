@@ -43,6 +43,11 @@ public class ParallaxActor extends Actor {
 	private float x2u, u2x;
 	
 	/**
+	 * Beginning U coordinate's value (used for reset) 
+	 */
+	private float startU;
+	
+	/**
 	 * Current U coordinate's value (used for "splitting" the region)
 	 */
 	private float currentU;
@@ -51,6 +56,7 @@ public class ParallaxActor extends Actor {
 	 * Fixed speed set up by setfixedSpeed() (when non-zero region's moving does not depend on camera speed)
 	 */
 	private float fixedSpeed = 0;	
+	
 	
 	/**
 	 * 
@@ -63,18 +69,18 @@ public class ParallaxActor extends Actor {
 		
 		this.camera = (OrthographicCamera)camera;
 		previousCameraX = camera.position.x;
-		
-		//Setting size (should be as small as possible)
-		setSize(0.01f,0.01f);
-		
+				
 		//Calculating width and height
 		width = FULL_WIDTH;
 		height = textureRegion.getRegionHeight()/64f;
 		setSize(width, height);
 		
 		//Calculating factors
-		x2u = width / textureRegion.getU2();
-		u2x = textureRegion.getU2() / width;
+		x2u = width / (textureRegion.getU2() - textureRegion.getU());
+		u2x = (textureRegion.getU2() - textureRegion.getU()) / width;
+		
+		//Saving start U coordinate's value
+		startU = textureRegion.getU();
 		
 		//Setting currentU (should be 0 at the beginning by default)
 		currentU = textureRegion.getU();
@@ -107,14 +113,14 @@ public class ParallaxActor extends Actor {
 			//Resetting region when left part is 0 or lesser
 			if( currentU >= textureRegion.getU2())
 			{
-				currentU = currentU - textureRegion.getU2();
-				width = FULL_WIDTH - (currentU * x2u);
+				currentU = currentU - (textureRegion.getU2() - startU);
+				width = FULL_WIDTH - (currentU * u2x);
 			}
 		}
 	};
 	
 	/**
-	 * Updates actor's position due to camera's positin (so it will be alway at the center of screen)
+	 * Updates actor's position due to camera's position (so it will be always at the center of screen)
 	 */
 	@Override
 	public void act(float delta) {
@@ -138,7 +144,7 @@ public class ParallaxActor extends Actor {
 		float backupU2 = textureRegion.getU2();
 		
 		//Setting up U and U2 values for right region temporarily
-		textureRegion.setU(0);
+		textureRegion.setU(startU);
 		textureRegion.setU2(currentU);
 
 		//Drawing right part of region
