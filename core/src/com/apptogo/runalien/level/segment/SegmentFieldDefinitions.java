@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public class SegmentFieldDefinitions {
 
 	//size of one field in segment
-	public final float OBSTACLE_SIZE = UnitConverter.toBox2dUnits(76f);
+	public static final float OBSTACLE_SIZE = UnitConverter.toBox2dUnits(76f);
 	
 	//names of fields and corresponding images
 	public final String CRATE = "crate";

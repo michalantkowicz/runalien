@@ -9,7 +9,7 @@ import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
 
-public class Segment implements Spawnable {
+public class Segment {
 	private List<GameActor> fields;
 	private int minLevel;
 	private int maxLevel;
@@ -30,20 +30,4 @@ public class Segment implements Spawnable {
 	public List<GameActor> getFields() {
 		return fields;
 	}
-
-	@Override
-	public float getBaseOffset() {
-		return baseOffset;
-	}
-
-	@Override
-	public float getMinLevel() {
-		return minLevel;
-	}
-
-	@Override
-	public float getMaxLevel() {
-		return maxLevel;
-	}
-
 }

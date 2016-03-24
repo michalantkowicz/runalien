@@ -31,13 +31,13 @@ public class SegmentGenerator {
 					//Do nothing
 				}
 				else if(value == SegmentDefinitions.CRATE_BOT) {
-					field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.CRATE);
+					field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.CRATE);
 					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
 				else if(value == SegmentDefinitions.CRATE_TOP) {
-					field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.CRATE);
+					field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.CRATE);
 					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
@@ -52,7 +52,7 @@ public class SegmentGenerator {
 						definition[j][i+1] = SegmentDefinitions.EMPTY;
 						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
 						
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BIG_CRATE);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BIG_CRATE);
 						field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
 						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 						segment.addField(field);	
@@ -67,7 +67,7 @@ public class SegmentGenerator {
 						definition[j][i+1] = SegmentDefinitions.EMPTY;
 						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
 						
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BIG_CRATE);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BIG_CRATE);
 						field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
 						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 						segment.addField(field);	
@@ -88,16 +88,16 @@ public class SegmentGenerator {
 					
 					switch (columnCounter) {
 					case 1:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.LOG_1);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.LOG_1);
 						break;
 					case 2:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.LOG_2);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.LOG_2);
 						break;
 					case 3:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.LOG_3);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.LOG_3);
 						break;
 					case 4:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.LOG_4);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.LOG_4);
 						break;
 					}
 
@@ -119,25 +119,25 @@ public class SegmentGenerator {
 					
 					switch (columnCounter) {
 					case 1:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_1);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_1);
 						break;
 					case 2:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_2);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_2);
 						break;
 					case 3:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_3);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_3);
 						break;
 					case 4:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_4);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_4);
 						break;
 					case 5:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_5);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_5);
 						break;
 					case 6:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_6);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_6);
 						break;
 					case 7:
-						field = Main.getInstance().getGameScreen().getObstaclesPool().getObstacle(segmentFieldDefinitions.BELL_7);
+						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BELL_7);
 						break;
 					}
 

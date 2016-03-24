@@ -3,7 +3,7 @@ package com.apptogo.runalien.level;
 public interface Spawnable {
 	float getBaseOffset();
 
-	float getMinLevel();
+	int getMinLevel();
 
-	float getMaxLevel();
+	int getMaxLevel();
 }

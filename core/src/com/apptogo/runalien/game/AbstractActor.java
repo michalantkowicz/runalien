@@ -32,6 +32,7 @@ public class AbstractActor extends Actor {
 		//it's in fact 1 frame animation
 		Animation animation = Animation.get(imageName).scaleFrames(1/UnitConverter.PPM);
 		currentAnimation = animation;
+		
 		calculateAverageOffset();
 		
 		currentAnimation.start();

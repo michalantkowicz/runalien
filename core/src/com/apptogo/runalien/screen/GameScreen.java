@@ -112,28 +112,6 @@ public class GameScreen extends BasicScreen {
 		sign.setStaticImage("board");
 		sign.setPosition(7, Main.GROUND_LEVEL);
 		gameworldStage.addActor(sign);
-		
-//		float x = 10, y = 6, ropeHeight = 7.5f;
-//		
-//		Body spikeBall = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("SpikeBall").circle(1).friction(0.5f).position(x + ropeHeight, y).create();
-//		Body anchor = BodyBuilder.get().type(BodyType.StaticBody).addFixture("AnchorBall").box(0.2f, 0.2f).friction(0.5f).position(x, y).sensor(true).create();
-//		Body rope = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ropeHeight, 0.1f).sensor(true).position(x + ropeHeight/2f, y).create();
-//		
-//		
-//		RevoluteJointDef jointDef = new RevoluteJointDef();
-//		jointDef.localAnchorB.set(ropeHeight/2f, 0);
-//		jointDef.collideConnected = false;
-//		jointDef.bodyA = anchor;
-//		jointDef.bodyB = rope;
-//		
-//		world.createJoint(jointDef);
-//		
-//		jointDef.localAnchorB.set(-ropeHeight/2f, 0);
-//		jointDef.collideConnected = false;
-//		jointDef.bodyA = spikeBall;
-//		jointDef.bodyB = rope;
-//		
-//		world.createJoint(jointDef);
 	}
 	
 	@Override
@@ -147,7 +125,7 @@ public class GameScreen extends BasicScreen {
 		obstaclesPool.freePools();
 		
 		//generate obstacles
-		//levelGenerator.generate();
+		levelGenerator.generate();
 
 		//act and draw main stage
 		gameworldStage.act(delta);

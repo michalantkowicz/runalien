@@ -5,14 +5,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.segment.Segment;
 import com.apptogo.runalien.level.segment.SegmentDefinition;
 import com.apptogo.runalien.level.segment.SegmentDefinitions;
 import com.apptogo.runalien.level.segment.SegmentGenerator;
+import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Pool;
 
 public class LevelGenerator {
 	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
@@ -28,6 +34,7 @@ public class LevelGenerator {
 	private float nextPosition;
 	private float level;
 
+	private List<GameActor> activeObstacles = new ArrayList<GameActor>();
 	private List<Segment> activeSegments = new ArrayList<Segment>();
 
 	public LevelGenerator(GameActor player) {
@@ -45,7 +52,7 @@ public class LevelGenerator {
 		calculateLevel();
 		
 		if (player.getBody().getPosition().x + SPAWN_DISTANCE >= nextPosition) {
-			generateRandomSegmentMeetingLevelRequirements();
+			generateRandom();
 		}
 
 		//free out of screen obstacles
@@ -53,14 +60,6 @@ public class LevelGenerator {
 	}
 
 	/* ---------- PRIVATE METHODS ---------- */
-
-	private void generateSegment(SegmentDefinition segmentDefinition) {
-		Segment segment = segmentGenerator.getSegment(segmentDefinition);
-		segment.setPosition(nextPosition);
-		activeSegments.add(segment);
-
-		this.nextPosition += segmentDefinition.getBaseOffset() + level;
-	}
 
 	private void freeSegments() {
 		for (Segment segment : activeSegments) {
@@ -71,9 +70,43 @@ public class LevelGenerator {
 			//			}
 			segment.getFields().stream().filter(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE).forEach(o -> o.setAlive(false));
 		}
+		
+		for(GameActor obstacle : activeObstacles){
+			if(obstacle.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE){
+				obstacle.setAlive(false);
+			}
+		}
+		activeObstacles.removeIf(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE);
 	}
 
-	private void generateRandomSegmentMeetingLevelRequirements() {
+	
+	private void generateRandom(){
+		Random random = new Random();
+		int randomNumber = random.nextInt(100);
+		
+		if(randomNumber > 0)
+			generateRandomObstacle();
+		else
+			generateRandomSegment();
+	}
+	
+	private void generateRandomObstacle() {
+		List<Map.Entry<String,Pool<GameActor>>> allPools = new ArrayList<Map.Entry<String,Pool<GameActor>>>(Main.getInstance().getGameScreen().getObstaclesPool().getObstaclePools().entrySet());
+		Collections.shuffle(allPools);
+		
+		Optional<Entry<String, Pool<GameActor>>> optional = allPools.stream().filter(k -> Float.valueOf(k.getKey().split("-")[0]) <= level && Float.valueOf(k.getKey().split("-")[1]) >= level).findAny();
+		
+		if(optional.isPresent()){
+			logger.debug("spawning obstacle");
+			GameActor obstacle = optional.get().getValue().obtain();
+			obstacle.getBody().setTransform(nextPosition,  obstacle.getBody().getPosition().y, 0);
+			obstacle.init();
+			activeObstacles.add(obstacle);
+			this.nextPosition += ((Spawnable)obstacle).getBaseOffset() + level;
+		}
+	}
+	
+	private void generateRandomSegment() {
 		Field[] segmentDefinitionFields = Arrays.asList(SegmentDefinitions.class.getFields()).stream().filter(f -> f.getType().getName().equals(SegmentDefinition.class.getTypeName())).toArray(Field[]::new);
 
 		//get all segmentDefinitions matching current level
@@ -90,31 +123,18 @@ public class LevelGenerator {
 		}
 		
 		if(segmentDefinitions.size() > 0){
+			logger.debug("spawning segment");
 			//get random segment def
 			Random random = new Random();
 			SegmentDefinition segmentToSpawn = segmentDefinitions.get(random.nextInt(segmentDefinitions.size()));
-			generateSegment(segmentToSpawn);
+			
+			Segment segment = segmentGenerator.getSegment(segmentToSpawn);
+			segment.setPosition(nextPosition);
+			activeSegments.add(segment);
+
+			this.nextPosition += segmentToSpawn.getBaseOffset() + level;
 		}
 
-	}
-
-	/**
-	 * generates all blocks from available definitions randomly
-	 */
-	@SuppressWarnings("unused")
-	private void generateRandomSegment() {
-
-		//get all segment definitions using reflection and streams
-		try {
-			List<Field> fields = Arrays.asList(SegmentDefinitions.class.getFields());
-			Collections.shuffle(fields);
-
-			Field field = fields.stream().filter(f -> f.getType().getName().equals(SegmentDefinition.class.getTypeName())).findAny().get();
-
-			generateSegment((SegmentDefinition) field.get(null));
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-			logger.error("Error during SegmentDefinitions reflection operation: ", e);
-		}
 	}
 
 	private void calculateLevel() {
