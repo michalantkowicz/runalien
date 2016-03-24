@@ -19,23 +19,23 @@ import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Image;
+import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
-public class GameScreen extends BasicScreen {
+public class GameScreen extends BasicScreen {	
 	protected Box2DDebugRenderer debugRenderer;
 	protected World world;
 	protected Stage gameworldStage;
@@ -45,6 +45,9 @@ public class GameScreen extends BasicScreen {
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
 	ParallaxActor grass;
+	
+	int score = 0;
+	protected Label scoreLabel;
 	
 	protected boolean endGame = false;
 	
@@ -77,8 +80,8 @@ public class GameScreen extends BasicScreen {
 		player.queueAnimation("idle");
 
 		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, Main.GROUND_LEVEL).fixedRotation(true)
-				                        .addFixture("player").box(0.6f, 1.9f).friction(0.1f)
-				                        .addFixture("player_sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.1f)
+				                        .addFixture("player").box(0.6f, 1.9f).friction(0.5f)
+				                        .addFixture("player", "sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.5f)
 				                        .create());
 		
 		player.modifyCustomOffsets(-0.4f, 0f);
@@ -86,7 +89,7 @@ public class GameScreen extends BasicScreen {
 		
 		//player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
 		player.addPlugin(new CameraFollowingPlugin());		
-		player.addPlugin(new DeathPlugin(this));
+		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
 		player.addPlugin(new TouchSteeringPlugin());
 		
@@ -107,6 +110,8 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.addActor( ground.moveToY(Main.GROUND_LEVEL - ground.getHeight()) );
 		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL);
 		gameworldStage.addActor( grass );
+		
+		gameworldStage.addActor(Image.get("buttonTutorial").scale(1/UnitConverter.PPM).position(-4.2f, Main.GROUND_LEVEL - 2));
 		
 		ImmaterialGameActor sign = new ImmaterialGameActor("sign");
 		sign.setStaticImage("board");
@@ -134,6 +139,9 @@ public class GameScreen extends BasicScreen {
 //		jointDef.bodyB = rope;
 //		
 //		world.createJoint(jointDef);
+		
+		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
+		stage.addActor(scoreLabel);
 	}
 	
 	@Override
@@ -147,7 +155,7 @@ public class GameScreen extends BasicScreen {
 		obstaclesPool.freePools();
 		
 		//generate obstacles
-		//levelGenerator.generate();
+		levelGenerator.generate();
 
 		//act and draw main stage
 		gameworldStage.act(delta);
@@ -171,6 +179,9 @@ public class GameScreen extends BasicScreen {
 			
 			endGame = false;
 		}
+		
+		score = (int) (player.getBody().getPosition().x / 10);
+		scoreLabel.setText("score: " + String.valueOf(score));
 	}
 
 	@Override

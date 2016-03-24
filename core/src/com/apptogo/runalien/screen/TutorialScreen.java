@@ -63,6 +63,8 @@ public class TutorialScreen extends GameScreen {
 	void prepare() {
 		super.prepare();
 		
+		scoreLabel.setVisible(false);
+		
 		tutorialViewport = new FitViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		tutorialStage = new Stage(tutorialViewport);
 		stagesToFade.add(tutorialStage);

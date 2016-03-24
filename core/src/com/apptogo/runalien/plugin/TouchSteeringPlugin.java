@@ -4,7 +4,6 @@ import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
-import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
@@ -21,6 +20,7 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 	protected SequenceAction standUpAction = Actions.sequence(); 
 //	private SoundPlugin soundHandler;
 	private RunningPlugin running;
+	private DeathPlugin deathPlugin;
 	
 	private Fixture defaultFixture, slidingFixture;
 	private boolean doStandUp = false;
@@ -146,20 +146,20 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 	}
 	
 	@Override
-	public void run() {		
-		if(Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").equals("ground"))
-			land();
-		
-		if(doStandUp )
-			standUp();
-		
+	public void run() {				
 		if(running.isStarted()){
+			if(Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").equals("ground"))
+				land();
+			
+			if(doStandUp )
+				standUp();
+			
 			if(Gdx.input.isKeyJustPressed(Keys.A))
 				jump();
 			if(Gdx.input.isKeyJustPressed(Keys.L))
 				chargeDown();
 		}
-		if(Gdx.input.isKeyJustPressed(Keys.SPACE)){
+		if(!deathPlugin.dead && Gdx.input.isKeyJustPressed(Keys.SPACE)){
 			if(!running.isStarted())
 				startRunning();
 			else{
@@ -176,27 +176,42 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 //		catch(PluginException e) {
 //			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");
 //		}
-		
+		//Running plugin check
 		try {
 			running = actor.getPlugin(RunningPlugin.class.getSimpleName());
 		}
 		catch(PluginException e) {
 			throw new PluginDependencyException("Actor must have Running plugin attached!");
 		}
-				
-		if(body.getFixtureList().size <= 0)
-			throw new PluginDependencyException("Actor's body must have at least one (default) fixture!");
-		else
-			defaultFixture = body.getFixtureList().first();
 		
+		//DeathPlugin check
+		try {
+			deathPlugin = actor.getPlugin(DeathPlugin.class.getSimpleName());
+		}
+		catch(PluginException e) {
+			throw new PluginDependencyException("Actor must have Death plugin attached!");
+		}
+		
+						
+		//Default fixture check
 		for(Fixture fixture : body.getFixtureList())
-			if(((UserData)fixture.getUserData()).key.contains("sliding")) {
+			if(((UserData)fixture.getUserData()).type == "default") {
+				defaultFixture = fixture;
+				break;
+			}
+		
+		if(defaultFixture == null)
+			throw new PluginDependencyException("Actor's body must have at least one (default) fixture!");
+		
+		//Sliding fixture check
+		for(Fixture fixture : body.getFixtureList())
+			if(((UserData)fixture.getUserData()).type == "sliding") {
 				slidingFixture = fixture;
 				break;
 			}
 		
 		if(slidingFixture == null)
-			throw new PluginDependencyException("Actor's body must have fixture that contains 'sliding' in userData's key!");
+			throw new PluginDependencyException("Actor's body must have fixture that is of 'sliding' type!");
 	}
 
 	public boolean isSliding() {

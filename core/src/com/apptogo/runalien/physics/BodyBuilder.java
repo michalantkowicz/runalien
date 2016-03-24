@@ -50,8 +50,14 @@ public class BodyBuilder {
 		
 	public BodyBuilder addFixture(String name)
 	{
+		return addFixture(name, "default");
+	}
+	
+	public BodyBuilder addFixture(String name, String type)
+	{
 		fixtureDatas.add( new UserData() );
 		fixtureDatas.peek().key = name;
+		fixtureDatas.peek().type = type;
 		
 		fixtureDefs.add(new FixtureDef());
 		fixtureDefs.peek().density = 0.5f;

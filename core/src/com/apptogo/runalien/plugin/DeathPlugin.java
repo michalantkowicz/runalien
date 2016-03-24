@@ -1,7 +1,6 @@
 package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
-import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.screen.GameScreen;
@@ -12,15 +11,9 @@ public class DeathPlugin extends AbstractPlugin {
 	public boolean dead = false;
 
 //	private SoundPlugin soundHandler;
-	private GameScreen screen;
-	
+
 	public DeathPlugin() {
 		super();
-	}
-	//TODO przerobic GameScreen do singletona lub zastosowac inny mechanizm - musi byc dostep do instancji GameScreen!
-	public DeathPlugin(GameScreen screen) {
-		this();
-		this.screen = screen;
 	}
 	
 	@Override
