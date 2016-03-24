@@ -33,6 +33,12 @@ public class Button extends com.badlogic.gdx.scenes.scene2d.ui.Button {
 
         return this;
     }
+    
+    public Button scale(float scale)
+    {
+    	setSize(getWidth()*scale, getHeight()*scale);
+    	return this;
+    }
 
     public Button centerX()
     {

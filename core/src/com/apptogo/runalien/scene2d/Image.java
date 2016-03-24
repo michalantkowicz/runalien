@@ -3,6 +3,7 @@ package com.apptogo.runalien.scene2d;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 
 public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
 
