@@ -54,6 +54,7 @@ public class GameScreen extends BasicScreen {
 		world = new World(new Vector2(0, -130), true);
 		world.setContactListener(contactListener);
 		createGameWorldStage();
+		stagesToFade.add(gameworldStage);
 		
 		stage.addActor(Image.get("space").size(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT).position(0, Main.SCREEN_HEIGHT/2f).centerX());
 		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 300).centerX().setListener(Listener.click(game, new MenuScreen(game))));

@@ -26,7 +26,8 @@ public abstract class BasicScreen implements Screen {
     protected String[] backgroundTextureNames = new String[] {};
 
     protected Array<Table> tables = new Array<Table>(new Table[] { new Table(), new Table(), new Table() });
-
+    protected Array<Stage> stagesToFade = new Array<Stage>();
+    
     Movement movement = new Movement();
 
     abstract void prepare();
@@ -78,10 +79,15 @@ public abstract class BasicScreen implements Screen {
             stage.addActor(table);
         }
 
+        stagesToFade.add(stage);
+        
         prepare();
 
         if(Main.FADE_IN)
-        	this.stage.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.2f)));
+        	for(Stage stageToFade : stagesToFade)
+        		stageToFade.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.2f)));
+        
+        
     }
 
     @Override
@@ -104,7 +110,9 @@ public abstract class BasicScreen implements Screen {
     protected void changeScreen(final Screen screen)
     {
         Gdx.input.setInputProcessor(null);
-        this.stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),
+        
+        for(Stage stage : stagesToFade)
+            stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),
                 Actions.run(new Runnable() {
                     @Override
                     public void run() {

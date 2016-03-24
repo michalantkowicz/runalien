@@ -202,4 +202,12 @@ public class TouchSteeringPlugin extends AbstractPlugin {
 	public boolean isSliding() {
 		return sliding;
 	}
+	
+	public boolean isJumping() {
+		return jumping;
+	}
+	
+	public boolean isDoubleJumping() {
+		return doubleJumping;
+	}
 }
