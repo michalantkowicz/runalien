@@ -92,24 +92,7 @@ public class TutorialScreen extends GameScreen {
 		chargeDownLabel = Label.get("Tap left side of screen when airborne to charge down", "tutorial").centerX().centerY(300);
 		speedLabel = Label.get("Remember that alien is running faster and faster!", "tutorial").centerX().centerY(300);
 		endLabel = Label.get("That's all! Now you are ready for the adventure", "tutorial").centerX().centerY(300);
-		
-		//Adding actors to stage
-		//tutorialStage.addActor(currentGroup);
-		/*
-		tutorialStage.addActor(leftHalf);
-		tutorialStage.addActor(rightHalf);
-		tutorialStage.addActor(leftHand);
-		tutorialStage.addActor(rightHand);		
-		
-		tutorialStage.addActor(welcomeLabel);
-		tutorialStage.addActor(slideLabel);
-		tutorialStage.addActor(longSlideLabel);
-		tutorialStage.addActor(jumpLabel);
-		tutorialStage.addActor(doubleJumpLabel);
-		tutorialStage.addActor(chargeDownLabel);
-		tutorialStage.addActor(endLabel);*/
-		
-		
+
 		//Setting alpha of tutorial stage's actors to 0
 		for(Actor actor : tutorialStage.getActors())
 			actor.setColor(actor.getColor().r, actor.getColor().g, actor.getColor().b, 0);
@@ -284,6 +267,7 @@ public class TutorialScreen extends GameScreen {
 		
 		//make player always on top
 		player.toFront();
+		grass.toFront();
 		
 		tutorialStage.act();
 		

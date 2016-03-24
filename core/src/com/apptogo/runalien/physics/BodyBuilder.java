@@ -42,6 +42,11 @@ public class BodyBuilder {
 		bodyDef.position.set(x, y);
 		return this;
 	}
+	
+	public BodyBuilder fixedRotation(boolean fixedRotation) {
+		bodyDef.fixedRotation = fixedRotation;
+		return this;
+	}
 		
 	public BodyBuilder addFixture(String name)
 	{
@@ -49,7 +54,7 @@ public class BodyBuilder {
 		fixtureDatas.peek().key = name;
 		
 		fixtureDefs.add(new FixtureDef());
-		
+		fixtureDefs.peek().density = 0.5f;
 		return this;
 	}
 	

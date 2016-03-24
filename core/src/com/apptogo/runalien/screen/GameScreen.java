@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
+import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.level.LevelGenerator;
 import com.apptogo.runalien.level.ObstaclesPool;
@@ -24,14 +25,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
-public class GameScreen extends BasicScreen {		
+public class GameScreen extends BasicScreen {
 	protected Box2DDebugRenderer debugRenderer;
 	protected World world;
 	protected Stage gameworldStage;
@@ -40,6 +44,7 @@ public class GameScreen extends BasicScreen {
 	protected ContactListener contactListener = new ContactListener();
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
+	ParallaxActor grass;
 	
 	protected boolean endGame = false;
 	
@@ -71,7 +76,7 @@ public class GameScreen extends BasicScreen {
 		player.addAvailableAnimation(Animation.get(0.04f, "idle", PlayMode.LOOP));
 		player.queueAnimation("idle");
 
-		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, Main.GROUND_LEVEL)
+		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, Main.GROUND_LEVEL).fixedRotation(true)
 				                        .addFixture("player").box(0.6f, 1.9f).friction(0.1f)
 				                        .addFixture("player_sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.1f)
 				                        .create());
@@ -97,9 +102,38 @@ public class GameScreen extends BasicScreen {
 
 		//create Parallaxes
 		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
-		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.001f).moveToY(2) );
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.004f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
 		gameworldStage.addActor( ground.moveToY(Main.GROUND_LEVEL - ground.getHeight()) );
+		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL);
+		gameworldStage.addActor( grass );
+		
+		ImmaterialGameActor sign = new ImmaterialGameActor("sign");
+		sign.setStaticImage("board");
+		sign.setPosition(7, Main.GROUND_LEVEL);
+		gameworldStage.addActor(sign);
+		
+//		float x = 10, y = 6, ropeHeight = 7.5f;
+//		
+//		Body spikeBall = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("SpikeBall").circle(1).friction(0.5f).position(x + ropeHeight, y).create();
+//		Body anchor = BodyBuilder.get().type(BodyType.StaticBody).addFixture("AnchorBall").box(0.2f, 0.2f).friction(0.5f).position(x, y).sensor(true).create();
+//		Body rope = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ropeHeight, 0.1f).sensor(true).position(x + ropeHeight/2f, y).create();
+//		
+//		
+//		RevoluteJointDef jointDef = new RevoluteJointDef();
+//		jointDef.localAnchorB.set(ropeHeight/2f, 0);
+//		jointDef.collideConnected = false;
+//		jointDef.bodyA = anchor;
+//		jointDef.bodyB = rope;
+//		
+//		world.createJoint(jointDef);
+//		
+//		jointDef.localAnchorB.set(-ropeHeight/2f, 0);
+//		jointDef.collideConnected = false;
+//		jointDef.bodyA = spikeBall;
+//		jointDef.bodyB = rope;
+//		
+//		world.createJoint(jointDef);
 	}
 	
 	@Override
@@ -113,7 +147,7 @@ public class GameScreen extends BasicScreen {
 		obstaclesPool.freePools();
 		
 		//generate obstacles
-		levelGenerator.generate();
+		//levelGenerator.generate();
 
 		//act and draw main stage
 		gameworldStage.act(delta);
@@ -124,6 +158,7 @@ public class GameScreen extends BasicScreen {
 		
 		//make player always on top
 		player.toFront();
+		grass.toFront();
 		
 		if(endGame) {
 			player.removePlugin("CameraFollowingPlugin");
