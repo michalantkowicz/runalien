@@ -26,14 +26,14 @@ background_menu
   index: -1
 buttonDown
   rotate: false
-  xy: 965, 921
+  xy: 483, 1034
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 1356, 921
+  xy: 874, 1034
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
@@ -82,7 +82,7 @@ gplusUp
   index: -1
 menu
   rotate: false
-  xy: 965, 803
+  xy: 1656, 1140
   size: 284, 70
   orig: 285, 72
   offset: 1, 1
@@ -103,21 +103,21 @@ playButtonUp
   index: -1
 rankButtonDown
   rotate: false
-  xy: 1, 803
+  xy: 1283, 921
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 rankButtonUp
   rotate: false
-  xy: 483, 803
+  xy: 1, 1034
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 replay
   rotate: false
-  xy: 1, 949
+  xy: 1265, 1067
   size: 389, 72
   orig: 389, 72
   offset: 0, 0
@@ -150,9 +150,16 @@ soundUpOff
   orig: 50, 51
   offset: 0, 0
   index: -1
+spaceRubbish
+  rotate: false
+  xy: 1, 803
+  size: 1280, 229
+  orig: 1280, 229
+  offset: 0, 0
+  index: -1
 submit
   rotate: false
-  xy: 392, 949
+  xy: 1656, 1067
   size: 376, 71
   orig: 377, 72
   offset: 1, 0

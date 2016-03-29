@@ -21,7 +21,10 @@ import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
+import com.apptogo.runalien.scene2d.TextButton;
 import com.apptogo.runalien.tools.UnitConverter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Interpolation;
@@ -33,7 +36,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
-public class GameScreen extends BasicScreen {
+public class GameScreen extends BasicScreen {	
 	protected Box2DDebugRenderer debugRenderer;
 	protected World world;
 	protected Stage gameworldStage;
@@ -42,8 +45,9 @@ public class GameScreen extends BasicScreen {
 	protected ContactListener contactListener = new ContactListener();
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
-	protected ParallaxActor grass;
-	protected int score;
+	ParallaxActor grass;
+	
+	int score = 0;
 	protected Label scoreLabel;
 	
 	protected boolean endGame = false;
@@ -61,11 +65,11 @@ public class GameScreen extends BasicScreen {
 		createGameWorldStage();
 		stagesToFade.add(gameworldStage);
 		
-		stage.addActor(Image.get("space").size(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT).position(0, Main.SCREEN_HEIGHT/2f).centerX());
-		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 300).centerX().setListener(Listener.click(game, new MenuScreen(game))));
-		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 150).centerX());
-		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f).centerX().setListener(Listener.click(game, new GameScreen(game))));
-		
+		stage.addActor(Image.get("space").width(Main.SCREEN_WIDTH).position(0, Main.SCREEN_HEIGHT/2f).centerX());
+		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 500).centerX().setListener(Listener.click(game, new MenuScreen(game))));
+		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 350).centerX());
+		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 200).centerX().setListener(Listener.click(game, new GameScreen(game))));
+				
 		//prepare CustomActionManager
 		gameworldStage.addActor(CustomActionManager.getInstance());
 
@@ -99,19 +103,50 @@ public class GameScreen extends BasicScreen {
 		
 		//create obstacle generator
 		levelGenerator = new LevelGenerator(player);
-
+		
 		//create Parallaxes
-		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "spaceRubbish").setFixedSpeed(0.002f).moveToY(UnitConverter.toBox2dUnits(1050)) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.004f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
+		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
 		gameworldStage.addActor( ground.moveToY(Main.GROUND_LEVEL - ground.getHeight()) );
 		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL);
 		gameworldStage.addActor( grass );
 		
-		ImmaterialGameActor sign = new ImmaterialGameActor("sign");
-		sign.setStaticImage("board");
-		sign.setPosition(7, Main.GROUND_LEVEL);
-		gameworldStage.addActor(sign);
+		//Sign and tutorial button if not TutorialScreen instance
+		if(!(this instanceof TutorialScreen)) {
+			stage.addActor(TextButton.get("TUTORIAL").position(-620, -390).setListener(Listener.click(game, new TutorialScreen(game))));
+			gameworldStage.addActor(Image.get("buttonTutorial").scale(1/UnitConverter.PPM).position(-4.2f, Main.GROUND_LEVEL - 2));
+			
+			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
+			sign.setStaticImage("board");
+			sign.setPosition(7, Main.GROUND_LEVEL);
+			gameworldStage.addActor(sign);
+		}
+//		float x = 10, y = 6, ropeHeight = 7.5f;
+//		
+//		Body spikeBall = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("SpikeBall").circle(1).friction(0.5f).position(x + ropeHeight, y).create();
+//		Body anchor = BodyBuilder.get().type(BodyType.StaticBody).addFixture("AnchorBall").box(0.2f, 0.2f).friction(0.5f).position(x, y).sensor(true).create();
+//		Body rope = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ropeHeight, 0.1f).sensor(true).position(x + ropeHeight/2f, y).create();
+//		
+//		
+//		RevoluteJointDef jointDef = new RevoluteJointDef();
+//		jointDef.localAnchorB.set(ropeHeight/2f, 0);
+//		jointDef.collideConnected = false;
+//		jointDef.bodyA = anchor;
+//		jointDef.bodyB = rope;
+//		
+//		world.createJoint(jointDef);
+//		
+//		jointDef.localAnchorB.set(-ropeHeight/2f, 0);
+//		jointDef.collideConnected = false;
+//		jointDef.bodyA = spikeBall;
+//		jointDef.bodyB = rope;
+//		
+//		world.createJoint(jointDef);
+		
+		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
+		stage.addActor(scoreLabel);
 	}
 	
 	@Override
@@ -141,10 +176,10 @@ public class GameScreen extends BasicScreen {
 		if(endGame) {
 			player.removePlugin("CameraFollowingPlugin");
 			
-			gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-600), 3, Interpolation.pow5),
+			gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-850), 2.5f, Interpolation.pow5),
 	                Actions.moveBy(0, UnitConverter.toBox2dUnits(-100), 60)));
 			
-			stage.addAction(Actions.sequence(Actions.moveBy(0, -600, 3, Interpolation.pow5),
+			stage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
 			       Actions.moveBy(0,  -100, 60)));
 			
 			endGame = false;

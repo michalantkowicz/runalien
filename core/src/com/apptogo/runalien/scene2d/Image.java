@@ -38,6 +38,13 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
 
         return this;
     }
+    
+    public Image width(float width)
+    {
+    	this.setWidth(width);
+    	
+    	return this;
+    }
 
     public Image centerX()
     {
