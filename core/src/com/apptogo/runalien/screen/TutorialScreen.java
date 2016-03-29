@@ -101,6 +101,8 @@ public class TutorialScreen extends GameScreen {
 				
 		addToCurrentGroup(welcomeLabel);
 		currentPhase = TutorialPhase.WELCOME;
+		
+		Gdx.app.getPreferences("SETTINGS").putBoolean("TUTORIAL", true);
 	}
 		
 	private void handleTutorialPhase() {

@@ -37,7 +37,15 @@ public class MenuScreen extends BasicScreen {
 
         tables.get(0).add(group).right().row();
         tables.get(0).add().height(300).row();
-        tables.get(0).add(TextButton.get("PLAY", "play").setListener(Listener.click(game, new GameScreen(game)))).expandX().row();
+        
+        if(Gdx.app.getPreferences("SETTINGS").getBoolean("TUTORIAL")) {
+        	tables.get(0).add(TextButton.get("PLAY", "play").setListener(Listener.click(game, new GameScreen(game)))).expandX().row();
+        }
+        else {
+        	tables.get(0).add(TextButton.get("PLAY", "play").setListener(Listener.click(game, new TutorialScreen(game)))).expandX().row();
+        }
+        
+        
         tables.get(0).add(TextButton.get("RANK", "rank").setListener(Listener.click(game, new TutorialScreen(game)))).expandX().row();
 
         Group share = new Group();

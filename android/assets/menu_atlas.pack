@@ -122,6 +122,13 @@ replay
   orig: 389, 72
   offset: 0, 0
   index: -1
+signScore
+  rotate: false
+  xy: 1872, 185
+  size: 29, 28
+  orig: 32, 32
+  offset: 0, 4
+  index: -1
 soundDown
   rotate: false
   xy: 1978, 105

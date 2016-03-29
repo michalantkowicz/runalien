@@ -24,14 +24,15 @@ import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -117,11 +118,15 @@ public class GameScreen extends BasicScreen {
 		if(!(this instanceof TutorialScreen)) {
 			stage.addActor(TextButton.get("TUTORIAL").position(-620, -390).setListener(Listener.click(game, new TutorialScreen(game))));
 			gameworldStage.addActor(Image.get("buttonTutorial").scale(1/UnitConverter.PPM).position(-4.2f, Main.GROUND_LEVEL - 2));
-			
+							
 			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
 			sign.setStaticImage("board");
 			sign.setPosition(7, Main.GROUND_LEVEL);
 			gameworldStage.addActor(sign);
+			
+			Group topScore = createTopScore(String.valueOf(Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")));
+			topScore.setPosition(sign.getX() + 1.6f - topScore.getWidth()/2f,  sign.getY() + 1.5f);
+			gameworldStage.addActor(topScore);
 		}
 //		float x = 10, y = 6, ropeHeight = 7.5f;
 //		
@@ -165,7 +170,7 @@ public class GameScreen extends BasicScreen {
 		//act and draw main stage
 		gameworldStage.act(delta);
 		gameworldStage.draw();
-
+		
 		//debug renderer
 		debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
@@ -181,6 +186,10 @@ public class GameScreen extends BasicScreen {
 			
 			stage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
 			       Actions.moveBy(0,  -100, 60)));
+			
+			if(score > Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")){
+				Gdx.app.getPreferences("SETTINGS").putLong("TOPSCORE", score);
+			}
 			
 			endGame = false;
 		}
@@ -203,6 +212,19 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.setViewport(new FillViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
 		((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));
 		((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
+	}
+	
+	protected Group createTopScore(String score) {
+		Group scoreGroup = new Group();
+		
+		for(String digit : score.split("")) {
+			Image digitImage = Image.get(digit).position(scoreGroup.getWidth(), 0).scale(1/40f);
+			scoreGroup.addActor(digitImage);
+			scoreGroup.setWidth(scoreGroup.getWidth() + digitImage.getWidth() + 0.05f);
+			scoreGroup.setHeight(Math.max(scoreGroup.getHeight(), digitImage.getHeight()));
+		}
+		
+		return scoreGroup;
 	}
 
 	/**------ GETTERS / SETTERS ------**/
