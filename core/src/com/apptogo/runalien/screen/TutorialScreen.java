@@ -260,6 +260,10 @@ public class TutorialScreen extends GameScreen {
 	
 	@Override
 	void step(float delta) {
+		//TODO usunac ten temp
+		if(Gdx.input.isKeyJustPressed(Keys.W))
+			changeScreen(new GameScreen(game));
+		
 		//simulate physics and handle body contacts
 		contactListener.contacts.clear();
 		world.step(delta, 3, 3);
