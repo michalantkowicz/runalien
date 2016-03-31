@@ -21,7 +21,7 @@ public class Listener {
         return listener;
     }
 	
-	public static ClickListener preferences(String preferencesName, String valueKey, boolean value)
+	public static ClickListener preferences(final String preferencesName, final String valueKey, final boolean value)
     {
         ClickListener listener = new ClickListener() {
             @Override

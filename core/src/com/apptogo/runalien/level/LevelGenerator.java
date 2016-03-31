@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,10 +25,10 @@ public class LevelGenerator {
 	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
 
 	private final float INITIAL_SPEED = 10f;
-	
+
 	private final float SPAWN_DISTANCE = 15f;
 	private final float DISAPPEAR_DISTANCE = 8f;
-	
+
 	private GameActor player;
 	private SegmentGenerator segmentGenerator;
 
@@ -50,7 +51,7 @@ public class LevelGenerator {
 	public void generate() {
 		//calculate level
 		calculateLevel();
-		
+
 		if (player.getBody().getPosition().x + SPAWN_DISTANCE >= nextPosition) {
 			generateRandom();
 		}
@@ -63,71 +64,81 @@ public class LevelGenerator {
 
 	private void freeSegments() {
 		for (Segment segment : activeSegments) {
-			//TODO check what's better
-			//			for(GameActor actor : segment.getObstacles()){
-			// 				if(actor.getBody().getPosition().x < player.getBody().getPosition().x + 1)
-			//					actor.setAlive(false);
-			//			}
-			segment.getFields().stream().filter(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE).forEach(o -> o.setAlive(false));
-		}
-		
-		for(GameActor obstacle : activeObstacles){
-			if(obstacle.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE){
-				obstacle.setAlive(false);
+			for (GameActor actor : segment.getFields()) {
+				if (actor.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE)
+					actor.setAlive(false);
 			}
 		}
-		activeObstacles.removeIf(o -> o.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE);
+
+		for (Iterator<GameActor> iterator = activeObstacles.iterator(); iterator.hasNext();) {
+			GameActor obstacle = iterator.next();
+			if (obstacle.getBody().getPosition().x < player.getBody().getPosition().x - DISAPPEAR_DISTANCE) {
+				obstacle.setAlive(false);
+				iterator.remove();
+			}
+		}
 	}
 
-	
-	private void generateRandom(){
+	private void generateRandom() {
 		Random random = new Random();
 		int randomNumber = random.nextInt(100);
-		
-		if(randomNumber > 0)
+
+		if (randomNumber > 0)
 			generateRandomObstacle();
 		else
 			generateRandomSegment();
 	}
-	
+
 	private void generateRandomObstacle() {
-		List<Map.Entry<String,Pool<GameActor>>> allPools = new ArrayList<Map.Entry<String,Pool<GameActor>>>(Main.getInstance().getGameScreen().getObstaclesPool().getObstaclePools().entrySet());
-		Collections.shuffle(allPools);
-		
-		Optional<Entry<String, Pool<GameActor>>> optional = allPools.stream().filter(k -> Float.valueOf(k.getKey().split("-")[0]) <= level && Float.valueOf(k.getKey().split("-")[1]) >= level).findAny();
-		
-		if(optional.isPresent()){
+
+		//iterate through the map and get all obstacles with key matching level.
+		List<Pool<GameActor>> possiblePools = new ArrayList<Pool<GameActor>>();
+		for (Map.Entry<String, Pool<GameActor>> entry : Main.getInstance().getGameScreen().getObstaclesPool().getObstaclePools().entrySet()) {
+			if (Float.valueOf(entry.getKey().split("-")[0]) <= level && Float.valueOf(entry.getKey().split("-")[1]) >= level) {
+				possiblePools.add(entry.getValue());
+			}
+		}
+
+		//get one random obstacle from possible Pools
+		if (!possiblePools.isEmpty()) {
 			logger.debug("spawning obstacle");
-			GameActor obstacle = optional.get().getValue().obtain();
-			obstacle.getBody().setTransform(nextPosition,  obstacle.getBody().getPosition().y, 0);
-			obstacle.init();
-			activeObstacles.add(obstacle);
-			this.nextPosition += ((Spawnable)obstacle).getBaseOffset() + level;
+
+			Random random = new Random();
+			GameActor randomObstacle = possiblePools.get(possiblePools.size() > 1 ? random.nextInt( possiblePools.size() - 1) : 0).obtain();
+			
+			randomObstacle.getBody().setTransform(nextPosition, randomObstacle.getBody().getPosition().y, 0);
+			randomObstacle.init();
+			activeObstacles.add(randomObstacle);
+			this.nextPosition += ((Spawnable) randomObstacle).getBaseOffset() + level;
 		}
 	}
-	
-	private void generateRandomSegment() {
-		Field[] segmentDefinitionFields = Arrays.asList(SegmentDefinitions.class.getFields()).stream().filter(f -> f.getType().getName().equals(SegmentDefinition.class.getTypeName())).toArray(Field[]::new);
 
+	private void generateRandomSegment() {
 		//get all segmentDefinitions matching current level
 		List<SegmentDefinition> segmentDefinitions = new ArrayList<SegmentDefinition>();
-		for (int i = 0; i < segmentDefinitionFields.length; i++) {
+		
+		for(Field field : SegmentDefinitions.class.getFields()){
+			//if it's not segment definition continue
+			if(!field.getType().getName().equals(SegmentDefinition.class.getTypeName())){
+				continue;
+			}
 			try {
-				SegmentDefinition s = (SegmentDefinition)segmentDefinitionFields[i].get(null);
-				if(s.getMinLevel() <= level && s.getMaxLevel() >= level){
+				SegmentDefinition s = (SegmentDefinition) field.get(null);
+				if (s.getMinLevel() <= level && s.getMaxLevel() >= level) {
 					segmentDefinitions.add(s);
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				logger.error("Error during SegmentDefinitions reflection operation: ", e);
 			}
 		}
-		
-		if(segmentDefinitions.size() > 0){
+
+		//get random segment def
+		if (segmentDefinitions.size() > 0) {
 			logger.debug("spawning segment");
-			//get random segment def
+			
 			Random random = new Random();
 			SegmentDefinition segmentToSpawn = segmentDefinitions.get(random.nextInt(segmentDefinitions.size()));
-			
+
 			Segment segment = segmentGenerator.getSegment(segmentToSpawn);
 			segment.setPosition(nextPosition);
 			activeSegments.add(segment);

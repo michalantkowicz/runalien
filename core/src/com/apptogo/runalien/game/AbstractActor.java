@@ -75,7 +75,9 @@ public class AbstractActor extends Actor {
 	 */
 	public void setAvailableAnimations(String... animationNames) {
 		this.availableAnimations = Animation.getAnimations(animationNames);
-		availableAnimations.forEach((k, v) -> v.scaleFrames(1 / UnitConverter.PPM));
+		for(Animation animation : availableAnimations.values()){
+			animation.scaleFrames(1 / UnitConverter.PPM);
+		}
 		calculateAverageOffset();
 	}
 
@@ -141,6 +143,9 @@ public class AbstractActor extends Actor {
 		}
 		averageOffset.x = offsetSum.x / availableAnimations.size();
 		averageOffset.y = offsetSum.y / availableAnimations.size();
-		availableAnimations.forEach((k, v) -> v.setDeltaOffset(new Vector2(averageOffset)));
+
+		for(Animation animation : availableAnimations.values()){
+			animation.setDeltaOffset(new Vector2(averageOffset));
+		}
 	}
 }

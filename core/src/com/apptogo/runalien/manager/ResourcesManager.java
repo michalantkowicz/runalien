@@ -1,5 +1,6 @@
 package com.apptogo.runalien.manager;
 
+import com.apptogo.runalien.exception.ResourcesManagerException;
 import com.apptogo.runalien.scene2d.AtlasRegionComparator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -67,7 +68,9 @@ public class ResourcesManager {
 				break;
 			}
 		}
-
+		if(region == null){
+			throw new ResourcesManagerException("Couldn't find region: " + regionName);
+		}
 		return region;
 	}
 

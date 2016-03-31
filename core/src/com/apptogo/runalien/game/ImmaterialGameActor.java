@@ -31,7 +31,9 @@ public class ImmaterialGameActor extends AbstractActor {
 		currentAnimation.position(getX() - currentAnimation.getDeltaOffset().x, getY() - currentAnimation.getDeltaOffset().y);
 		currentAnimation.act(delta);
 
-		procedures.forEach((k, v) -> v.run());
+		for(AbstractProcedure procedure : procedures.values()){
+			procedure.run();
+		}
 	}
 
 	@Override

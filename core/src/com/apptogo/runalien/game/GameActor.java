@@ -40,7 +40,9 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		currentAnimation.position(getX() - currentAnimation.getDeltaOffset().x, getY() - currentAnimation.getDeltaOffset().y);
 		currentAnimation.act(delta);
 
-		plugins.forEach((k, v) -> v.run());
+		for(AbstractPlugin plugin : plugins.values()){
+			plugin.run();
+		}
 	}
 
 	@Override

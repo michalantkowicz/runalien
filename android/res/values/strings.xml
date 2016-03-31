@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">runAlien</string>
+    <string name="app_id">809895136933</string>
+    <string name="app_name">Run Alien</string>
 
 </resources>

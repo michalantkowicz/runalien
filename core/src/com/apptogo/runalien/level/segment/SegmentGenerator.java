@@ -1,19 +1,20 @@
 package com.apptogo.runalien.level.segment;
 
-import java.util.Arrays;
-
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class SegmentGenerator {
 	private final SegmentFieldDefinitions segmentFieldDefinitions = new SegmentFieldDefinitions();
 	
 	public Segment getSegment(SegmentDefinition segmentDefinition) {
-		int[][] definition = Arrays.stream(segmentDefinition.getDefinition())
-	             .map((int[] row) -> row.clone())
-	             .toArray((int length) -> new int[length][]);
+		int length = segmentDefinition.getDefinition().length;
+		int[][] definition = new int[length][segmentDefinition.getDefinition()[0].length];
+	    for (int i = 0; i < length; i++) {
+	        System.arraycopy(segmentDefinition.getDefinition()[i], 0, definition[i], 0, segmentDefinition.getDefinition()[i].length);
+	    }
 		
 		//TODO exception for maximum size
 		Segment segment = new Segment(segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset());
@@ -22,8 +23,8 @@ public class SegmentGenerator {
 			for (int j = definition.length - 1; j >= 0; j--) {
 				//iteration through columns(bottom->top) -> rows(left->right) because we need column blocks like bells or logs
 				int value = definition[j][i];
-				float positionX = i * segmentFieldDefinitions.OBSTACLE_SIZE;
-				float positionY = (definition.length - j - 1) * segmentFieldDefinitions.OBSTACLE_SIZE;
+				float positionX = i * SegmentFieldDefinitions.OBSTACLE_SIZE;
+				float positionY = (definition.length - j - 1) * SegmentFieldDefinitions.OBSTACLE_SIZE;
 
 				GameActor field = null;
 
@@ -32,13 +33,17 @@ public class SegmentGenerator {
 				}
 				else if(value == SegmentDefinitions.CRATE_BOT) {
 					field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.CRATE);
-					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
+					for(Fixture f : field.getBody().getFixtureList()){
+						UserData.get(f).key = "killingBottom";
+					}
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
 				else if(value == SegmentDefinitions.CRATE_TOP) {
 					field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.CRATE);
-					field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
+					for(Fixture f : field.getBody().getFixtureList()){
+						UserData.get(f).key = "killingTop";
+					}
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
@@ -53,7 +58,9 @@ public class SegmentGenerator {
 						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
 						
 						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BIG_CRATE);
-						field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingBottom");
+						for(Fixture f : field.getBody().getFixtureList()){
+							UserData.get(f).key = "killingBottom";
+						}
 						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 						segment.addField(field);	
 					}
@@ -68,7 +75,9 @@ public class SegmentGenerator {
 						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
 						
 						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BIG_CRATE);
-						field.getBody().getFixtureList().forEach(f -> UserData.get(f).key = "killingTop");
+						for(Fixture f : field.getBody().getFixtureList()){
+							UserData.get(f).key = "killingTop";
+						}
 						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 						segment.addField(field);	
 					}

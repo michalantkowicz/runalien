@@ -3,6 +3,7 @@ package com.apptogo.runalien.level;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
@@ -50,11 +51,14 @@ public class ObstaclesPool {
 	 * 
 	 */
 	public void freePools() {
-		activeActors.stream().filter(a -> !a.isAlive()).forEach(a -> segmentPools.get(a.getName()).free(a));
-		
-		boolean somethingWasRemoved = activeActors.removeIf(a -> !a.isAlive());
-		if (somethingWasRemoved)
-			logger.debug("Freeing pools. " + activeActors.size() + " Active actors left.");
+		for(Iterator<GameActor> iterator = activeActors.iterator(); iterator.hasNext();){
+			GameActor actor = iterator.next();
+			if(!actor.isAlive()){
+				segmentPools.get(actor.getName()).free(actor);
+				iterator.remove();
+				logger.debug("Freeing pools. " + activeActors.size() + " Active actors left.");
+			}
+		}
 	}
 
 	/**
@@ -72,7 +76,7 @@ public class ObstaclesPool {
 		return segmentField;
 	}
 	
-	private void createSegmentPool(String actorName, BodyBuilder actorBodyDef, int capacity) {
+	private void createSegmentPool(final String actorName, final BodyBuilder actorBodyDef, int capacity) {
 		//TODO consider filling pools with objects at start
 		logger.debug("Creating pool of: " + actorName);
 		segmentPools.put(actorName, new Pool<GameActor>(capacity) {

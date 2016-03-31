@@ -28,6 +28,7 @@ import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -207,7 +208,7 @@ public class GameScreen extends BasicScreen {
 				//add extras to balloon
 				finalScore.addActor(Image.get("newTop").position(0, -190).centerX());
 				
-				ParticleEffectActor stars = new ParticleEffectActor("losecoins.p", 1, 1, 1, 1, ResourcesManager.getInstance().get("game_atlas.pack"));
+				ParticleEffectActor stars = new ParticleEffectActor("losecoins.p", 1, 1, 1, 1, (TextureAtlas)ResourcesManager.getInstance().get("game_atlas.pack"));
 				stars.obtainAndStart(0, -60, 0);
 				finalScore.addActor(stars);
 				stars.toBack();
@@ -242,10 +243,12 @@ public class GameScreen extends BasicScreen {
 		Group scoreGroup = new Group();
 		
 		for(String digit : score.split("")) {
-			Image digitImage = Image.get(digit).position(scoreGroup.getWidth(), 0).scale(scale);
-			scoreGroup.addActor(digitImage);
-			scoreGroup.setWidth(scoreGroup.getWidth() + digitImage.getWidth() + 2 * scale);
-			scoreGroup.setHeight(Math.max(scoreGroup.getHeight(), digitImage.getHeight()));
+			if(!digit.isEmpty()){
+				Image digitImage = Image.get(digit).position(scoreGroup.getWidth(), 0).scale(scale);
+				scoreGroup.addActor(digitImage);
+				scoreGroup.setWidth(scoreGroup.getWidth() + digitImage.getWidth() + 2 * scale);
+				scoreGroup.setHeight(Math.max(scoreGroup.getHeight(), digitImage.getHeight()));
+			}
 		}
 		
 		return scoreGroup;

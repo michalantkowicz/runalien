@@ -24,7 +24,12 @@ public class Segment {
 	}
 
 	public void setPosition(float posX) {
-		fields.forEach(a -> a.getBody().setTransform(new Vector2(a.getBody().getPosition().x + posX + UserData.get(a.getBody()).width/2, Main.GROUND_LEVEL + a.getBody().getPosition().y + UserData.get(a.getBody()).height/2), 0));
+		for(GameActor field : fields){
+			Vector2 position = new Vector2();
+			position.x = field.getBody().getPosition().x + posX + UserData.get(field.getBody()).width/2;
+			position.y = Main.GROUND_LEVEL + field.getBody().getPosition().y + UserData.get(field.getBody()).height/2;
+			field.getBody().setTransform(position, 0);
+		}
 	}
 
 	public List<GameActor> getFields() {
