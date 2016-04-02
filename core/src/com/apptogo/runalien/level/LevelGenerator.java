@@ -114,7 +114,7 @@ public class LevelGenerator {
 		
 		for(Field field : SegmentDefinitions.class.getFields()){
 			//if it's not segment definition continue
-			if(!field.getType().getName().equals(SegmentDefinition.class.getTypeName())){
+			if(!field.getType().getName().equals(SegmentDefinition.class.getCanonicalName())){
 				continue;
 			}
 			try {

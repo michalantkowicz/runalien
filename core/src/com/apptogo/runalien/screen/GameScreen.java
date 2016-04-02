@@ -279,6 +279,8 @@ public class GameScreen extends BasicScreen {
 	}
 
 	public void removeTutorialButton() {
-		this.tutorialButton.remove();
+		if(this.tutorialButton != null) {
+			this.tutorialButton.remove();
+		}
 	}
 }

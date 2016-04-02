@@ -175,7 +175,7 @@ public class TutorialScreen extends GameScreen {
 					longSlideCounter++;
 				}
 				
-				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding() && longSlideCounter > 10) {
+				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding() && longSlideCounter > 5) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.JUMPPREPARE;
 					fadeOutCurrentGroup(0.5f);
