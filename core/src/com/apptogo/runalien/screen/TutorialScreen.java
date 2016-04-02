@@ -2,7 +2,7 @@ package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.plugin.RunningPlugin;
-import com.apptogo.runalien.plugin.TouchSteeringPlugin;
+import com.apptogo.runalien.plugin.SteeringPlugin;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.scene2d.Label;
 import com.badlogic.gdx.Gdx;
@@ -103,10 +103,11 @@ public class TutorialScreen extends GameScreen {
 		currentPhase = TutorialPhase.WELCOME;
 		
 		Gdx.app.getPreferences("SETTINGS").putBoolean("TUTORIAL", true);
+		
+		Gdx.input.setInputProcessor(null);
 	}
 		
 	private void handleTutorialPhase() {
-		
 		switch(currentPhase) {
 			case TRANSITION:
 				if(currentGroup.getActions().size == 0) {
@@ -129,6 +130,8 @@ public class TutorialScreen extends GameScreen {
 				
 				rightHand.addAction(tapOnce());
 							
+				Gdx.input.setInputProcessor(stage);
+				
 				currentPhase = TutorialPhase.START;
 				break;
 				
@@ -149,7 +152,7 @@ public class TutorialScreen extends GameScreen {
 				break;
 				
 			case SLIDE:
-				if(currentGroup.getActions().size == 0 && ((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding()) {
+				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding()) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.LONGSLIDEPREPARE;
 					fadeOutCurrentGroup(0.5f);
@@ -165,14 +168,14 @@ public class TutorialScreen extends GameScreen {
 				break;
 				
 			case LONGSLIDE:
-				if(!((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding()) {
+				if(!((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding()) {
 					longSlideCounter = 0;
 				}
 				else if(Gdx.input.justTouched()) {
 					longSlideCounter++;
 				}
 				
-				if(currentGroup.getActions().size == 0 && ((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding() && longSlideCounter > 10) {
+				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isSliding() && longSlideCounter > 10) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.JUMPPREPARE;
 					fadeOutCurrentGroup(0.5f);
@@ -188,7 +191,7 @@ public class TutorialScreen extends GameScreen {
 				break;
 				
 			case JUMP:
-				if(currentGroup.getActions().size == 0 && ((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isJumping()) {
+				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isJumping()) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.DOUBLEJUMPPREPARE;
 					fadeOutCurrentGroup(0.5f);
@@ -204,7 +207,7 @@ public class TutorialScreen extends GameScreen {
 				break;
 				
 			case DOUBLEJUMP:
-				if(currentGroup.getActions().size == 0 && ((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isDoubleJumping()) {
+				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isDoubleJumping()) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.CHARGEDOWNPREPARE;
 					fadeOutCurrentGroup(0.5f);
@@ -222,7 +225,7 @@ public class TutorialScreen extends GameScreen {
 				
 			case CHARGEDOWN:
 				//TODO przerobic mapowanie klawiszy na dotkniecia
-				if(currentGroup.getActions().size == 0 && ((TouchSteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isDoubleJumping() && Gdx.input.isKeyJustPressed(Keys.L)) {
+				if(currentGroup.getActions().size == 0 && ((SteeringPlugin)player.getPlugin("TouchSteeringPlugin")).isDoubleJumping() && player.getBody().getLinearVelocity().y >= -35) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.SPEEDPREPARE;
 					fadeOutCurrentGroup(0.5f);

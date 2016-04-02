@@ -26,11 +26,12 @@ import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -51,7 +52,7 @@ public class GameScreen extends BasicScreen {
 	protected GameActor player;
 	ParallaxActor grass;
 	Group finalScore;
-	
+	FPSLogger logger = new FPSLogger();
 	int score = 0;
 	protected Label scoreLabel;
 	
@@ -138,34 +139,13 @@ public class GameScreen extends BasicScreen {
 			topScore.setPosition(sign.getX() + 1.6f - topScore.getWidth()/2f,  sign.getY() + 1.5f);
 			gameworldStage.addActor(topScore);
 		}
-//		float x = 10, y = 6, ropeHeight = 7.5f;
-//		
-//		Body spikeBall = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("SpikeBall").circle(1).friction(0.5f).position(x + ropeHeight, y).create();
-//		Body anchor = BodyBuilder.get().type(BodyType.StaticBody).addFixture("AnchorBall").box(0.2f, 0.2f).friction(0.5f).position(x, y).sensor(true).create();
-//		Body rope = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ropeHeight, 0.1f).sensor(true).position(x + ropeHeight/2f, y).create();
-//		
-//		
-//		RevoluteJointDef jointDef = new RevoluteJointDef();
-//		jointDef.localAnchorB.set(ropeHeight/2f, 0);
-//		jointDef.collideConnected = false;
-//		jointDef.bodyA = anchor;
-//		jointDef.bodyB = rope;
-//		
-//		world.createJoint(jointDef);
-//		
-//		jointDef.localAnchorB.set(-ropeHeight/2f, 0);
-//		jointDef.collideConnected = false;
-//		jointDef.bodyA = spikeBall;
-//		jointDef.bodyB = rope;
-//		
-//		world.createJoint(jointDef);
 		
 		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
 		stage.addActor(scoreLabel);
 	}
 	
 	@Override
-	void step(float delta) {
+	void step(float delta) {		
 		//simulate physics and handle body contacts
 		contactListener.contacts.clear();
 		world.step(delta, 3, 3);
@@ -180,7 +160,8 @@ public class GameScreen extends BasicScreen {
 		//act and draw main stage
 		gameworldStage.act(delta);
 		gameworldStage.draw();
-		
+		System.out.println("GAME: " + ((SpriteBatch)gameworldStage.getBatch()).renderCalls );
+		System.out.println("STAGE: " + ((SpriteBatch)stage.getBatch()).renderCalls );
 		//debug renderer
 		debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
@@ -218,7 +199,7 @@ public class GameScreen extends BasicScreen {
 			gameFinished = true;
 		}
 		else if(!gameFinished){
-			score = (int) (player.getBody().getPosition().x / 10);
+			score = Gdx.graphics.getFramesPerSecond();
 			scoreLabel.setText("score: " + String.valueOf(score));
 		}
 	}
