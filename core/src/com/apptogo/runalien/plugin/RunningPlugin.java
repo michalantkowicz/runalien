@@ -2,6 +2,7 @@ package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
+import com.apptogo.runalien.main.Main;
 
 public class RunningPlugin extends AbstractPlugin {
 	private boolean started;
@@ -31,13 +32,13 @@ public class RunningPlugin extends AbstractPlugin {
 
 		if (started) {
 			actor.changeAnimation("run").setFrameDuration(0.017f);
+			Main.getInstance().getGameScreen().removeTutorialButton();
 		} else {
 			if(!deathPlugin.dead)
 				actor.changeAnimation("idle");
 		}
 
 		this.started = started;
-
 	}
 
 	@Override

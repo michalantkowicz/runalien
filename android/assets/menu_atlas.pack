@@ -5,197 +5,176 @@ filter: Linear,Linear
 repeat: none
 achievementDown
   rotate: false
-  xy: 1794, 1
+  xy: 416, 1605
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 achievementUp
   rotate: false
-  xy: 1886, 1
+  xy: 416, 1697
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
-background_menu
+background_game
   rotate: false
   xy: 1, 1
   size: 1280, 800
   orig: 1280, 800
   offset: 0, 0
   index: -1
+background_menu
+  rotate: false
+  xy: 23, 803
+  size: 1280, 800
+  orig: 1280, 800
+  offset: 0, 0
+  index: -1
+balloon
+  rotate: false
+  xy: 1278, 1605
+  size: 175, 260
+  orig: 175, 260
+  offset: 0, 0
+  index: -1
 buttonDown
   rotate: false
-  xy: 483, 1034
+  xy: 1305, 1
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 874, 1034
+  xy: 1283, 573
   size: 389, 132
   orig: 389, 132
   offset: 0, 0
   index: -1
 font_big
   rotate: false
-  xy: 1283, 205
+  xy: 512, 1605
   size: 507, 422
   orig: 512, 512
   offset: 0, 87
   index: -1
 font_medium
   rotate: false
-  xy: 1792, 237
+  xy: 1021, 1605
   size: 255, 420
   orig: 256, 512
   offset: 0, 89
   index: -1
 font_small
   rotate: false
-  xy: 1765, 659
+  xy: 23, 1605
   size: 256, 193
   orig: 256, 256
   offset: 0, 60
   index: -1
 font_tutorial
   rotate: false
-  xy: 1283, 1
+  xy: 1, 1805
   size: 509, 202
   orig: 512, 512
   offset: 0, 310
   index: -1
 gplusDown
   rotate: false
-  xy: 1794, 93
+  xy: 324, 1698
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 gplusUp
   rotate: false
-  xy: 1886, 93
+  xy: 1937, 73
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 menu
   rotate: false
-  xy: 1656, 1140
+  xy: 1760, 1
   size: 284, 70
   orig: 285, 72
   offset: 1, 1
   index: -1
+newTop
+  rotate: false
+  xy: 281, 1605
+  size: 41, 140
+  orig: 41, 140
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 1, 2009
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
 playButtonDown
   rotate: false
-  xy: 1283, 629
+  xy: 1278, 1867
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 playButtonUp
   rotate: false
-  xy: 1283, 775
+  xy: 1455, 135
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 rankButtonDown
   rotate: false
-  xy: 1283, 921
+  xy: 1455, 281
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 rankButtonUp
   rotate: false
-  xy: 1, 1034
+  xy: 1455, 427
   size: 480, 144
   orig: 480, 144
   offset: 0, 0
   index: -1
 replay
   rotate: false
-  xy: 1265, 1067
+  xy: 1283, 707
   size: 389, 72
   orig: 389, 72
   offset: 0, 0
   index: -1
-signScore
-  rotate: false
-  xy: 1872, 185
-  size: 29, 28
-  orig: 32, 32
-  offset: 0, 4
-  index: -1
-soundDown
-  rotate: false
-  xy: 1978, 105
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
-  index: -1
-soundDownOff
-  rotate: false
-  xy: 1765, 854
-  size: 36, 51
-  orig: 50, 51
-  offset: 0, 0
-  index: -1
-soundUp
-  rotate: false
-  xy: 1978, 157
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
-  index: -1
-soundUpOff
-  rotate: false
-  xy: 1803, 854
-  size: 36, 51
-  orig: 50, 51
-  offset: 0, 0
-  index: -1
-spaceRubbish
+space
   rotate: false
   xy: 1, 803
-  size: 1280, 229
-  orig: 1280, 229
+  size: 20, 1000
+  orig: 20, 1000
   offset: 0, 0
   index: -1
 submit
   rotate: false
-  xy: 1656, 1067
+  xy: 1455, 781
   size: 376, 71
   orig: 377, 72
   offset: 1, 0
   index: -1
 vibrationDown
   rotate: false
-  xy: 1978, 1
-  size: 59, 50
-  orig: 59, 50
+  xy: 1937, 165
+  size: 90, 90
+  orig: 90, 90
   offset: 0, 0
-  index: -1
-vibrationDownOff
-  rotate: false
-  xy: 1794, 185
-  size: 37, 50
-  orig: 57, 50
-  offset: 10, 0
   index: -1
 vibrationUp
   rotate: false
-  xy: 1978, 53
-  size: 59, 50
-  orig: 59, 50
+  xy: 324, 1605
+  size: 90, 91
+  orig: 90, 91
   offset: 0, 0
-  index: -1
-vibrationUpOff
-  rotate: false
-  xy: 1833, 185
-  size: 37, 50
-  orig: 57, 50
-  offset: 10, 0
   index: -1

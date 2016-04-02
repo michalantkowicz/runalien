@@ -8,8 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class Listener {
 
-	public static ClickListener click(final Main game, final Screen screen)
-    {
+	public static ClickListener click(final Main game, final Screen screen) {
         ClickListener listener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -25,10 +24,8 @@ public class Listener {
     {
         ClickListener listener = new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-            	Gdx.app.getPreferences(preferencesName).putBoolean(valueKey, value);
-            	Gdx.app.getPreferences(preferencesName).flush();
+            public void clicked(InputEvent event, float x, float y) {
+            	Gdx.app.getPreferences(preferencesName).putBoolean(valueKey, value).flush();
             }
         };
 

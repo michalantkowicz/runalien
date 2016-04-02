@@ -3,6 +3,8 @@ package com.apptogo.runalien.screen;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.GroupLayout.Alignment;
+
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.game.ParallaxActor;
@@ -39,7 +41,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends BasicScreen {	
 	protected Box2DDebugRenderer debugRenderer;
@@ -55,6 +58,8 @@ public class GameScreen extends BasicScreen {
 	FPSLogger logger = new FPSLogger();
 	int score = 0;
 	protected Label scoreLabel;
+	
+	protected TextButton tutorialButton;
 	
 	protected boolean endGame = false, gameFinished = false;
 	
@@ -77,9 +82,14 @@ public class GameScreen extends BasicScreen {
 		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 200).centerX().setListener(Listener.click(game, new GameScreen(game))));
 		
 		finalScore = new Group();
-		finalScore.addActor(Image.get("baloon").centerX().centerY());
-		finalScore.setPosition(-480,  Main.SCREEN_HEIGHT);
-		finalScore.addAction(Actions.forever(Actions.sequence(Actions.moveBy(0, 20, 2), Actions.moveBy(0, -20, 4))));
+		finalScore.setOrigin(Align.center);
+		finalScore.addAction(Actions.rotateBy(-1));
+		finalScore.addAction(Actions.forever(Actions.sequence(Actions.moveBy(0, 40, 4), Actions.moveBy(0, -40, 6))));
+		finalScore.addAction(Actions.forever(Actions.sequence(Actions.rotateBy(2, 2), Actions.rotateBy(-2, 2))));
+		finalScore.setPosition(-420,  Main.SCREEN_HEIGHT);
+		
+		finalScore.addActor(Image.get("balloon").centerX().centerY());
+		finalScore.setVisible(false);
 		stage.addActor(finalScore);		
 		
 		//prepare CustomActionManager
@@ -127,7 +137,9 @@ public class GameScreen extends BasicScreen {
 		
 		//Sign and tutorial button if not TutorialScreen instance
 		if(!(this instanceof TutorialScreen)) {
-			stage.addActor(TextButton.get("TUTORIAL").position(-620, -390).setListener(Listener.click(game, new TutorialScreen(game))));
+			tutorialButton = TextButton.get("TUTORIAL").position(-620, -390).setListener(Listener.click(game, new TutorialScreen(game)));
+			stage.addActor(tutorialButton);
+			
 			gameworldStage.addActor(Image.get("buttonTutorial").scale(1/UnitConverter.PPM).position(-4.2f, Main.GROUND_LEVEL - 2));
 							
 			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
@@ -135,7 +147,7 @@ public class GameScreen extends BasicScreen {
 			sign.setPosition(7, Main.GROUND_LEVEL);
 			gameworldStage.addActor(sign);
 			
-			Group topScore = createTopScore(String.valueOf(Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")), 1/UnitConverter.PPM);
+			Group topScore = createTopScore(String.valueOf(Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")), 1/UnitConverter.PPM/1.5f);
 			topScore.setPosition(sign.getX() + 1.6f - topScore.getWidth()/2f,  sign.getY() + 1.5f);
 			gameworldStage.addActor(topScore);
 		}
@@ -145,7 +157,9 @@ public class GameScreen extends BasicScreen {
 	}
 	
 	@Override
-	void step(float delta) {		
+	void step(float delta) {
+		logger.log();
+		
 		//simulate physics and handle body contacts
 		contactListener.contacts.clear();
 		world.step(delta, 3, 3);
@@ -160,8 +174,7 @@ public class GameScreen extends BasicScreen {
 		//act and draw main stage
 		gameworldStage.act(delta);
 		gameworldStage.draw();
-		System.out.println("GAME: " + ((SpriteBatch)gameworldStage.getBatch()).renderCalls );
-		System.out.println("STAGE: " + ((SpriteBatch)stage.getBatch()).renderCalls );
+		
 		//debug renderer
 		debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
@@ -171,6 +184,8 @@ public class GameScreen extends BasicScreen {
 		
 		if(endGame) {
 			player.removePlugin("CameraFollowingPlugin");
+			
+			finalScore.setVisible(true);
 			
 			gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-850), 2.5f, Interpolation.pow5),
 	                Actions.moveBy(0, UnitConverter.toBox2dUnits(-30), 60)));
@@ -184,13 +199,13 @@ public class GameScreen extends BasicScreen {
 			finalScore.addActor(finalScoreLabel);
 			
 			if(score > Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")){
-				Gdx.app.getPreferences("SETTINGS").putLong("TOPSCORE", score);
-				
+				Gdx.app.getPreferences("SETTINGS").putLong("TOPSCORE", score).flush();
+			
 				//add extras to balloon
-				finalScore.addActor(Image.get("newTop").position(0, -190).centerX());
+				finalScore.addActor(Image.get("newTop").position(0, -260).centerX());
 				
-				ParticleEffectActor stars = new ParticleEffectActor("losecoins.p", 1, 1, 1, 1, (TextureAtlas)ResourcesManager.getInstance().get("game_atlas.pack"));
-				stars.obtainAndStart(0, -60, 0);
+				ParticleEffectActor stars = new ParticleEffectActor("losecoins.p", 1, 1, 1, 1, (TextureAtlas)ResourcesManager.getInstance().get("menu_atlas.pack"));
+				stars.obtainAndStart(0, -80, 0);
 				finalScore.addActor(stars);
 				stars.toBack();
 			}
@@ -199,10 +214,16 @@ public class GameScreen extends BasicScreen {
 			gameFinished = true;
 		}
 		else if(!gameFinished){
-			score = Gdx.graphics.getFramesPerSecond();
+			score = (int) (player.getBody().getPosition().x / 10);
 			scoreLabel.setText("score: " + String.valueOf(score));
 		}
 	}
+	
+	@Override
+    public void resize(int width, int height) {
+		super.resize(width, height);
+        this.gameworldStage.getViewport().update(width, height);
+    }
 
 	@Override
 	public void dispose() {
@@ -215,13 +236,14 @@ public class GameScreen extends BasicScreen {
 
 	protected void createGameWorldStage() {
 		gameworldStage = new Stage();
-		gameworldStage.setViewport(new FillViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
+		gameworldStage.setViewport(new FitViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
 		((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));
 		((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
 	}
 	
 	protected Group createTopScore(String score, float scale) {
 		Group scoreGroup = new Group();
+		scoreGroup.setTransform(false);
 		
 		for(String digit : score.split("")) {
 			if(!digit.isEmpty()){
@@ -254,5 +276,9 @@ public class GameScreen extends BasicScreen {
 	
 	public Map<String, String> getContactsSnapshot() {
 		return contactsSnapshot;
+	}
+
+	public void removeTutorialButton() {
+		this.tutorialButton.remove();
 	}
 }

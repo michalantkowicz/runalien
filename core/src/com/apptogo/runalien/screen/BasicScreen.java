@@ -15,12 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public abstract class BasicScreen implements Screen {
     protected Main game;
 
     protected Stage stage;
-    protected FillViewport viewport;
+    protected FitViewport viewport;
     protected OrthographicCamera camera;
 
     protected String[] backgroundTextureNames = new String[] {};
@@ -52,7 +53,7 @@ public abstract class BasicScreen implements Screen {
     @Override
     public void show() {
 
-        this.viewport = new FillViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
+        this.viewport = new FitViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
         this.stage = new Stage(this.viewport);
 
         this.camera = (OrthographicCamera) stage.getCamera();
