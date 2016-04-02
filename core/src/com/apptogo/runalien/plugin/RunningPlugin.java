@@ -19,7 +19,8 @@ public class RunningPlugin extends AbstractPlugin {
 				body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
 			}
 			else{
-				body.setLinearVelocity(10 + body.getPosition().x * 0.1f , body.getLinearVelocity().y);
+				body.setLinearVelocity(12.5f + body.getPosition().x * 0.01f , body.getLinearVelocity().y);
+				System.out.println("POS: " + body.getPosition().x + " SPEED: " + body.getLinearVelocity().x);
 			}
 		}
 	}

@@ -9,9 +9,9 @@ public class KeyboardSteeringPlugin extends SteeringPlugin {
 		super.run();
 				
 		if(running.isStarted()){			
-			if(Gdx.input.isKeyJustPressed(Keys.A))
-				jump();
 			if(Gdx.input.isKeyJustPressed(Keys.L))
+				jump();
+			if(Gdx.input.isKeyJustPressed(Keys.A))
 				chargeDown();
 		}
 		if(!deathPlugin.dead && Gdx.input.isKeyJustPressed(Keys.SPACE)){

@@ -17,9 +17,9 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
 
 public class LevelGenerator {
-	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	private final Logger logger = new Logger(getClass().getName(), Logger.ERROR);
 
-	private final float INITIAL_SPEED = 10f;
+	private final float INITIAL_SPEED = 12f;
 
 	private final float SPAWN_DISTANCE = 15f;
 	private final float DISAPPEAR_DISTANCE = 8f;
@@ -78,7 +78,7 @@ public class LevelGenerator {
 		Random random = new Random();
 		int randomNumber = random.nextInt(100);
 
-		if (randomNumber > 0)
+		if (randomNumber < 0)
 			generateRandomObstacle();
 		else
 			generateRandomSegment();
