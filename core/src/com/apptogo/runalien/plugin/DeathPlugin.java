@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 public class DeathPlugin extends AbstractPlugin {
 
 	public boolean dead = false;
-
+	
+	private final boolean DEBUG_IMMORTAL = false;
+	
 //	private SoundPlugin soundHandler;
 
 	public DeathPlugin() {
@@ -18,7 +20,7 @@ public class DeathPlugin extends AbstractPlugin {
 	
 	@Override
 	public void run() {		
-		if(Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").startsWith("killing")) {
+		if(!DEBUG_IMMORTAL && Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").startsWith("killing")) {
 			dead = true;
 			
 			//TODO soundHandler.stopSounds();

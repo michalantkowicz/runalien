@@ -29,7 +29,7 @@ public class MenuScreen extends BasicScreen {
         tables.get(0).add(group).right().row();
         tables.get(0).add().height(300).row();
         
-        if(Gdx.app.getPreferences("SETTINGS").getBoolean("TUTORIAL")) {
+        if(true || Gdx.app.getPreferences("SETTINGS").getBoolean("TUTORIAL")) {
         	tables.get(0).add(TextButton.get("PLAY", "play").setListener(Listener.click(game, new GameScreen(game)))).expandX().row();
         }
         else {

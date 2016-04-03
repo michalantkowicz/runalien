@@ -17,6 +17,9 @@ public class Segment {
 
 	public Segment(int minLevel, int maxLevel, float baseOffset) {
 		fields = new ArrayList<GameActor>();
+		this.maxLevel = maxLevel;
+		this.minLevel = minLevel;
+		this.baseOffset = baseOffset;
 	}
 
 	public void addField(GameActor field) {
@@ -34,5 +37,29 @@ public class Segment {
 
 	public List<GameActor> getFields() {
 		return fields;
+	}
+
+	public int getMinLevel() {
+		return minLevel;
+	}
+
+	public void setMinLevel(int minLevel) {
+		this.minLevel = minLevel;
+	}
+
+	public int getMaxLevel() {
+		return maxLevel;
+	}
+
+	public void setMaxLevel(int maxLevel) {
+		this.maxLevel = maxLevel;
+	}
+
+	public float getBaseOffset() {
+		return baseOffset;
+	}
+
+	public void setBaseOffset(float baseOffset) {
+		this.baseOffset = baseOffset;
 	}
 }

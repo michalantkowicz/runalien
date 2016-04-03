@@ -3,11 +3,31 @@ package com.apptogo.runalien.plugin;
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.main.Main;
+import com.badlogic.gdx.utils.Logger;
 
 public class RunningPlugin extends AbstractPlugin {
+	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	
+	//set if you want to debug one level without speeding up
+	private final int DEBUG_LEVEL = 0;
+	
+	//speed which alien starts with
+	private final int BASIC_SPEED = 12;
+	
+	//interval in box2d meters after which run alien speeds up 
+	private final int SPEED_EVERY_X_METERS = 100;
+	
+	//max speed level
+	private final float MAX_SPEED_LEVEL = 14;
+	
+	//curent speed level (not the same what velocity)
+	private int speedLevel = 0;
+	
+	//position when alien will speed up
+	private int nextSpeedUp = 50;
+
 	private boolean started;
 	private DeathPlugin deathPlugin;
-	private final float MAX_SPEED = 25;
 	
 	@Override
 	public void run() {
@@ -15,12 +35,21 @@ public class RunningPlugin extends AbstractPlugin {
 			setStarted(false);
 		}
 		if (started) {
-			if(body.getLinearVelocity().x >= MAX_SPEED - 1){
-				body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
+			
+			//fix on one level if set
+			if(DEBUG_LEVEL >= 0){
+				body.setLinearVelocity(BASIC_SPEED + DEBUG_LEVEL , body.getLinearVelocity().y);
+				speedLevel = DEBUG_LEVEL;
 			}
 			else{
-				body.setLinearVelocity(12.5f + body.getPosition().x * 0.01f , body.getLinearVelocity().y);
-				System.out.println("POS: " + body.getPosition().x + " SPEED: " + body.getLinearVelocity().x);
+				body.setLinearVelocity(BASIC_SPEED + speedLevel , body.getLinearVelocity().y);
+				
+				//speed every x meters
+				if(speedLevel <= MAX_SPEED_LEVEL && body.getPosition().x > nextSpeedUp){
+					nextSpeedUp += SPEED_EVERY_X_METERS;
+					speedLevel++;
+					logger.debug("speeding up. Current speed level: " + speedLevel);
+				}
 			}
 		}
 	}
@@ -32,6 +61,8 @@ public class RunningPlugin extends AbstractPlugin {
 	public void setStarted(boolean started) {
 
 		if (started) {
+			if(DEBUG_LEVEL >= 0)
+				logger.debug("Starting with testing level: " + DEBUG_LEVEL);
 			actor.changeAnimation("run").setFrameDuration(0.017f);
 			Main.getInstance().getGameScreen().removeTutorialButton();
 		} else {
@@ -49,5 +80,9 @@ public class RunningPlugin extends AbstractPlugin {
 		} catch (PluginException e) {
 			throw new PluginDependencyException("Actor must have DeathPlugin plugin attached!");
 		}
+	}
+
+	public int getSpeedLevel() {
+		return speedLevel;
 	}
 }

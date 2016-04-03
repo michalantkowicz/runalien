@@ -158,8 +158,6 @@ public class GameScreen extends BasicScreen {
 	
 	@Override
 	void step(float delta) {
-		logger.log();
-		
 		//simulate physics and handle body contacts
 		contactListener.contacts.clear();
 		world.step(delta, 3, 3);

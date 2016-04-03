@@ -17,7 +17,7 @@ public class SegmentGenerator {
 	    }
 		
 		//TODO exception for maximum size
-		Segment segment = new Segment(segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset());
+		Segment segment = new Segment(segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset() + definition[0].length);
 
 		for (int i = 0; i < definition[0].length; i++) {
 			for (int j = definition.length - 1; j >= 0; j--) {

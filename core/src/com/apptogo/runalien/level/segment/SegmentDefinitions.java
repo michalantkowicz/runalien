@@ -62,7 +62,6 @@ public class SegmentDefinitions {
 				{ 6 },
 				{ 6 },
 				{ 6 },
-				{ 6 },
 				{ 0 },
 			});
 	public static final SegmentDefinition BIG_BELL_CRATE = new SegmentDefinition(1, 5, 7f,
@@ -195,10 +194,10 @@ public class SegmentDefinitions {
 				{ 3, 3 },
 			});
 	
-	public static final SegmentDefinition LONG_JUMP = new SegmentDefinition(5, 9, 10f,
+	public static final SegmentDefinition LONG_JUMP = new SegmentDefinition(5, 9, 7f,
 			new int[][]
 			{ 
-				{ 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			});
 	/* ------------------ LEVEL 6 ------------------ */
 	public static final SegmentDefinition PYRAMID_BELL_2 = new SegmentDefinition(6, 10, 7f,
