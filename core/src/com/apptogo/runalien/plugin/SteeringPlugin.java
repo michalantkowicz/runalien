@@ -31,7 +31,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		
 		if(!jumping)
 		{	
-			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 35));
+			this.body.setLinearVelocity(new Vector2(this.body.getLinearVelocity().x, 37));
 			jumping = true;
 			actor.changeAnimation("jump");
 
@@ -65,7 +65,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	{
 		if(jumping)
 		{
-			this.body.setLinearVelocity(body.getLinearVelocity().x, -35);
+			this.body.setLinearVelocity(body.getLinearVelocity().x, -45);
 //			soundHandler.playSound("chargeDown");
 		}
 		else

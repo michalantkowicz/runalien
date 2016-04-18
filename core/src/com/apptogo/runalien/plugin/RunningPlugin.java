@@ -9,7 +9,7 @@ public class RunningPlugin extends AbstractPlugin {
 	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
 	
 	//set if you want to debug one level without speeding up
-	private final int DEBUG_LEVEL = 0;
+	private final int DEBUG_LEVEL = -1;
 	
 	//speed which alien starts with
 	private final int BASIC_SPEED = 12;

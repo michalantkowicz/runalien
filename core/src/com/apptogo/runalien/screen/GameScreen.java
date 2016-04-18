@@ -71,7 +71,7 @@ public class GameScreen extends BasicScreen {
 	void prepare() {
 		debugRenderer = new Box2DDebugRenderer();
 
-		world = new World(new Vector2(0, -130), true);
+		world = new World(new Vector2(0, -150), true);
 		world.setContactListener(contactListener);
 		createGameWorldStage();
 		stagesToFade.add(gameworldStage);
