@@ -1,6 +1,5 @@
 package com.apptogo.runalien.level;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
 
 public class LevelGenerator {
-	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	private final Logger logger = new Logger(getClass().getName(), Logger.ERROR);
 
 	private final float SPAWN_DISTANCE = 15f;
 	private final float DISAPPEAR_DISTANCE = 8f;
@@ -32,11 +31,11 @@ public class LevelGenerator {
 	private List<Segment> activeSegments = new ArrayList<Segment>();
 
 	private Integer speedLevel;
-	
+
 	public LevelGenerator(GameActor player) {
 
 		this.player = player;
-		this.speedLevel = ((RunningPlugin)player.getPlugin(RunningPlugin.class.getSimpleName())).getSpeedLevel();
+		this.speedLevel = ((RunningPlugin) player.getPlugin(RunningPlugin.class.getSimpleName())).getSpeedLevel();
 		this.segmentGenerator = new SegmentGenerator();
 		this.nextPosition = 17f;
 	}
@@ -46,7 +45,7 @@ public class LevelGenerator {
 	 */
 	public void generate() {
 		updateLevel();
-		
+
 		if (player.getBody().getPosition().x + SPAWN_DISTANCE >= nextPosition) {
 			generateRandom();
 		}
@@ -99,8 +98,8 @@ public class LevelGenerator {
 			logger.debug("spawning obstacle. Level: " + speedLevel);
 
 			Random random = new Random();
-			GameActor randomObstacle = possiblePools.get(possiblePools.size() > 1 ? random.nextInt( possiblePools.size() - 1) : 0).obtain();
-			
+			GameActor randomObstacle = possiblePools.get(possiblePools.size() > 1 ? random.nextInt(possiblePools.size() - 1) : 0).obtain();
+
 			randomObstacle.getBody().setTransform(nextPosition, randomObstacle.getBody().getPosition().y, 0);
 			randomObstacle.init();
 			activeObstacles.add(randomObstacle);
@@ -111,26 +110,17 @@ public class LevelGenerator {
 	private void generateRandomSegment() {
 		//get all segmentDefinitions matching current level
 		List<SegmentDefinition> segmentDefinitions = new ArrayList<SegmentDefinition>();
-		
-		for(Field field : SegmentDefinitions.class.getFields()){
-			//if it's not segment definition continue
-			if(!field.getType().getName().equals(SegmentDefinition.class.getCanonicalName())){
-				continue;
-			}
-			try {
-				SegmentDefinition s = (SegmentDefinition) field.get(null);
-				if (s.getMinLevel() <= speedLevel && s.getMaxLevel() >= speedLevel) {
-					segmentDefinitions.add(s);
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				logger.error("Error during SegmentDefinitions reflection operation: ", e);
+
+		for (SegmentDefinition sd : SegmentDefinitions.SEGMENT_DEFINITIONS) {
+			if (sd.getMinLevel() <= speedLevel && sd.getMaxLevel() >= speedLevel) {
+				segmentDefinitions.add(sd);
 			}
 		}
 
 		//get random segment def
 		if (segmentDefinitions.size() > 0) {
 			logger.debug("spawning segment. Level: " + speedLevel);
-			
+
 			Random random = new Random();
 			SegmentDefinition segmentToSpawn = segmentDefinitions.get(random.nextInt(segmentDefinitions.size()));
 
@@ -142,9 +132,9 @@ public class LevelGenerator {
 		}
 
 	}
-	
+
 	//simple method to avoid huge code
-	private void updateLevel(){
-		this.speedLevel = ((RunningPlugin)player.getPlugin(RunningPlugin.class.getSimpleName())).getSpeedLevel();
+	private void updateLevel() {
+		this.speedLevel = ((RunningPlugin) player.getPlugin(RunningPlugin.class.getSimpleName())).getSpeedLevel();
 	}
 }

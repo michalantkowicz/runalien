@@ -6,7 +6,7 @@ import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.utils.Logger;
 
 public class RunningPlugin extends AbstractPlugin {
-	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	private final Logger logger = new Logger(getClass().getName(), Logger.ERROR);
 	
 	//set if you want to debug one level without speeding up
 	private final int DEBUG_LEVEL = -1;

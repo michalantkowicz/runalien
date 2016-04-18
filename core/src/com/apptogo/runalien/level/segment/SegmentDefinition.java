@@ -14,6 +14,8 @@ public class SegmentDefinition implements Spawnable{
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
 		this.baseOffset = basicOffset + definition.length;
+		
+		SegmentDefinitions.SEGMENT_DEFINITIONS.add(this);
 	}
 
 	/**

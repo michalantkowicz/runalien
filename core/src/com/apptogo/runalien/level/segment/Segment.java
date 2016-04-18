@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apptogo.runalien.game.GameActor;
-import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;

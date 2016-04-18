@@ -3,8 +3,6 @@ package com.apptogo.runalien.screen;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.GroupLayout.Alignment;
-
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.game.ParallaxActor;
@@ -31,7 +29,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -71,7 +68,7 @@ public class GameScreen extends BasicScreen {
 	void prepare() {
 		debugRenderer = new Box2DDebugRenderer();
 
-		world = new World(new Vector2(0, -150), true);
+		world = new World(new Vector2(0, -145), true);
 		world.setContactListener(contactListener);
 		createGameWorldStage();
 		stagesToFade.add(gameworldStage);
