@@ -1,5 +1,6 @@
 package com.apptogo.runalien.main;
 
+import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.screen.GameScreen;
@@ -14,9 +15,20 @@ public class Main extends Game {
     public static final float SCREEN_WIDTH = 1280f, SCREEN_HEIGHT = 800f;
     public final static float GROUND_LEVEL = -3.5f;
     public static boolean FADE_IN = true;
+    
+    public static GameCallback gameCallback;
 
     public static Main getInstance() {
     	return (Main)Gdx.app.getApplicationListener();
+    }
+    
+    public Main() {
+    	super();
+    }
+    
+    public Main(GameCallback gameCallback) {
+    	this();
+    	this.gameCallback = gameCallback;
     }
     
     public GameScreen getGameScreen() {

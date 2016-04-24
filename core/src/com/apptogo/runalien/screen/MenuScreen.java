@@ -6,9 +6,14 @@ import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Logger;
 
 public class MenuScreen extends BasicScreen {
-
+	
+	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	
     public MenuScreen(Main game) {
         super(game, "background_menu");
     }
@@ -40,7 +45,19 @@ public class MenuScreen extends BasicScreen {
         tables.get(0).add(TextButton.get("RANK", "rank").setListener(Listener.click(game, new TutorialScreen(game)))).expandX().row();
 
         Group share = new Group();
-        share.addActor(Button.get("achievement").position(-0, 0));
+        
+        ClickListener showAchievementsListener = new ClickListener() {
+        	@Override
+        	public void clicked (InputEvent event, float x, float y) {
+        		if(Main.gameCallback == null) {
+        			logger.debug("Available only in Android");
+        			return;
+        		}
+				Main.gameCallback.showAchievements();
+        	}
+        };
+        
+        share.addActor(Button.get("achievement").setListener(showAchievementsListener).position(-0, 0));
         share.addActor(Button.get("gplus").position(120, 0));
 
         tables.get(0).add(share).left().pad(140, 0, 0, 0).row();

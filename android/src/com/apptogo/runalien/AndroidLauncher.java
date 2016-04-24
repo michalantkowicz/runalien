@@ -1,5 +1,6 @@
 package com.apptogo.runalien;
 
+import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -12,7 +13,7 @@ import com.google.example.games.basegameutils.BaseGameUtils;
 
 import android.os.Bundle;
 
-public class AndroidLauncher extends AndroidApplication implements OnConnectionFailedListener, ConnectionCallbacks{
+public class AndroidLauncher extends AndroidApplication implements OnConnectionFailedListener, ConnectionCallbacks, GameCallback{
 	
 	private GoogleApiClient mGoogleApiClient;
 	private static int RC_SIGN_IN = 9001;
@@ -27,7 +28,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useImmersiveMode = true;
 		
-		initialize(new Main(), config);
+		initialize(new Main(this), config);
 		
 	    // Create the Google Api Client with access to the Play Games services
 	    mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -87,5 +88,16 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		System.out.println("COS SIE SUSPENDOWALO");		
 		// Attempt to reconnect
 	    mGoogleApiClient.connect();
+	}
+	
+	//GameCallback methods implementations
+	@Override
+	public void showLeaderboard() {
+		System.out.println("SHOW LEADERBOARD");
+	}
+	
+	@Override
+	public void showAchievements() {
+		System.out.println("SHOW ACHIEVMENTS");
 	}
 }
