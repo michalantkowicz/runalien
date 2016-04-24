@@ -65,9 +65,10 @@ public class GameScreen extends BasicScreen {
 	}
 	
 	@Override
-	void prepare() {
+	void prepare() {		
 		debugRenderer = new Box2DDebugRenderer();
-
+		Main.gameCallback.setBannerVisible(false);
+		
 		world = new World(new Vector2(0, -145), true);
 		world.setContactListener(contactListener);
 		createGameWorldStage();
@@ -178,6 +179,8 @@ public class GameScreen extends BasicScreen {
 		grass.toFront();
 		
 		if(endGame) {
+			Main.gameCallback.setBannerVisible(true);
+			
 			player.removePlugin("CameraFollowingPlugin");
 			
 			finalScore.setVisible(true);
@@ -223,10 +226,10 @@ public class GameScreen extends BasicScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		
 		debugRenderer.dispose();
 		world.dispose();
 		gameworldStage.dispose();
+		Main.gameCallback.setBannerVisible(false);
 	}
 
 	protected void createGameWorldStage() {

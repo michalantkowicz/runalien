@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Logger;
 
 public class MenuScreen extends BasicScreen {
 	
-	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+
 	
     public MenuScreen(Main game) {
         super(game, "background_menu");
@@ -20,6 +20,27 @@ public class MenuScreen extends BasicScreen {
 
     @Override
     void prepare() {
+    	//TODO move to scene2d class. click listeners
+        ClickListener showAchievementsListener = new ClickListener() {
+        	@Override
+        	public void clicked (InputEvent event, float x, float y) {
+				Main.gameCallback.showAchievements();
+        	}
+        };
+        ClickListener showLeaderboardListener = new ClickListener() {
+        	@Override
+        	public void clicked (InputEvent event, float x, float y) {
+				Main.gameCallback.showLeaderboard();
+        	}
+        };
+        
+        ClickListener shareOnGooglePlusListener = new ClickListener() {
+        	@Override
+        	public void clicked (InputEvent event, float x, float y) {
+				Main.gameCallback.shareOnGooglePlus();
+        	}
+        };
+        
         Group group = new Group();
                 
         if(Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
@@ -42,23 +63,12 @@ public class MenuScreen extends BasicScreen {
         }
         
         
-        tables.get(0).add(TextButton.get("RANK", "rank").setListener(Listener.click(game, new TutorialScreen(game)))).expandX().row();
+        tables.get(0).add(TextButton.get("RANK", "rank").setListener(showLeaderboardListener)).expandX().row();
 
         Group share = new Group();
         
-        ClickListener showAchievementsListener = new ClickListener() {
-        	@Override
-        	public void clicked (InputEvent event, float x, float y) {
-        		if(Main.gameCallback == null) {
-        			logger.debug("Available only in Android");
-        			return;
-        		}
-				Main.gameCallback.showAchievements();
-        	}
-        };
-        
         share.addActor(Button.get("achievement").setListener(showAchievementsListener).position(-0, 0));
-        share.addActor(Button.get("gplus").position(120, 0));
+        share.addActor(Button.get("gplus").setListener(shareOnGooglePlusListener).position(120, 0));
 
         tables.get(0).add(share).left().pad(140, 0, 0, 0).row();
     }

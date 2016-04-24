@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class DeathPlugin extends AbstractPlugin {
 
-	public boolean dead = false;
+	public boolean dead;
 	
 	private final boolean DEBUG_IMMORTAL = false;
 	
@@ -16,6 +16,8 @@ public class DeathPlugin extends AbstractPlugin {
 
 	public DeathPlugin() {
 		super();
+		dead = false;
+		System.out.println("TWORZAE NOWY DEADPLUGIN!");
 	}
 	
 	@Override

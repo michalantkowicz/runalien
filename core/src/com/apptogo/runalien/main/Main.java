@@ -22,12 +22,8 @@ public class Main extends Game {
     	return (Main)Gdx.app.getApplicationListener();
     }
     
-    public Main() {
-    	super();
-    }
-    
     public Main(GameCallback gameCallback) {
-    	this();
+    	super();
     	this.gameCallback = gameCallback;
     }
     
