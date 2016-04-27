@@ -39,7 +39,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 
 public class GameScreen extends BasicScreen {	
 	protected Box2DDebugRenderer debugRenderer;
@@ -50,10 +50,10 @@ public class GameScreen extends BasicScreen {
 	protected ContactListener contactListener = new ContactListener();
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
-	ParallaxActor grass;
-	Group finalScore;
-	FPSLogger logger = new FPSLogger();
-	int score = 0;
+	protected ParallaxActor grass;
+	protected Group finalScore;
+	protected FPSLogger logger = new FPSLogger();
+	protected int score = 0;
 	protected Label scoreLabel;
 	
 	protected TextButton tutorialButton;
@@ -74,10 +74,10 @@ public class GameScreen extends BasicScreen {
 		createGameWorldStage();
 		stagesToFade.add(gameworldStage);
 		
-		stage.addActor(Image.get("space").width(Main.SCREEN_WIDTH).position(0, Main.SCREEN_HEIGHT/2f).centerX());
-		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 500).centerX().setListener(Listener.click(game, new MenuScreen(game))));
-		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 350).centerX());
-		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 200).centerX().setListener(Listener.click(game, new GameScreen(game))));
+		backgroundStage.addActor(Image.get("space").width(Main.SCREEN_WIDTH).position(0, Main.SCREEN_HEIGHT/2f).centerX());
+		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
+		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX());
+		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX().setListener(Listener.click(game, new GameScreen(game))));
 		
 		finalScore = new Group();
 		finalScore.setOrigin(Align.center);
@@ -125,7 +125,7 @@ public class GameScreen extends BasicScreen {
 		levelGenerator = new LevelGenerator(player);
 		
 		//create Parallaxes
-		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "spaceRubbish").setFixedSpeed(0.002f).moveToY(UnitConverter.toBox2dUnits(1050)) );
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "spaceRubbish").setFixedSpeed(0.002f).moveToY(UnitConverter.toBox2dUnits(1090)) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.004f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
 		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
@@ -168,6 +168,7 @@ public class GameScreen extends BasicScreen {
 		levelGenerator.generate();
 
 		//act and draw main stage
+		gameworldStage.getViewport().apply();
 		gameworldStage.act(delta);
 		gameworldStage.draw();
 		
@@ -187,6 +188,9 @@ public class GameScreen extends BasicScreen {
 			
 			gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-850), 2.5f, Interpolation.pow5),
 	                Actions.moveBy(0, UnitConverter.toBox2dUnits(-30), 60)));
+			
+			backgroundStage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
+				       Actions.moveBy(0,  -30, 60)));
 			
 			stage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
 			       Actions.moveBy(0,  -30, 60)));
@@ -234,7 +238,7 @@ public class GameScreen extends BasicScreen {
 
 	protected void createGameWorldStage() {
 		gameworldStage = new Stage();
-		gameworldStage.setViewport(new FitViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
+		gameworldStage.setViewport(new FillViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
 		((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));
 		((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
 	}

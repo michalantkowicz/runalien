@@ -20,8 +20,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public abstract class BasicScreen implements Screen {
     protected Main game;
 
-    protected Stage stage;
+    protected Stage backgroundStage;
+    protected FillViewport backgroundViewport;
+    
     protected FitViewport viewport;
+    protected Stage stage;
     protected OrthographicCamera camera;
 
     protected String[] backgroundTextureNames = new String[] {};
@@ -53,6 +56,11 @@ public abstract class BasicScreen implements Screen {
     @Override
     public void show() {
 
+        this.backgroundViewport = new FillViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
+        this.backgroundStage = new Stage(this.backgroundViewport);
+        
+        ((OrthographicCamera) backgroundStage.getCamera()).position.set(0f, 0f, 0f);
+        
         this.viewport = new FitViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
         this.stage = new Stage(this.viewport);
 
@@ -63,7 +71,7 @@ public abstract class BasicScreen implements Screen {
         for (int i = 0; i < backgroundTextureNames.length; i++)
         {
             Image background = Image.get(backgroundTextureNames[i]).size(1280, 800).centerX(i * Main.SCREEN_WIDTH).centerY();
-            this.stage.addActor(background);
+            this.backgroundStage.addActor(background);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -80,6 +88,7 @@ public abstract class BasicScreen implements Screen {
             stage.addActor(table);
         }
 
+        stagesToFade.add(backgroundStage);
         stagesToFade.add(stage);
         
         prepare();
@@ -100,6 +109,11 @@ public abstract class BasicScreen implements Screen {
             this.camera.position.set(movement.getCurrent());
         }
 
+        this.backgroundViewport.apply();
+        this.backgroundStage.act(delta);
+        this.backgroundStage.draw();
+        
+        this.viewport.apply();
         this.stage.act(delta);
         this.stage.draw();
         
@@ -149,6 +163,7 @@ public abstract class BasicScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        this.backgroundStage.getViewport().update(width, height);
         this.stage.getViewport().update(width, height);
     }
 
