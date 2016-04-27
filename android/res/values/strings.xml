@@ -4,6 +4,8 @@
     <string name="app_id">809895136933</string>
     <string name="app_name">Run Alien</string>
     <string name="signin_other_error">Issue with sign-in, please try again later.</string>
-    
+
 	<string name="banner_ad_unit_id">ca-app-pub-9012477671085567/2504348939</string>
+	<string name="fullscreen_ad_unit_id">ca-app-pub-9012477671085567/8064590933</string>
+	<string name="leaderboard_id">CgkIpZ2MjMkXEAIQAA</string>
 </resources>

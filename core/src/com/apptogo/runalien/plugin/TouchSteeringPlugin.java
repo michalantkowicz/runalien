@@ -17,7 +17,6 @@ public class TouchSteeringPlugin extends SteeringPlugin {
 					chargeDown();
 			}
 			if(!deathPlugin.dead && Gdx.input.justTouched()){
-				System.out.println("MAM KLICKA " + this);
 				if(!running.isStarted())
 					startRunning();
 			}

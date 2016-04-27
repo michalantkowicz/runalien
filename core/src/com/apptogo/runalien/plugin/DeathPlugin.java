@@ -3,7 +3,6 @@ package com.apptogo.runalien.plugin;
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
-import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class DeathPlugin extends AbstractPlugin {
@@ -17,7 +16,6 @@ public class DeathPlugin extends AbstractPlugin {
 	public DeathPlugin() {
 		super();
 		dead = false;
-		System.out.println("TWORZAE NOWY DEADPLUGIN!");
 	}
 	
 	@Override

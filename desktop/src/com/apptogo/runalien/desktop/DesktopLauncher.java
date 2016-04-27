@@ -2,6 +2,8 @@ package com.apptogo.runalien.desktop;
 
 import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.screen.GameScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Logger;
@@ -27,9 +29,21 @@ public class DesktopLauncher {
 		}
 
 		@Override
+		public void submitScore(int score) {
+			logger.debug("Available only in Android");
+		}
+		
+		@Override
 		public void setBannerVisible(boolean visible) {
 			logger.debug("Available only in Android");
 		}
+
+		@Override
+		public void showFullscreenAd() {
+			logger.debug("Available only in Android");
+			Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
+		}
+
 	};
 
 	public static void main(String[] arg) {
