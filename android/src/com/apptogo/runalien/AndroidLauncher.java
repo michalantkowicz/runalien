@@ -203,6 +203,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	public void submitScore(int score) {
 		logger.debug("Submitting score");
 		Games.Leaderboards.submitScore(mGoogleApiClient, getResources().getString(R.string.leaderboard_id), score);
+		showLeaderboard();
 	}
 	
 	@Override
