@@ -89,7 +89,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		@SuppressWarnings("unchecked")
 		T plugin = (T) plugins.get(name);
 		if(plugin == null)
-			throw new PluginException("Actor: '" + getName() + "' doesn't have plugin: '" + name);
+			throw new PluginException("Actor: '" + getName() + "' doesn't have plugin: '" + name + "'");
 		return plugin;
 	}
 	

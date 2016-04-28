@@ -2,9 +2,7 @@ package com.apptogo.runalien.level.segment;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.main.Main;
-import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class SegmentGenerator {
 	private final SegmentFieldDefinitions segmentFieldDefinitions = new SegmentFieldDefinitions();
@@ -33,17 +31,11 @@ public class SegmentGenerator {
 				}
 				else if(value == SegmentDefinitions.CRATE_BOT) {
 					field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.CRATE);
-					for(Fixture f : field.getBody().getFixtureList()){
-						UserData.get(f).key = "killingBottom";
-					}
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
 				else if(value == SegmentDefinitions.CRATE_TOP) {
 					field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.CRATE);
-					for(Fixture f : field.getBody().getFixtureList()){
-						UserData.get(f).key = "killingTop";
-					}
 					field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 					segment.addField(field);
 				}
@@ -58,9 +50,7 @@ public class SegmentGenerator {
 						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
 						
 						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BIG_CRATE);
-						for(Fixture f : field.getBody().getFixtureList()){
-							UserData.get(f).key = "killingBottom";
-						}
+						
 						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 						segment.addField(field);	
 					}
@@ -75,9 +65,7 @@ public class SegmentGenerator {
 						definition[j-1][i+1] = SegmentDefinitions.EMPTY;
 						
 						field = Main.getInstance().getGameScreen().getObstaclesPool().getSegmentField(segmentFieldDefinitions.BIG_CRATE);
-						for(Fixture f : field.getBody().getFixtureList()){
-							UserData.get(f).key = "killingTop";
-						}
+
 						field.getBody().setTransform(new Vector2(positionX, positionY), 0);
 						segment.addField(field);	
 					}

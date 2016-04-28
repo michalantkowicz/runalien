@@ -14,16 +14,17 @@ import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
+import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
-import com.apptogo.runalien.scene2d.TextButton;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -48,7 +49,7 @@ public class GameScreen extends BasicScreen {
 	protected World world;
 	protected Stage gameworldStage;
 	protected ObstaclesPool obstaclesPool;
-	protected Map<String, String> contactsSnapshot = new HashMap<String, String>();
+	protected Map<UserData, UserData> contactsSnapshot = new HashMap<UserData, UserData>();
 	protected ContactListener contactListener = new ContactListener();
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
@@ -78,7 +79,7 @@ public class GameScreen extends BasicScreen {
 		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
 		//TODO add listener handling
 		Button submitButton = Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX();
-		submitButton.addListener(new ClickListener(){
+		submitButton.setListener(new ClickListener(){
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -89,7 +90,7 @@ public class GameScreen extends BasicScreen {
 		stage.addActor(submitButton);
 		
 		Button replayButton = Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX();
-		replayButton.addListener(new ClickListener(){
+		replayButton.setListener(new ClickListener(){
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -128,7 +129,7 @@ public class GameScreen extends BasicScreen {
 		player.modifyCustomOffsets(-0.4f, 0f);
 		gameworldStage.addActor(player);
 		
-		//player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run"));
+		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run", "bell", "die"));
 		player.addPlugin(new CameraFollowingPlugin());		
 		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
@@ -205,6 +206,7 @@ public class GameScreen extends BasicScreen {
 			
 			finalScore.setVisible(true);
 			
+			SoundPlugin.playSingleSound("whoosh");
 			gameworldStage.addAction(Actions.sequence(Actions.moveBy(0, UnitConverter.toBox2dUnits(-850), 2.5f, Interpolation.pow5),
 	                Actions.moveBy(0, UnitConverter.toBox2dUnits(-30), 60)));
 			
@@ -296,7 +298,7 @@ public class GameScreen extends BasicScreen {
 		return obstaclesPool;
 	}
 	
-	public Map<String, String> getContactsSnapshot() {
+	public Map<UserData, UserData> getContactsSnapshot() {
 		return contactsSnapshot;
 	}
 

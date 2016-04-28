@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener
 {
-	public Map<String, String> contacts = new HashMap<String, String>();
+	public Map<UserData, UserData> contacts = new HashMap<UserData, UserData>();
 	
 	@Override
 	public void beginContact(Contact contact)
@@ -18,13 +18,13 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 		Fixture fa = contact.getFixtureA();
 		Fixture fb = contact.getFixtureB();
 		
-		String keyA = UserData.get(fa).key;
-		String keyB = UserData.get(fb).key;
+		UserData dataA = UserData.get(fa);
+		UserData dataB = UserData.get(fb);
 		
-		if(!UserData.get(fa).ignore && !UserData.get(fb).ignore) {
-			if( contacts.get(keyA) == null ) {
-				contacts.put(keyA, keyB);
-				contacts.put(keyB, keyA);
+		if(!dataA.ignore && !dataB.ignore) {
+			if( contacts.get(dataA) == null ) {
+				contacts.put(dataA, dataB);
+				contacts.put(dataB, dataA);
 			}
 		}
 	}

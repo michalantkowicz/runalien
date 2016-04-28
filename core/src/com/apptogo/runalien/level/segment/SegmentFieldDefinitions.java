@@ -26,31 +26,31 @@ public class SegmentFieldDefinitions {
 	public final String BELL_7 = "upper7";
 	
 	public final BodyBuilder CRATE_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingBottom").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingBottom", "crate").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BIG_CRATE_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingBottom").box(OBSTACLE_SIZE * 2, OBSTACLE_SIZE * 2).sensor(true);
+			.addFixture("killingBottom", "crate").box(OBSTACLE_SIZE * 2, OBSTACLE_SIZE * 2).sensor(true);
 	
 	public final BodyBuilder LOG1_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingBottom").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingBottom", "log").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder LOG2_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingBottom").box(OBSTACLE_SIZE, 2 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingBottom", "log").box(OBSTACLE_SIZE, 2 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder LOG3_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingBottom").box(OBSTACLE_SIZE, 3 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingBottom", "log").box(OBSTACLE_SIZE, 3 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder LOG4_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingBottom").box(OBSTACLE_SIZE, 4 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingBottom", "log").box(OBSTACLE_SIZE, 4 * OBSTACLE_SIZE).sensor(true);
 	
 	public final BodyBuilder BELL1_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BELL2_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, 2 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, 2 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BELL3_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, 3 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, 3 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BELL4_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, 4 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, 4 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BELL5_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, 5 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, 5 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BELL6_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, 6 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, 6 * OBSTACLE_SIZE).sensor(true);
 	public final BodyBuilder BELL7_BODY = BodyBuilder.get().type(BodyType.StaticBody).position(-100, Main.GROUND_LEVEL)
-			.addFixture("killingTop").box(OBSTACLE_SIZE, 7 * OBSTACLE_SIZE).sensor(true);
+			.addFixture("killingTop", "bell").box(OBSTACLE_SIZE, 7 * OBSTACLE_SIZE).sensor(true);
 }

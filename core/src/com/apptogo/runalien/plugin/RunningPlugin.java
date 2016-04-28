@@ -75,11 +75,8 @@ public class RunningPlugin extends AbstractPlugin {
 
 	@Override
 	public void setUpDependencies() {
-		try {
+		
 			deathPlugin = actor.getPlugin(DeathPlugin.class.getSimpleName());
-		} catch (PluginException e) {
-			throw new PluginDependencyException("Actor must have DeathPlugin plugin attached!");
-		}
 	}
 
 	public int getSpeedLevel() {

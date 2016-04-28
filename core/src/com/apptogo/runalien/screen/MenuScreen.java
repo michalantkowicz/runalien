@@ -1,6 +1,7 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Logger;
 
 public class MenuScreen extends BasicScreen {
 	
@@ -21,6 +21,8 @@ public class MenuScreen extends BasicScreen {
 
     @Override
     protected void prepare() {
+    	SoundPlugin.loopSingleSound("runalienMusic");
+    	
     	//TODO move to scene2d class. click listeners
         ClickListener showAchievementsListener = new ClickListener() {
         	@Override
@@ -86,5 +88,11 @@ public class MenuScreen extends BasicScreen {
     		Gdx.app.exit();
     	}
     }
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		SoundPlugin.stopSingleSound("runalienMusic");
+	}
 
 }

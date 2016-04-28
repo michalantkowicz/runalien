@@ -15,7 +15,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 
 	protected RunningPlugin running;
 	protected DeathPlugin deathPlugin;
-	//private SoundPlugin soundHandler;
+	private SoundPlugin soundHandler;
 	
 	protected Fixture defaultFixture, slidingFixture;
 	
@@ -37,9 +37,9 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			jumping = true;
 			actor.changeAnimation("jump");
 
-//			soundHandler.pauseSound("scream");
-//			soundHandler.pauseSound("run");
-//			soundHandler.playSound("jump");
+			soundHandler.pauseSound("scream");
+			soundHandler.pauseSound("run");
+			soundHandler.playSound("jump");
 			
 		}
 		else
@@ -56,10 +56,10 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			doubleJumping = true;
 			
 			//50% chance to play scream sound
-//			if(Math.random() > 0.5f)
-//				soundHandler.playSound("doubleJump");
-//			else
-//				soundHandler.playSound("jump");
+			if(Math.random() > 0.5f)
+				soundHandler.playSound("doubleJump");
+			else
+				soundHandler.playSound("jump");
 		}
 	}
 	
@@ -68,7 +68,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		if(jumping)
 		{
 			this.body.setLinearVelocity(body.getLinearVelocity().x, -45);
-//			soundHandler.playSound("chargeDown");
+			soundHandler.playSound("chargeDown");
 		}
 		else
 		{
@@ -80,9 +80,9 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	{		
 		if(!sliding){
 			actor.changeAnimation("slide");
-//			soundHandler.playSound("slide");
-//			soundHandler.pauseSound("scream");
-//			soundHandler.pauseSound("run");
+			soundHandler.playSound("slide");
+			soundHandler.pauseSound("scream");
+			soundHandler.pauseSound("run");
 		}
 		
 		sliding = true;
@@ -112,8 +112,8 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		actor.changeAnimation("standup");
 		actor.queueAnimation("run");
 		
-//		soundHandler.resumeSound("scream");
-//		soundHandler.resumeSound("run");
+		soundHandler.resumeSound("scream");
+		soundHandler.resumeSound("run");
 		
 		UserData.get(slidingFixture).ignore = true;
 		slidingFixture.setSensor(true);
@@ -130,22 +130,22 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			actor.changeAnimation("land");
 			actor.queueAnimation("run");
 			
-//			soundHandler.playSound("land");
-//			soundHandler.resumeSound("scream");
-//			soundHandler.resumeSound("run");
+			soundHandler.playSound("land");
+			soundHandler.resumeSound("scream");
+			soundHandler.resumeSound("run");
 		}
 	}
 	
 	public void startRunning(){		
 		running.setStarted(true);
-//		soundHandler.loopSound("scream");
-//		soundHandler.loopSound("run");
+		soundHandler.loopSound("scream");
+		soundHandler.loopSound("run");
 	}
 	
 	public void stopRunning(){		
 		running.setStarted(false);
-//		soundHandler.pauseSound("scream");
-//		soundHandler.pauseSound("run");
+		soundHandler.pauseSound("scream");
+		soundHandler.pauseSound("run");
 	}
 
 	@Override
@@ -161,27 +161,9 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	
 	@Override
 	public void setUpDependencies() {
-//		try {
-//			soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
-//		}
-//		catch(PluginException e) {
-//			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");
-//		}
-		//Running plugin check
-		try {
-			running = actor.getPlugin(RunningPlugin.class.getSimpleName());
-		}
-		catch(PluginException e) {
-			throw new PluginDependencyException("Actor must have Running plugin attached!");
-		}
-		
-		//DeathPlugin check
-		try {
-			deathPlugin = actor.getPlugin(DeathPlugin.class.getSimpleName());
-		}
-		catch(PluginException e) {
-			throw new PluginDependencyException("Actor must have Death plugin attached!");
-		}
+		soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
+		running = actor.getPlugin(RunningPlugin.class.getSimpleName());
+		deathPlugin = actor.getPlugin(DeathPlugin.class.getSimpleName());
 		
 						
 		//Default fixture check

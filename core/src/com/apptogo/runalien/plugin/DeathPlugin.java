@@ -1,5 +1,7 @@
 package com.apptogo.runalien.plugin;
 
+import java.util.Map;
+
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
@@ -11,7 +13,7 @@ public class DeathPlugin extends AbstractPlugin {
 	
 	private final boolean DEBUG_IMMORTAL = false;
 	
-//	private SoundPlugin soundHandler;
+	private SoundPlugin soundHandler;
 
 	public DeathPlugin() {
 		super();
@@ -20,16 +22,26 @@ public class DeathPlugin extends AbstractPlugin {
 	
 	@Override
 	public void run() {		
-		if(!DEBUG_IMMORTAL && Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").startsWith("killing")) {
+		Map<UserData, UserData> snapshot = Main.getInstance().getGameScreen().getContactsSnapshot();
+		UserData playerUserData = UserData.get(actor.getBody());
+		
+		if(!DEBUG_IMMORTAL && snapshot.containsKey(playerUserData) && snapshot.get(playerUserData).key.startsWith("killing")) {
 			dead = true;
+			String obstacleType = snapshot.get(playerUserData).type;
 			
-			//TODO soundHandler.stopSounds();
-			//TODO soundHandler.playSound("bang"); 
+			soundHandler.stopSound("run");
+			soundHandler.stopSound("scream");
+			if("bell".equals(obstacleType))
+				soundHandler.playSound("bell"); 
+			else if("log".equals(obstacleType))
+				soundHandler.playSound("die"); 
+			else if("crate".equals(obstacleType))
+				soundHandler.playSound("die"); 
 			
 			for(Fixture fixture : body.getFixtureList())
 				UserData.get(fixture).ignore = true;
 			
-			if(Main.getInstance().getGameScreen().getContactsSnapshot().get("player").equals("killingTop"))
+			if(snapshot.get(playerUserData).key.equals("killingTop"))
 				actor.changeAnimation("dietop");
 			else
 				actor.changeAnimation("diebottom");
@@ -42,12 +54,7 @@ public class DeathPlugin extends AbstractPlugin {
 
 	@Override
 	public void setUpDependencies() {	
-//		try {
-//			soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
-//		}
-//		catch(PluginException e) {
-//			throw new PluginDependencyException("Actor must have SoundHandler plugin attached!");
-//		}
+		soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
 		
 		if(body.getFixtureList().size <= 0)
 			throw new PluginDependencyException("Actor's body must have at least one (default) fixture!");
