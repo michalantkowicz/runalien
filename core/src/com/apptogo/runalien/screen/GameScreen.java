@@ -66,7 +66,7 @@ public class GameScreen extends BasicScreen {
 	}
 	
 	@Override
-	void prepare() {		
+	protected void prepare() {		
 		debugRenderer = new Box2DDebugRenderer();
 		
 		world = new World(new Vector2(0, -145), true);
@@ -153,7 +153,7 @@ public class GameScreen extends BasicScreen {
 		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL);
 		gameworldStage.addActor( grass );
 		
-		tutorialButton = Button.get("tutorial").position(-580, -350).setListener(Listener.click(game, new TutorialScreen(game)));
+		tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game)));
 		
 		//Sign and tutorial button if not TutorialScreen instance
 		if(!(this instanceof TutorialScreen)) {		
@@ -169,12 +169,12 @@ public class GameScreen extends BasicScreen {
 			gameworldStage.addActor(topScore);
 		}
 		
-		scoreLabel = Label.get("0", "tutorial").position(-580, 320);
+		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
 		stage.addActor(scoreLabel);
 	}
 	
 	@Override
-	void step(float delta) {
+	protected void step(float delta) {
 		//simulate physics and handle body contacts
 		contactListener.contacts.clear();
 		world.step(delta, 3, 3);
@@ -192,7 +192,7 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.draw();
 		
 		//debug renderer
-		debugRenderer.render(world, gameworldStage.getCamera().combined);
+		//debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
 		//make player always on top
 		player.toFront();

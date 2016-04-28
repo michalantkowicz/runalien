@@ -5,6 +5,7 @@ import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -19,7 +20,7 @@ public class MenuScreen extends BasicScreen {
     }
 
     @Override
-    void prepare() {
+    protected void prepare() {
     	//TODO move to scene2d class. click listeners
         ClickListener showAchievementsListener = new ClickListener() {
         	@Override
@@ -74,9 +75,16 @@ public class MenuScreen extends BasicScreen {
     }
 
     @Override
-    void step(float delta) {
+    protected void step(float delta) {
         // TODO Auto-generated method stub
 
+    }
+    
+    @Override
+	protected void handleInput() {
+    	if(Gdx.input.isKeyJustPressed(Keys.BACK)) {
+    		Gdx.app.exit();
+    	}
     }
 
 }

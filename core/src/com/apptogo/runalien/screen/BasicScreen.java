@@ -5,6 +5,7 @@ import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.tools.Movement;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -34,9 +36,9 @@ public abstract class BasicScreen implements Screen {
     
     Movement movement = new Movement();
 
-    abstract void prepare();
+    abstract protected void prepare();
 
-    abstract void step(float delta);
+    abstract protected void step(float delta);
 
     public BasicScreen(Main game)
     {
@@ -75,7 +77,7 @@ public abstract class BasicScreen implements Screen {
         }
 
         Gdx.input.setInputProcessor(stage);
-
+        
         for (int i = 0; i < tables.size; i++)
         {
             Table table = tables.get(i);
@@ -118,14 +120,26 @@ public abstract class BasicScreen implements Screen {
         this.viewport.apply();
         this.stage.act(delta);
         this.stage.draw();
+        
+        // HANDLING BUTTON INPUT
+        handleInput(); //Moving at the end of render method by Mateusz Gawel @2016
     }
+    
+    protected void handleInput() {
+    	if(Gdx.input.isKeyJustPressed(Keys.BACK)) {
+    		game.setScreen(new MenuScreen(game));
+    	}
+    }
+    
 
     protected void changeScreen(final Screen screen)
     {
+    	//TODO to make transition not in another thread
         Gdx.input.setInputProcessor(null);
-        
+                
         for(Stage stage : stagesToFade)
             stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),
+            	
                 Actions.run(new Runnable() {
                     @Override
                     public void run() {

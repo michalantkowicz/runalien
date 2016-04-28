@@ -60,7 +60,7 @@ public class TutorialScreen extends GameScreen {
 	}
 	
 	@Override
-	void prepare() {
+	protected void prepare() {
 		super.prepare();
 		
 		scoreLabel.setVisible(false);
@@ -262,10 +262,10 @@ public class TutorialScreen extends GameScreen {
 	}
 	
 	@Override
-	void step(float delta) {
+	protected void step(float delta) {
 		//TODO usunac ten temp
 		if(Gdx.input.isKeyJustPressed(Keys.W))
-			changeScreen(new GameScreen(game));
+			game.setScreen(new GameScreen(game));//changeScreen(new GameScreen(game));
 		
 		//simulate physics and handle body contacts
 		contactListener.contacts.clear();

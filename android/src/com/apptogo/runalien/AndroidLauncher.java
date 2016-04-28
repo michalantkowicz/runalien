@@ -52,7 +52,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	private static final int HIDE_BANNER = 0;
 	private static final int SHOW_BANNER = 1;
 
-	private static final int FULLSCREEN_AD_INTERVAL = 10;
+	private static final int FULLSCREEN_AD_INTERVAL = 7;
 	private int fullscreenAdCounter = 0;
 	
 	@Override

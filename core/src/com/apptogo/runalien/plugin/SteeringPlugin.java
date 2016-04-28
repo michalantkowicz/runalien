@@ -3,6 +3,8 @@ package com.apptogo.runalien.plugin;
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.manager.CustomAction;
+import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -91,13 +93,15 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		defaultFixture.setSensor(true);
 		
 		actor.removeAction(standUpAction);
-		standUpAction = Actions.sequence(Actions.delay(0.4f), Actions.run(new Runnable() {
-							@Override
-							public void run() {
-								if(sliding)
-									doStandUp = true;
-						}}));
-		actor.addAction(standUpAction);
+		
+		
+		CustomActionManager.getInstance().registerAction(new CustomAction(0.4f) {
+			@Override
+			public void perform() {
+				if(sliding)
+					doStandUp = true;
+			}
+		});
 	}
 	
 	public void standUp()
