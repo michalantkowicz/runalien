@@ -31,6 +31,7 @@
 		menu: { down: menu, up: menu },
 		submit: { down: submit, up: submit },
 		replay: { down: replay, up: replay },
+		tutorial : { down: buttonTutorial, up: buttonTutorial },
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: 

@@ -113,11 +113,11 @@ public abstract class BasicScreen implements Screen {
         this.backgroundStage.act(delta);
         this.backgroundStage.draw();
         
+        step(delta);
+        
         this.viewport.apply();
         this.stage.act(delta);
         this.stage.draw();
-        
-        step(delta);
     }
 
     protected void changeScreen(final Screen screen)

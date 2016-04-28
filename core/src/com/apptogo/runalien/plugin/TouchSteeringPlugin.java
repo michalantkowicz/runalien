@@ -1,5 +1,6 @@
 package com.apptogo.runalien.plugin;
 
+import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.Gdx;
 
 public class TouchSteeringPlugin extends SteeringPlugin {
@@ -17,7 +18,7 @@ public class TouchSteeringPlugin extends SteeringPlugin {
 					chargeDown();
 			}
 			if(!deathPlugin.dead && Gdx.input.justTouched()){
-				if(!running.isStarted())
+				if(!running.isStarted() && !Main.getInstance().getGameScreen().tutorialButton.isPressed())
 					startRunning();
 			}
 		}

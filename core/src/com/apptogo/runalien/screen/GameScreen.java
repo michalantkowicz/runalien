@@ -57,8 +57,7 @@ public class GameScreen extends BasicScreen {
 	protected FPSLogger logger = new FPSLogger();
 	protected int score = 0;
 	protected Label scoreLabel;
-	
-	protected TextButton tutorialButton;
+	public Button tutorialButton;
 	
 	protected boolean endGame = false, gameFinished = false;
 	
@@ -154,13 +153,12 @@ public class GameScreen extends BasicScreen {
 		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL);
 		gameworldStage.addActor( grass );
 		
+		tutorialButton = Button.get("tutorial").position(-580, -350).setListener(Listener.click(game, new TutorialScreen(game)));
+		
 		//Sign and tutorial button if not TutorialScreen instance
-		if(!(this instanceof TutorialScreen)) {
-			tutorialButton = TextButton.get("TUTORIAL").position(-620, -390).setListener(Listener.click(game, new TutorialScreen(game)));
+		if(!(this instanceof TutorialScreen)) {		
 			stage.addActor(tutorialButton);
 			
-			gameworldStage.addActor(Image.get("buttonTutorial").scale(1/UnitConverter.PPM).position(-4.2f, Main.GROUND_LEVEL - 2));
-							
 			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
 			sign.setStaticImage("board");
 			sign.setPosition(7, Main.GROUND_LEVEL);
@@ -171,7 +169,7 @@ public class GameScreen extends BasicScreen {
 			gameworldStage.addActor(topScore);
 		}
 		
-		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
+		scoreLabel = Label.get("0", "tutorial").position(-580, 320);
 		stage.addActor(scoreLabel);
 	}
 	
@@ -216,6 +214,7 @@ public class GameScreen extends BasicScreen {
 			stage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
 			       Actions.moveBy(0,  -30, 60)));
 			
+			this.scoreLabel.addAction(Actions.fadeOut(1, Interpolation.pow5Out));
 			
 			Group finalScoreLabel = createTopScore(String.valueOf(score), 1);
 			finalScoreLabel.setPosition(-finalScoreLabel.getWidth()/2f, 10);
@@ -303,7 +302,8 @@ public class GameScreen extends BasicScreen {
 
 	public void removeTutorialButton() {
 		if(this.tutorialButton != null) {
-			this.tutorialButton.remove();
+			this.tutorialButton.clearListeners();
+			this.tutorialButton.addAction(Actions.fadeOut(1, Interpolation.pow5Out));
 		}
 	}
 }
