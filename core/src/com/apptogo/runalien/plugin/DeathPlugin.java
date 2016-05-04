@@ -1,9 +1,8 @@
 package com.apptogo.runalien.plugin;
 
-import java.util.Map;
-
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
@@ -22,12 +21,9 @@ public class DeathPlugin extends AbstractPlugin {
 	
 	@Override
 	public void run() {		
-		Map<UserData, UserData> snapshot = Main.getInstance().getGameScreen().getContactsSnapshot();
-		UserData playerUserData = UserData.get(actor.getBody());
-		
-		if(!DEBUG_IMMORTAL && snapshot.containsKey(playerUserData) && snapshot.get(playerUserData).key.startsWith("killing")) {
+		if(!DEBUG_IMMORTAL && ContactListener.SNAPSHOT.collide(UserData.get(actor.getBody()), "killing")) {
 			dead = true;
-			String obstacleType = snapshot.get(playerUserData).type;
+			String obstacleType = ContactListener.SNAPSHOT.getCollision(UserData.get(actor.getBody()), "killing").getValue().type;
 			
 			soundHandler.stopSound("run");
 			soundHandler.stopSound("scream");
@@ -41,7 +37,7 @@ public class DeathPlugin extends AbstractPlugin {
 			for(Fixture fixture : body.getFixtureList())
 				UserData.get(fixture).ignore = true;
 			
-			if(snapshot.get(playerUserData).key.equals("killingTop"))
+			if(ContactListener.SNAPSHOT.collide(UserData.get(actor.getBody()), "killingTop"))
 				actor.changeAnimation("dietop");
 			else
 				actor.changeAnimation("diebottom");

@@ -1,7 +1,5 @@
 package com.apptogo.runalien.plugin;
 
-import com.apptogo.runalien.exception.PluginDependencyException;
-import com.apptogo.runalien.exception.PluginException;
 import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.utils.Logger;
 

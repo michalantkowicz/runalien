@@ -1,18 +1,20 @@
 package com.apptogo.runalien.plugin;
 
 import com.apptogo.runalien.exception.PluginDependencyException;
-import com.apptogo.runalien.exception.PluginException;
-import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
+import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Logger;
 
 public abstract class SteeringPlugin extends AbstractPlugin {
 
+	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	
 	protected RunningPlugin running;
 	protected DeathPlugin deathPlugin;
 	private SoundPlugin soundHandler;
@@ -151,10 +153,10 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	@Override
 	public void run() {
 		if(running.isStarted()) {
-			if(Main.getInstance().getGameScreen().getContactsSnapshot().containsKey("player") && Main.getInstance().getGameScreen().getContactsSnapshot().get("player").equals("ground"))
+			if(ContactListener.SNAPSHOT.collide(UserData.get(actor.getBody()), "ground"))
 				land();
 			
-			if(doStandUp )
+			if(doStandUp)
 				standUp();
 		}
 	}

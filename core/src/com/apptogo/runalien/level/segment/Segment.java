@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apptogo.runalien.game.GameActor;
+import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
 
-public class Segment {
+public class Segment implements Spawnable{
 	private List<GameActor> fields;
 	private int minLevel;
 	private int maxLevel;
@@ -38,27 +39,18 @@ public class Segment {
 		return fields;
 	}
 
+	@Override
 	public int getMinLevel() {
 		return minLevel;
 	}
 
-	public void setMinLevel(int minLevel) {
-		this.minLevel = minLevel;
-	}
-
+	@Override
 	public int getMaxLevel() {
 		return maxLevel;
 	}
-
-	public void setMaxLevel(int maxLevel) {
-		this.maxLevel = maxLevel;
-	}
-
+	
+	@Override
 	public float getBaseOffset() {
 		return baseOffset;
-	}
-
-	public void setBaseOffset(float baseOffset) {
-		this.baseOffset = baseOffset;
 	}
 }

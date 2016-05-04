@@ -23,7 +23,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	private final int MIN_LEVEL = 0;
 	private final int MAX_LEVEL = 5;
 	
-	private final float ROPE_WIDTH = 7.5f;
+	private final float ROPE_WIDTH = 8.5f;
 
 	private AtlasRegion ball;
 	private Vector2 ballSize;
@@ -48,9 +48,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		
 		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(1).friction(0.5f).position(x + ROPE_WIDTH, y).sensor(true).create();	
 		ropeBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ROPE_WIDTH, 0.1f).sensor(true).position(x + ROPE_WIDTH/2f, y).create();
-		System.out.println("rope: " + ropeBody.getPosition());
-		System.out.println("ball: " + ballBody.getPosition());
-		System.out.println("anchor: " + anchor.getPosition());
+
 		setBody(anchor);
 		
 		RevoluteJointDef jointDef = new RevoluteJointDef();

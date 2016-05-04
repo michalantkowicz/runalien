@@ -1,6 +1,7 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.RunningPlugin;
 import com.apptogo.runalien.plugin.SteeringPlugin;
 import com.apptogo.runalien.scene2d.Image;
@@ -268,9 +269,8 @@ public class TutorialScreen extends GameScreen {
 			game.setScreen(new GameScreen(game));//changeScreen(new GameScreen(game));
 		
 		//simulate physics and handle body contacts
-		contactListener.contacts.clear();
+		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
-		contactsSnapshot = contactListener.contacts;
 				
 		//act and draw main stage
 		gameworldStage.act(delta);		

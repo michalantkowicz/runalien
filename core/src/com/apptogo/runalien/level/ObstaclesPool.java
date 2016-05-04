@@ -96,7 +96,7 @@ public class ObstaclesPool {
 		logger.debug("Creating obstacles pools: ");
 		
 		//create spheres
-		obstaclePools.put("0-15", new Pool<GameActor>(4) {
+		obstaclePools.put("5-10", new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
 				GameActor obstacleActor = new Sphere("sphere");

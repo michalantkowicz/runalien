@@ -1,8 +1,5 @@
 package com.apptogo.runalien.screen;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.game.ParallaxActor;
@@ -14,7 +11,6 @@ import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
-import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
@@ -49,7 +45,6 @@ public class GameScreen extends BasicScreen {
 	protected World world;
 	protected Stage gameworldStage;
 	protected ObstaclesPool obstaclesPool;
-	protected Map<UserData, UserData> contactsSnapshot = new HashMap<UserData, UserData>();
 	protected ContactListener contactListener = new ContactListener();
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
@@ -177,9 +172,8 @@ public class GameScreen extends BasicScreen {
 	@Override
 	protected void step(float delta) {
 		//simulate physics and handle body contacts
-		contactListener.contacts.clear();
+		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
-		contactsSnapshot = contactListener.contacts;
 
 		//update pools
 		obstaclesPool.freePools();
@@ -296,10 +290,6 @@ public class GameScreen extends BasicScreen {
 
 	public ObstaclesPool getObstaclesPool() {
 		return obstaclesPool;
-	}
-	
-	public Map<UserData, UserData> getContactsSnapshot() {
-		return contactsSnapshot;
 	}
 
 	public void removeTutorialButton() {

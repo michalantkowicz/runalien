@@ -77,13 +77,14 @@ public class LevelGenerator {
 		Random random = new Random();
 		int randomNumber = random.nextInt(100);
 
-		if (randomNumber < 0)
-			generateRandomObstacle();
+		if (randomNumber < 50)
+			if(!generateRandomObstacle())
+				generateRandomSegment();
 		else
 			generateRandomSegment();
 	}
 
-	private void generateRandomObstacle() {
+	private boolean generateRandomObstacle() {
 
 		//iterate through the map and get all obstacles with key matching level.
 		List<Pool<GameActor>> possiblePools = new ArrayList<Pool<GameActor>>();
@@ -104,7 +105,10 @@ public class LevelGenerator {
 			randomObstacle.init();
 			activeObstacles.add(randomObstacle);
 			this.nextPosition += ((Spawnable) randomObstacle).getBaseOffset() + speedLevel;
+			return true;
 		}
+		else 
+			return false;
 	}
 
 	private void generateRandomSegment() {

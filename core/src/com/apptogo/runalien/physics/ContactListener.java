@@ -1,16 +1,16 @@
 package com.apptogo.runalien.physics;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.utils.Logger;
 
 public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener
 {
-	public Map<UserData, UserData> contacts = new HashMap<UserData, UserData>();
+	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
+	
+	public static final ContactSnapshot SNAPSHOT = new ContactSnapshot();
 	
 	@Override
 	public void beginContact(Contact contact)
@@ -22,10 +22,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 		UserData dataB = UserData.get(fb);
 		
 		if(!dataA.ignore && !dataB.ignore) {
-			if( contacts.get(dataA) == null ) {
-				contacts.put(dataA, dataB);
-				contacts.put(dataB, dataA);
-			}
+			SNAPSHOT.addContact(dataA, dataB);
 		}
 	}
 
