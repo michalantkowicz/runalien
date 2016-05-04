@@ -1,0 +1,38 @@
+#ifdef GL_ES
+#define LOWP lowp
+precision mediump float;
+#else
+#define LOWP 
+#endif
+
+varying LOWP vec4 v_color;
+varying vec2 v_texCoords;
+uniform sampler2D u_texture;
+uniform float saturation;
+uniform float brightness;
+
+vec4 changeBrightness(vec4 c, float change)
+{
+   return vec4(c.x * change,
+               c.y * change,
+               c.z * change,
+               c.w);
+}
+
+vec4 changeSaturation(vec4 c, float change)
+{
+   float P = sqrt(c.x * c.x * 0.299 +
+                  c.y * c.y * 0.587 +
+                  c.z * c.z * 0.114); 
+
+   return vec4(P + (c.x - P) * change,
+               P + (c.y - P) * change,
+               P + (c.z - P) * change,
+               c.w);
+}
+
+void main()
+{
+   vec4 c = changeBrightness(v_color, brightness) * changeSaturation(texture2D(u_texture, v_texCoords), saturation);
+   gl_FragColor = c;
+}

@@ -13,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen extends BasicScreen {
 	
-
-	
     public MenuScreen(Main game) {
         super(game, "background_menu");
     }

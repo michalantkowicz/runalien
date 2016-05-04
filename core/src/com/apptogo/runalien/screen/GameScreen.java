@@ -7,6 +7,7 @@ import com.apptogo.runalien.game.ParticleEffectActor;
 import com.apptogo.runalien.level.LevelGenerator;
 import com.apptogo.runalien.level.ObstaclesPool;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
@@ -23,10 +24,11 @@ import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -52,8 +54,12 @@ public class GameScreen extends BasicScreen {
 	protected Group finalScore;
 	protected FPSLogger logger = new FPSLogger();
 	protected int score = 0;
+	protected Image sky_day, sky_night, sun, moon;
 	protected Label scoreLabel;
 	public Button tutorialButton;
+	
+	protected ShaderProgram shaderProgram;
+	protected float shaderBrightness = 1, shaderSaturation = 1;
 	
 	protected boolean endGame = false, gameFinished = false;
 	
@@ -67,44 +73,22 @@ public class GameScreen extends BasicScreen {
 		
 		world = new World(new Vector2(0, -145), true);
 		world.setContactListener(contactListener);
+		
+		createBackgroundStage();
 		createGameWorldStage();
-		stagesToFade.add(gameworldStage);
+		createStage();
 		
-		backgroundStage.addActor(Image.get("space").width(Main.SCREEN_WIDTH).position(0, Main.SCREEN_HEIGHT/2f).centerX());
-		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
-		//TODO add listener handling
-		Button submitButton = Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX();
-		submitButton.setListener(new ClickListener(){
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Main.gameCallback.submitScore(score);
-			}
-			
-		});
-		stage.addActor(submitButton);
+		//Shaders
+		//TODO to check performance (and improve it)
+		shaderProgram = new ShaderProgram(Gdx.files.internal("shaders/vert.shd"), Gdx.files.internal("shaders/frag.shd"));
+				
+		shaderProgram.begin();
+		shaderProgram.setUniformf("saturation", 1f);
+		shaderProgram.setUniformf("brightness", 1f);
+		shaderProgram.end();
 		
-		Button replayButton = Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX();
-		replayButton.setListener(new ClickListener(){
-
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Main.gameCallback.showFullscreenAd();
-			}
-			
-		});
-		stage.addActor(replayButton);
-		
-		finalScore = new Group();
-		finalScore.setOrigin(Align.center);
-		finalScore.addAction(Actions.rotateBy(-1));
-		finalScore.addAction(Actions.forever(Actions.sequence(Actions.moveBy(0, 40, 4), Actions.moveBy(0, -40, 6))));
-		finalScore.addAction(Actions.forever(Actions.sequence(Actions.rotateBy(2, 2), Actions.rotateBy(-2, 2))));
-		finalScore.setPosition(-420,  Main.SCREEN_HEIGHT);
-		
-		finalScore.addActor(Image.get("balloon").centerX().centerY());
-		finalScore.setVisible(false);
-		stage.addActor(finalScore);		
+		backgroundStage.getBatch().setShader(shaderProgram);
+		gameworldStage.getBatch().setShader(shaderProgram);	
 		
 		//prepare CustomActionManager
 		gameworldStage.addActor(CustomActionManager.getInstance());
@@ -131,7 +115,6 @@ public class GameScreen extends BasicScreen {
 		player.addPlugin(new TouchSteeringPlugin());
 		
 		//create infinite ground body
-		//TODO should be polyline
 		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).create();
 
 		//create obstacle pool
@@ -164,13 +147,19 @@ public class GameScreen extends BasicScreen {
 			topScore.setPosition(sign.getX() + 1.6f - topScore.getWidth()/2f,  sign.getY() + 1.5f);
 			gameworldStage.addActor(topScore);
 		}
-		
-		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
-		stage.addActor(scoreLabel);
 	}
 	
 	@Override
-	protected void step(float delta) {
+	protected void step(float delta) {	
+		shaderProgram.begin();
+		shaderProgram.setUniformf("saturation", shaderSaturation);
+		shaderProgram.setUniformf("brightness", shaderBrightness);
+		shaderProgram.end();
+		
+		//The magic is hidden outta here =|:^)>
+		if(Gdx.graphics.getFrameId()%500 == 0)
+			toggleDaytime();
+		
 		//simulate physics and handle body contacts
 		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
@@ -251,12 +240,92 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.dispose();
 		Main.gameCallback.setBannerVisible(false);
 	}
+	
+	void toggleDaytime()
+	{
+		if(sky_day.getColor().a >= 1) {
+			//Switch to night
+			sky_day.addAction(Actions.alpha(0, 0.5f));
+			sun.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -340, 0.15f)));
+			moon.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 340, 0.25f), Actions.moveBy(0, -20, 0.1f)));
+			CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
+				@Override
+				public void perform() {
+					shaderSaturation -= 0.01f;
+				}
+			});
+		}
+		else {
+			//Switch to day
+			sky_day.addAction(Actions.alpha(1, 0.5f));
+			moon.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -340, 0.15f)));
+			sun.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 340, 0.25f), Actions.moveBy(0, -20, 0.1f)));
+			CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
+				@Override
+				public void perform() {
+					shaderSaturation += 0.01f;
+				}
+			});
+		}
+	}
 
+	protected void createBackgroundStage() {
+		sun = Image.get("sun").position(0, 160).centerX();
+		backgroundStage.addActor(sun);
+		sun.toBack();
+		
+		moon = Image.get("moon").position(0, -160).centerX();
+		backgroundStage.addActor(moon);
+		moon.toBack();
+		
+		sky_day = Image.get("sky_day").width(Main.SCREEN_WIDTH).position(0, -Main.SCREEN_HEIGHT/2f).centerX();
+		backgroundStage.addActor(sky_day);
+		sky_day.toBack();
+		
+		sky_night = Image.get("sky_night").width(Main.SCREEN_WIDTH).position(0, -Main.SCREEN_HEIGHT/2f).centerX();
+		backgroundStage.addActor(sky_night);
+		sky_night.toBack();
+	}
+	
 	protected void createGameWorldStage() {
 		gameworldStage = new Stage();
 		gameworldStage.setViewport(new FillViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
-		((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));
-		((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
+		//((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));
+		//((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
+		
+		stagesToFade.add(gameworldStage);
+	}
+	
+	protected void createStage() {
+		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
+		
+		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX().setListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Main.gameCallback.submitScore(score);
+			}
+		}));
+		
+		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX().setListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Main.gameCallback.showFullscreenAd();
+			}
+		}));
+		
+		finalScore = new Group();
+		finalScore.setOrigin(Align.center);
+		finalScore.addAction(Actions.rotateBy(-1));
+		finalScore.addAction(Actions.forever(Actions.sequence(Actions.moveBy(0, 40, 4), Actions.moveBy(0, -40, 6))));
+		finalScore.addAction(Actions.forever(Actions.sequence(Actions.rotateBy(2, 2), Actions.rotateBy(-2, 2))));
+		finalScore.setPosition(-420,  Main.SCREEN_HEIGHT);
+		
+		finalScore.addActor(Image.get("balloon").centerX().centerY());
+		finalScore.setVisible(false);
+		stage.addActor(finalScore);
+		
+		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
+		stage.addActor(scoreLabel);
 	}
 	
 	protected Group createTopScore(String score, float scale) {

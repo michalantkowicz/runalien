@@ -87,6 +87,12 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image {
     	this.addAction(action);
     	return this;
     }
+    
+    public Image back()
+    {
+    	this.toBack();
+    	return this;
+    }
 
     public TextureRegion getRegion() {
         return region;
