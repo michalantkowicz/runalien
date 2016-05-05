@@ -62,6 +62,7 @@ public class GameScreen extends BasicScreen {
 	protected float shaderBrightness = 1, shaderSaturation = 1;
 	
 	protected boolean endGame = false, gameFinished = false;
+	public boolean LEFT = false, RIGHT = false;
 	
 	public GameScreen(Main game) {
 		super(game, "background_game");
@@ -151,6 +152,9 @@ public class GameScreen extends BasicScreen {
 	
 	@Override
 	protected void step(float delta) {	
+		if(LEFT) System.out.println("LEFT");
+		if(RIGHT) System.out.println("RIGHT");
+		
 		shaderProgram.begin();
 		shaderProgram.setUniformf("saturation", shaderSaturation);
 		shaderProgram.setUniformf("brightness", shaderBrightness);
@@ -326,6 +330,17 @@ public class GameScreen extends BasicScreen {
 		
 		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
 		stage.addActor(scoreLabel);
+		
+		stage.addListener(new ClickListener(){ 
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if(x <= 0)
+					LEFT = true;
+				else
+					RIGHT = true;
+				return super.touchDown(event, x, y, pointer, button);
+			}
+		});
 	}
 	
 	protected Group createTopScore(String score, float scale) {
