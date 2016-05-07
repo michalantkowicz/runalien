@@ -7,11 +7,14 @@ import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen extends BasicScreen {
+	
+	Music music;
 	
     public MenuScreen(Main game) {
         super(game, "background_menu");
@@ -19,7 +22,11 @@ public class MenuScreen extends BasicScreen {
 
     @Override
     protected void prepare() {
-    	SoundPlugin.loopSingleSound("runalienMusic");
+//    	SoundPlugin.loopSingleSound("runalienMusic");
+    	//TODO move this code to soundmanager
+    	music = Gdx.audio.newMusic(Gdx.files.internal("runalienMusic.ogg"));
+    	music.setLooping(true);
+    	music.play();
     	
     	//TODO move to scene2d class. click listeners
         ClickListener showAchievementsListener = new ClickListener() {
@@ -44,6 +51,7 @@ public class MenuScreen extends BasicScreen {
         
         Group group = new Group();
                 
+        //TODO do not refresh screen after change vibration mode
         if(Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
         	group.addActor(Button.get("vibration").position(-120, -90)
         										  .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", false))
@@ -90,7 +98,9 @@ public class MenuScreen extends BasicScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		SoundPlugin.stopSingleSound("runalienMusic");
+		//SoundPlugin.stopSingleSound("runalienMusic");
+		music.stop();
+		music.dispose();
 	}
 
 }

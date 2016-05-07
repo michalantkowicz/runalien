@@ -55,7 +55,6 @@ public class ResourcesManager {
 		manager.load("die.ogg", Sound.class);
 		manager.load("whoosh.ogg", Sound.class);
 		manager.load("click.ogg", Sound.class);
-		manager.load("runalienMusic.ogg", Sound.class);
 	}
 
 	public void loadSkin() {

@@ -26,7 +26,13 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	protected boolean sliding = false;
 	protected boolean doStandUp = false;
 	
-	protected SequenceAction standUpAction = Actions.sequence(); 
+	protected CustomAction standUpAction = new CustomAction(0.4f) {
+		@Override
+		public void perform() {
+			if(sliding)
+				doStandUp = true;
+		}
+	};
 	
 	protected void jump()
 	{
@@ -94,16 +100,8 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		UserData.get(defaultFixture).ignore = true;
 		defaultFixture.setSensor(true);
 		
-		actor.removeAction(standUpAction);
-		
-		
-		CustomActionManager.getInstance().registerAction(new CustomAction(0.4f) {
-			@Override
-			public void perform() {
-				if(sliding)
-					doStandUp = true;
-			}
-		});
+		CustomActionManager.getInstance().unregisterAction(standUpAction);
+		CustomActionManager.getInstance().registerAction(standUpAction);
 	}
 	
 	public void standUp()
