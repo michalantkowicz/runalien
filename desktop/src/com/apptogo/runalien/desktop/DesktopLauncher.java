@@ -44,6 +44,11 @@ public class DesktopLauncher {
 			Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
 		}
 
+		@Override
+		public void vibrate() {
+			logger.debug("BRRRR - vibrations are available only in Android");
+		}
+
 	};
 
 	public static void main(String[] arg) {

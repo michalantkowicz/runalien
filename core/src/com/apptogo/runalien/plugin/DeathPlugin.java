@@ -28,6 +28,9 @@ public class DeathPlugin extends AbstractPlugin {
 				
 				soundHandler.stopSound("run");
 				soundHandler.stopSound("scream");
+				
+				Main.gameCallback.vibrate();
+				
 				if("bell".equals(obstacleType))
 					soundHandler.playSound("bell"); 
 				else if("log".equals(obstacleType))

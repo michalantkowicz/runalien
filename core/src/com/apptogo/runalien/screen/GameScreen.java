@@ -30,6 +30,8 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -45,6 +47,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 public class GameScreen extends BasicScreen {	
 	protected Box2DDebugRenderer debugRenderer;
 	protected World world;
+	protected Stage middleBackgroundStage;
 	protected Stage gameworldStage;
 	protected ObstaclesPool obstaclesPool;
 	protected ContactListener contactListener = new ContactListener();
@@ -56,7 +59,7 @@ public class GameScreen extends BasicScreen {
 	protected int score = 0;
 	protected Image sky_day, sky_night, sun, moon;
 	protected Label scoreLabel;
-	public Button tutorialButton;
+	public Button tutorialButton, submitButton;
 	
 	protected ShaderProgram shaderProgram;
 	protected float shaderBrightness = 1, shaderSaturation = 1;
@@ -65,7 +68,7 @@ public class GameScreen extends BasicScreen {
 	public boolean LEFT = false, RIGHT = false;
 	
 	public GameScreen(Main game) {
-		super(game, "background_game");
+		super(game);
 	}
 	
 	@Override
@@ -76,6 +79,7 @@ public class GameScreen extends BasicScreen {
 		world.setContactListener(contactListener);
 		
 		createBackgroundStage();
+		createMiddleBackgroundStage();
 		createGameWorldStage();
 		createStage();
 		
@@ -88,7 +92,7 @@ public class GameScreen extends BasicScreen {
 		shaderProgram.setUniformf("brightness", 1f);
 		shaderProgram.end();
 		
-		backgroundStage.getBatch().setShader(shaderProgram);
+		middleBackgroundStage.getBatch().setShader(shaderProgram);
 		gameworldStage.getBatch().setShader(shaderProgram);	
 		
 		//prepare CustomActionManager
@@ -152,13 +156,13 @@ public class GameScreen extends BasicScreen {
 	
 	@Override
 	protected void step(float delta) {	
-		if(LEFT) System.out.println("LEFT");
-		if(RIGHT) System.out.println("RIGHT");
-		
-		shaderProgram.begin();
-		shaderProgram.setUniformf("saturation", shaderSaturation);
-		shaderProgram.setUniformf("brightness", shaderBrightness);
-		shaderProgram.end();
+		if(shaderSaturation < 1 && shaderSaturation > 0.5f) {
+			shaderProgram.begin();
+			shaderProgram.setUniformf("saturation", shaderSaturation);
+			shaderProgram.setUniformf("brightness", shaderBrightness);
+			shaderProgram.end();
+			System.out.println("SHADER!! " + shaderSaturation);
+		}
 		
 		//The magic is hidden outta here =|:^)>
 		if(Gdx.graphics.getFrameId()%500 == 0)
@@ -174,6 +178,11 @@ public class GameScreen extends BasicScreen {
 		//generate obstacles
 		levelGenerator.generate();
 
+		//act and draw main stage
+		middleBackgroundStage.getViewport().apply();
+		middleBackgroundStage.act(delta);
+		middleBackgroundStage.draw();
+		
 		//act and draw main stage
 		gameworldStage.getViewport().apply();
 		gameworldStage.act(delta);
@@ -200,6 +209,9 @@ public class GameScreen extends BasicScreen {
 			backgroundStage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
 				       Actions.moveBy(0,  -30, 60)));
 			
+			middleBackgroundStage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
+				       Actions.moveBy(0,  -30, 60)));
+			
 			stage.addAction(Actions.sequence(Actions.moveBy(0, -850, 2.5f, Interpolation.pow5),
 			       Actions.moveBy(0,  -30, 60)));
 			
@@ -219,6 +231,12 @@ public class GameScreen extends BasicScreen {
 				stars.obtainAndStart(0, -80, 0);
 				finalScore.addActor(stars);
 				stars.toBack();
+				
+				submitButton.addAction(Actions.forever(Actions.sequence(
+						                                           Actions.rotateBy(30, 0.05f),
+						                                           Actions.rotateBy(-60, 0.05f),
+						                                           Actions.rotateBy(30, 0.5f, Interpolation.elasticOut),
+						                                           Actions.delay(1))));
 			}
 			
 			endGame = false;
@@ -233,7 +251,8 @@ public class GameScreen extends BasicScreen {
 	@Override
     public void resize(int width, int height) {
 		super.resize(width, height);
-        this.gameworldStage.getViewport().update(width, height);
+		this.gameworldStage.getViewport().update(width, height);
+		this.middleBackgroundStage.getViewport().update(width, height);
     }
 
 	@Override
@@ -250,35 +269,47 @@ public class GameScreen extends BasicScreen {
 		if(sky_day.getColor().a >= 1) {
 			//Switch to night
 			sky_day.addAction(Actions.alpha(0, 0.5f));
-			sun.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -340, 0.15f)));
-			moon.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 340, 0.25f), Actions.moveBy(0, -20, 0.1f)));
+			sun.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -560, 0.15f)));
+			moon.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 560, 0.25f), Actions.moveBy(0, -20, 0.1f)));
 			CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
 				@Override
 				public void perform() {
 					shaderSaturation -= 0.01f;
+					shaderBrightness -= 0.005f;
+					
+					if(getLoopCount() == 50) {
+						shaderSaturation = 0.5f;
+						shaderBrightness = 0.75f;
+					};
 				}
 			});
 		}
 		else {
 			//Switch to day
 			sky_day.addAction(Actions.alpha(1, 0.5f));
-			moon.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -340, 0.15f)));
-			sun.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 340, 0.25f), Actions.moveBy(0, -20, 0.1f)));
+			moon.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -560, 0.15f)));
+			sun.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 560, 0.25f), Actions.moveBy(0, -20, 0.1f)));
 			CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
 				@Override
 				public void perform() {
 					shaderSaturation += 0.01f;
+					shaderBrightness += 0.005f;
+					
+					if(getLoopCount() == 50) {
+						shaderSaturation = 1;
+						shaderBrightness = 1;
+					};
 				}
 			});
 		}
 	}
 
 	protected void createBackgroundStage() {
-		sun = Image.get("sun").position(0, 160).centerX();
+		sun = Image.get("sun").position(0, 140).centerX();
 		backgroundStage.addActor(sun);
 		sun.toBack();
 		
-		moon = Image.get("moon").position(0, -160).centerX();
+		moon = Image.get("moon").position(0, -400).centerX();
 		backgroundStage.addActor(moon);
 		moon.toBack();
 		
@@ -289,6 +320,15 @@ public class GameScreen extends BasicScreen {
 		sky_night = Image.get("sky_night").width(Main.SCREEN_WIDTH).position(0, -Main.SCREEN_HEIGHT/2f).centerX();
 		backgroundStage.addActor(sky_night);
 		sky_night.toBack();
+	}
+	
+	protected void createMiddleBackgroundStage() {
+		middleBackgroundStage = new Stage(new FillViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT));
+		middleBackgroundStage.getCamera().position.set(0, 0, 0);
+		
+		middleBackgroundStage.addActor(Image.get("background_game").centerX().centerY());
+		
+		stagesToFade.add(middleBackgroundStage);
 	}
 	
 	protected void createGameWorldStage() {
@@ -303,12 +343,15 @@ public class GameScreen extends BasicScreen {
 	protected void createStage() {
 		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
 		
-		stage.addActor(Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX().setListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Main.gameCallback.submitScore(score);
-			}
-		}));
+		submitButton = Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX()
+				             .setListener(new ClickListener(){
+			                     @Override
+									 public void clicked(InputEvent event, float x, float y) {
+										 Main.gameCallback.submitScore(score);
+									 }
+				             });
+		
+		stage.addActor(submitButton);
 		
 		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX().setListener(new ClickListener(){
 			@Override

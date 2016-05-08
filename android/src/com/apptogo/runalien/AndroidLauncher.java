@@ -266,4 +266,9 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		}
 	};
 
+	@Override
+	public void vibrate() {
+		Gdx.input.vibrate(200);
+	}
+
 }

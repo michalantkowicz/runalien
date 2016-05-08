@@ -1,7 +1,6 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.main.Main;
-import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.scene2d.TextButton;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class MenuScreen extends BasicScreen {
 	
 	Music music;
+	Button vibrationOn, vibrationOff;
 	
     public MenuScreen(Main game) {
         super(game, "background_menu");
@@ -51,16 +51,34 @@ public class MenuScreen extends BasicScreen {
         
         Group group = new Group();
                 
-        //TODO do not refresh screen after change vibration mode
+        vibrationOn = Button.get("vibration").position(-120, -90)
+        		            .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", false))
+        		            .setListener(new ClickListener(){
+        		            	@Override
+        		            	public void clicked(InputEvent event, float x, float y) {
+        		            		vibrationOn.setVisible(false);
+        		            		vibrationOff.setVisible(true);
+        		            	}
+        		            });
+        
+        vibrationOff = Button.get("vibrationOff").position(-120, -90)
+					         .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", true))
+					         .setListener(new ClickListener(){
+					         	@Override
+					         	public void clicked(InputEvent event, float x, float y) {
+					         		vibrationOn.setVisible(true);
+					         		vibrationOff.setVisible(false);
+					         	}
+					         });
+        
+        group.addActor(vibrationOn);
+        group.addActor(vibrationOff);
+        
         if(Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
-        	group.addActor(Button.get("vibration").position(-120, -90)
-        										  .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", false))
-        										  .setListener(Listener.click(game, new MenuScreen(game))));
+        	vibrationOff.setVisible(false);
         else
-        	group.addActor(Button.get("vibrationOff").position(-120, -90)
-        											 .setListener(Listener.preferences("SETTINGS", "VIBRATIONS", true))
-        											 .setListener(Listener.click(game, new MenuScreen(game))));
-
+        	vibrationOn.setVisible(false);
+        
         tables.get(0).add(group).right().row();
         tables.get(0).add().height(300).row();
         
@@ -85,7 +103,6 @@ public class MenuScreen extends BasicScreen {
     @Override
     protected void step(float delta) {
         // TODO Auto-generated method stub
-
     }
     
     @Override
