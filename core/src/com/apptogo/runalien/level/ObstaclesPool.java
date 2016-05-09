@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.obstacle.Sphere;
+import com.apptogo.runalien.level.obstacle.Weasel;
 import com.apptogo.runalien.level.segment.SegmentFieldDefinitions;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.badlogic.gdx.utils.Logger;
@@ -100,6 +101,17 @@ public class ObstaclesPool {
 			@Override
 			protected GameActor newObject() {
 				GameActor obstacleActor = new Sphere("sphere");
+				obstacleActor.setAlive(false);
+
+				return obstacleActor;
+			}
+		});
+		
+		//create weasles
+		obstaclePools.put("0-10", new Pool<GameActor>(4) {
+			@Override
+			protected GameActor newObject() {
+				GameActor obstacleActor = new Weasel("weasel");
 				obstacleActor.setAlive(false);
 
 				return obstacleActor;

@@ -271,8 +271,14 @@ public class TutorialScreen extends GameScreen {
 		//simulate physics and handle body contacts
 		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
-				
+			
 		//act and draw main stage
+		middleBackgroundStage.getViewport().apply();
+		middleBackgroundStage.act(delta);
+		middleBackgroundStage.draw();
+		
+		//act and draw main stage
+		gameworldStage.getViewport().apply();
 		gameworldStage.act(delta);		
 		gameworldStage.draw();
 		

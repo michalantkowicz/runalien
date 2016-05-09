@@ -137,9 +137,10 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		mGoogleApiClient.disconnect();
 	}
 
+	
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
-		logger.debug("Connection to Google Play has not been connected");
+		logger.debug("Connection to Google Play has not been connected due to: " + connectionResult.toString());
 		if (mResolvingConnectionFailure) {
 			// already resolving
 			return;
@@ -179,12 +180,22 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	//GameCallback methods implementations
 	@Override
 	public void showLeaderboard() {
-		startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getResources().getString(R.string.leaderboard_id)), LEADERBOARDS_RESULT_CODE);
+		if(mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.connect();
+		}
+		else {
+			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getResources().getString(R.string.leaderboard_id)), LEADERBOARDS_RESULT_CODE);
+		}
 	}
 
 	@Override
 	public void showAchievements() {
-		startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), ACHIEVEMENTS_RESULT_CODE);
+		if(mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.connect();
+		}
+		else {
+			startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), ACHIEVEMENTS_RESULT_CODE);
+		}
 	}
 
 	@Override
@@ -201,9 +212,14 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 
 	@Override
 	public void submitScore(int score) {
-		logger.debug("Submitting score");
-		Games.Leaderboards.submitScore(mGoogleApiClient, getResources().getString(R.string.leaderboard_id), score);
-		showLeaderboard();
+		if(mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.connect();
+		}
+		else {
+			logger.debug("Submitting score");
+			Games.Leaderboards.submitScore(mGoogleApiClient, getResources().getString(R.string.leaderboard_id), score);
+			showLeaderboard();
+		}
 	}
 	
 	@Override
@@ -268,7 +284,8 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 
 	@Override
 	public void vibrate() {
-		Gdx.input.vibrate(200);
+		if(Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
+			Gdx.input.vibrate(200);
 	}
 
 }

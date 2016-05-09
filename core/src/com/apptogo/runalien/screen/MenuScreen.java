@@ -68,6 +68,8 @@ public class MenuScreen extends BasicScreen {
 					         	public void clicked(InputEvent event, float x, float y) {
 					         		vibrationOn.setVisible(true);
 					         		vibrationOff.setVisible(false);
+					         		
+					         		Main.gameCallback.vibrate();
 					         	}
 					         });
         

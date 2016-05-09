@@ -47,7 +47,8 @@ public class LevelGenerator {
 		updateLevel();
 
 		if (player.getBody().getPosition().x + SPAWN_DISTANCE >= nextPosition) {
-			generateRandom();
+			//generateRandom();
+			generateRandomObstacle();
 		}
 
 		//free out of screen obstacles

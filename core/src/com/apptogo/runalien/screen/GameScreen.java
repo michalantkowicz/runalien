@@ -24,14 +24,11 @@ import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -161,7 +158,6 @@ public class GameScreen extends BasicScreen {
 			shaderProgram.setUniformf("saturation", shaderSaturation);
 			shaderProgram.setUniformf("brightness", shaderBrightness);
 			shaderProgram.end();
-			System.out.println("SHADER!! " + shaderSaturation);
 		}
 		
 		//The magic is hidden outta here =|:^)>
@@ -189,7 +185,7 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.draw();
 		
 		//debug renderer
-		//debugRenderer.render(world, gameworldStage.getCamera().combined);
+		debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
 		//make player always on top
 		player.toFront();
@@ -233,9 +229,9 @@ public class GameScreen extends BasicScreen {
 				stars.toBack();
 				
 				submitButton.addAction(Actions.forever(Actions.sequence(
-						                                           Actions.rotateBy(30, 0.05f),
-						                                           Actions.rotateBy(-60, 0.05f),
-						                                           Actions.rotateBy(30, 0.5f, Interpolation.elasticOut),
+						                                           Actions.moveBy(0, 15, 0.05f),
+						                                           Actions.moveBy(0, -30, 0.05f),
+						                                           Actions.moveBy(0, 15, 0.5f, Interpolation.elasticOut),
 						                                           Actions.delay(1))));
 			}
 			
