@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -40,7 +41,7 @@ public class SplashScreen implements Screen
 
         logo = Image.get(ResourcesManager.getInstance().manager.get("logo.png", Texture.class)).centerX().centerY();
         logo.setColor(logo.getColor().r, logo.getColor().g, logo.getColor().b, 0);
-        logo.addAction(Actions.sequence(Actions.alpha(0, 0), Actions.alpha(1, 0)));
+        logo.addAction(Actions.sequence(Actions.alpha(0, 0), Actions.alpha(1, 0.75f, Interpolation.pow5Out)));
 
         stage.addActor(logo);
 

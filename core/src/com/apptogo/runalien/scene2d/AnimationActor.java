@@ -122,8 +122,7 @@ public class AnimationActor extends Actor {
 					deltaOffset.y = -(deltaOffset.y - currentOffset.y);
 				} else {
 					deltaOffset.y += currentOffset.y - previousOffset.y;
-				}
-
+				}				
 			}
 		}
 	}
