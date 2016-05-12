@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
-	
+	static int id = 0; int iid = 0;
 	private final float BASE_OFFSET = 25f;
 	private final int MIN_LEVEL = 0;
 	private final int MAX_LEVEL = 5;
@@ -36,18 +36,20 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private int interval = 0;	
 
 	private AtlasRegion ball;
+	private AtlasRegion chain;
 	private Vector2 ballSize;
 	
 	private Body anchor, ballBody;
 	
 	private RopeJoint joint;
+	private float ropeLength, startU2Length;
 	
 	private World world;
 
 	public FallingSphere(String name) {
 		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();
-		
+		iid = ++id;
 		final float x = 10;
 		final float y = 6;
 		
@@ -56,6 +58,8 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 		
 		ball = ResourcesManager.getInstance().getAtlasRegion("fallingSphere");
 		ballSize = new Vector2(UnitConverter.toBox2dUnits(ball.getRegionWidth()), UnitConverter.toBox2dUnits(ball.getRegionHeight()));
+		
+		chain = ResourcesManager.getInstance().getAtlasRegion("chain");
 		
 		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(0.7f).friction(0.5f).position(x + ROPE_WIDTH, y).sensor(true).create();	
 		ballBody.setTransform(ballBody.getPosition(), MathUtils.degRad * 30f);
@@ -73,13 +77,15 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
     	jointDef.maxLength = 2.2f;
     	    	
     	joint = (RopeJoint)world.createJoint(jointDef);
+    	
+    	startU2Length = chain.getU2() - chain.getU();
 	}
 	
 	@Override 
 	public void act(float delta) {
 		super.act(delta);
     	
-    	float ropeLength = ballBody.getPosition().cpy().add(joint.getLocalAnchorB()).sub(anchor.getPosition()).len();
+    	ropeLength = ballBody.getPosition().cpy().add(joint.getLocalAnchorB()).sub(anchor.getPosition()).len();
     	
     	if(!doFall && ropeLength >= joint.getMaxLength() && ropeLength < MAX_ROPE_LENGTH)
     		doFall = true;
@@ -95,6 +101,12 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		//Backuping U2 - we are operating on the original region and want it to be reusable
+		float u2Backup = chain.getU2();
+		chain.setU2(chain.getU() + startU2Length * ((64f * ropeLength) / 1024f));
+		batch.draw(chain, anchor.getPosition().x - chain.getRegionHeight()/64f/2f, anchor.getPosition().y, getOriginX(), getOriginY(), ropeLength, chain.getRegionHeight() / 64f , getScaleX(), getScaleY(), ballBody.getPosition().cpy().sub(anchor.getPosition()).angle());
+		chain.setU2(u2Backup);
+				
 		super.draw(batch, parentAlpha);
 		batch.draw(ball, ballBody.getPosition().x - ballSize.x/2, ballBody.getPosition().y - ballSize.y/2, getOriginX(), getOriginY(), ballSize.x, ballSize.y, getScaleX(), getScaleY(), getRotation());
 	}
