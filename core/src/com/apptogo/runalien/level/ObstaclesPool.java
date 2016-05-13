@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.apptogo.runalien.game.GameActor;
-import com.apptogo.runalien.level.obstacle.FallingSphere;
+import com.apptogo.runalien.level.obstacle.Rocket;
 import com.apptogo.runalien.level.obstacle.Sphere;
 import com.apptogo.runalien.level.segment.SegmentFieldDefinitions;
 import com.apptogo.runalien.physics.BodyBuilder;
@@ -111,7 +111,7 @@ public class ObstaclesPool {
 		obstaclePools.put("0-10", new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
-				GameActor obstacleActor = new FallingSphere("fallingSphere");
+				GameActor obstacleActor = new Sphere("fallingSphere");
 				obstacleActor.setAlive(false);
 
 				return obstacleActor;

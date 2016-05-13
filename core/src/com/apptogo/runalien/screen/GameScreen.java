@@ -194,6 +194,7 @@ public class GameScreen extends BasicScreen {
 		if(endGame) {
 			Main.gameCallback.setBannerVisible(true);
 			
+			//TODO Once I had PluginException here caused by ball hit - WHY?
 			player.removePlugin("CameraFollowingPlugin");
 			
 			finalScore.setVisible(true);

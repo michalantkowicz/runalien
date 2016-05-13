@@ -58,11 +58,6 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	public void act(float delta)
 	{
 		super.act(delta);
-		
-		counter++;
-		if(counter % 10 == 0){
-			body.setLinearVelocity(body.getLinearVelocity().x, -body.getLinearVelocity().y);
-		}
 	}
 
 	@Override
@@ -89,8 +84,6 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	public void init() {
 		super.init();
 		body.setTransform(getBody().getPosition().x, getBody().getPosition().y, 0);
-		body.setLinearVelocity(-15, 1);
+		body.setLinearVelocity(-15, 0);
 	}
-
-
 }
