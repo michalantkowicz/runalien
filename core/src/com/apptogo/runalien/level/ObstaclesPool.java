@@ -111,7 +111,7 @@ public class ObstaclesPool {
 		obstaclePools.put("0-10", new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
-				GameActor obstacleActor = new Sphere("fallingSphere");
+				GameActor obstacleActor = new Rocket("fallingSphere");
 				obstacleActor.setAlive(false);
 
 				return obstacleActor;

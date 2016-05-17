@@ -103,7 +103,7 @@ public class LevelGenerator {
 			GameActor randomObstacle = possiblePools.get(possiblePools.size() > 1 ? random.nextInt(possiblePools.size() - 1) : 0).obtain();
 
 			randomObstacle.getBody().setTransform(nextPosition, randomObstacle.getBody().getPosition().y, 0);
-			randomObstacle.init();
+			randomObstacle.init(speedLevel);
 			activeObstacles.add(randomObstacle);
 			this.nextPosition += ((Spawnable) randomObstacle).getBaseOffset() + speedLevel;
 			return true;

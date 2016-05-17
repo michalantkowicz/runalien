@@ -118,7 +118,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	}
 
 	@Override
-	public void init() {
+	public void init() { System.out.println("SPHERE INIT");
 		super.init();
 		ballBody.setTransform(getBody().getPosition().x + ballPositionOffset.x, getBody().getPosition().y + ballPositionOffset.y, 0);		
 		//ropeBody.setTransform(getBody().getPosition().x + ROPE_WIDTH/2f, getBody().getPosition().y, 0);

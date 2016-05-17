@@ -102,7 +102,11 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		body.setActive(false);
 		remove();
 	}
-
+	
+	public void init(int speedLevel) {
+		init();
+	}
+	
 	public void init() {
 		setAlive(true);
 		body.setActive(true);
