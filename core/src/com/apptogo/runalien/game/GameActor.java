@@ -10,6 +10,7 @@ import com.apptogo.runalien.physics.UserData;
 import com.apptogo.runalien.plugin.AbstractPlugin;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class GameActor extends AbstractActor implements Poolable, Serializable{
@@ -23,6 +24,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	}
 
 	Map<String, AbstractPlugin> plugins = new HashMap<String, AbstractPlugin>();
+	Array<AbstractPlugin> pluginsQueue = new Array<AbstractPlugin>();
 
 	@Override
 	public void act(float delta) {
@@ -40,7 +42,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		currentAnimation.position(getX() - currentAnimation.getDeltaOffset().x, getY() - currentAnimation.getDeltaOffset().y);
 		currentAnimation.act(delta);
 
-		for(AbstractPlugin plugin : plugins.values()){
+		for(AbstractPlugin plugin : pluginsQueue){
 			plugin.run();
 		}
 	}
@@ -54,6 +56,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	public void addPlugin(AbstractPlugin plugin) {
 		plugin.setActor(this);
 		plugins.put(plugin.getClass().getSimpleName(), plugin);
+		pluginsQueue.add(plugin);
 	}
 	
 	public void removePlugin(String name) throws PluginException{
@@ -62,6 +65,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 			throw new PluginException("Actor: '" + getName() + "' doesn't have plugin: '" + name);
 		
 		plugins.remove(name);
+		pluginsQueue.removeValue(plugin, true);
 	}
 
 	public void modifyCustomOffsets(float deltaX, float deltaY) {
