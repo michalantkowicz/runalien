@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -39,6 +40,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
 public class GameScreen extends BasicScreen {	
@@ -59,7 +61,7 @@ public class GameScreen extends BasicScreen {
 	public Button tutorialButton, submitButton;
 	
 	protected ShaderProgram shaderProgram;
-	protected float shaderBrightness = 1, shaderSaturation = 1;
+	protected float shaderBrightness, shaderSaturation;
 	
 	protected boolean endGame = false, gameFinished = false;
 	public boolean LEFT = false, RIGHT = false;
@@ -75,26 +77,44 @@ public class GameScreen extends BasicScreen {
 		world = new World(new Vector2(0, -145), true);
 		world.setContactListener(contactListener);
 		
-		createBackgroundStage();
+		boolean isDay = Gdx.app.getPreferences("SETTINGS").getBoolean("DAYTIME", false);
+		
+		createBackgroundStage(isDay);
 		createMiddleBackgroundStage();
 		createGameWorldStage();
 		createStage();
 		
+		//prepare CustomActionManager
+		gameworldStage.addActor(CustomActionManager.getInstance());
+		
 		//Shaders
 		//TODO to check performance (and improve it)
 		shaderProgram = new ShaderProgram(Gdx.files.internal("shaders/vert.shd"), Gdx.files.internal("shaders/frag.shd"));
-				
+		
+		shaderSaturation = isDay ? 1f : 0.5f;
+		shaderBrightness = isDay ? 1f : 0.75f;
+		
 		shaderProgram.begin();
-		shaderProgram.setUniformf("saturation", 1f);
-		shaderProgram.setUniformf("brightness", 1f);
+		shaderProgram.setUniformf("saturation", shaderSaturation);
+		shaderProgram.setUniformf("brightness", shaderBrightness);
 		shaderProgram.end();
 		
 		middleBackgroundStage.getBatch().setShader(shaderProgram);
-		gameworldStage.getBatch().setShader(shaderProgram);	
+		gameworldStage.getBatch().setShader(shaderProgram);
 		
-		//prepare CustomActionManager
-		gameworldStage.addActor(CustomActionManager.getInstance());
-
+		//get isDay flag [t:day f:night] from Preferences and check whether it is time to change daytime
+		if(Gdx.app.getPreferences("SETTINGS").getInteger("LASTDAYCHANGE", 0) + Main.DAYTIME_CHANGE_INTERVAL < TimeUtils.millis()/1000 ) {
+			Gdx.app.getPreferences("SETTINGS").putBoolean("DAYTIME", !isDay);
+			Gdx.app.getPreferences("SETTINGS").putInteger("LASTDAYCHANGE", (int) (TimeUtils.millis()/1000)).flush();
+		
+			CustomActionManager.getInstance().registerAction(new CustomAction(0.5f){
+				@Override
+				public void perform() {
+					toggleDaytime(Gdx.app.getPreferences("SETTINGS").getBoolean("DAYTIME", true));
+				}
+			});
+		}
+		
 		//create player
 		player = new GameActor("player");
 		player.setAvailableAnimations("diebottom", "dietop", "jump", "land", "slide", "standup", "startrunning");
@@ -152,18 +172,7 @@ public class GameScreen extends BasicScreen {
 	}
 	
 	@Override
-	protected void step(float delta) {	
-		if(shaderSaturation < 1 && shaderSaturation > 0.5f) {
-			shaderProgram.begin();
-			shaderProgram.setUniformf("saturation", shaderSaturation);
-			shaderProgram.setUniformf("brightness", shaderBrightness);
-			shaderProgram.end();
-		}
-		
-		//The magic is hidden outta here =|:^)>
-		if(Gdx.graphics.getFrameId()%500 == 0)
-			toggleDaytime();
-		
+	protected void step(float delta) {
 		//simulate physics and handle body contacts
 		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
@@ -174,6 +183,14 @@ public class GameScreen extends BasicScreen {
 		//generate obstacles
 		levelGenerator.generate();
 
+		//update shader if need to
+		if(shaderSaturation < 1 && shaderSaturation > 0.5f) {System.out.println("TOGGLE " + Gdx.graphics.getFrameId());
+			shaderProgram.begin();
+			shaderProgram.setUniformf("saturation", shaderSaturation);
+			shaderProgram.setUniformf("brightness", shaderBrightness);
+			shaderProgram.end();
+		}
+		
 		//act and draw main stage
 		middleBackgroundStage.getViewport().apply();
 		middleBackgroundStage.act(delta);
@@ -261,56 +278,57 @@ public class GameScreen extends BasicScreen {
 		Main.gameCallback.setBannerVisible(false);
 	}
 	
-	void toggleDaytime()
-	{
-		if(sky_day.getColor().a >= 1) {
-			//Switch to night
-			sky_day.addAction(Actions.alpha(0, 0.5f));
-			sun.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -560, 0.15f)));
-			moon.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 560, 0.25f), Actions.moveBy(0, -20, 0.1f)));
-			CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
-				@Override
-				public void perform() {
-					shaderSaturation -= 0.01f;
-					shaderBrightness -= 0.005f;
-					
-					if(getLoopCount() == 50) {
-						shaderSaturation = 0.5f;
-						shaderBrightness = 0.75f;
-					};
-				}
-			});
-		}
-		else {
-			//Switch to day
-			sky_day.addAction(Actions.alpha(1, 0.5f));
-			moon.addAction(Actions.sequence(Actions.moveBy(0, 20, 0.1f), Actions.moveBy(0, -560, 0.15f)));
-			sun.addAction(Actions.sequence(Actions.delay(0.35f), Actions.moveBy(0, 560, 0.25f), Actions.moveBy(0, -20, 0.1f)));
-			CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
-				@Override
-				public void perform() {
-					shaderSaturation += 0.01f;
-					shaderBrightness += 0.005f;
-					
-					if(getLoopCount() == 50) {
-						shaderSaturation = 1;
-						shaderBrightness = 1;
-					};
-				}
-			});
-		}
+	void toggleDaytime(boolean isDay)
+	{ 
+		//setting up values for animation
+		float sunXPos = -sun.getWidth()/2f;
+		float moonXPos = -moon.getWidth()/2f;
+		//Vector3 is more convenient than declaring 3 variables here
+		Vector3 sunDelay = isDay ? new Vector3(0.35f, 0.25f, 0.1f) : new Vector3(0, 0.1f, 0.15f);
+		Vector3 moonDelay = isDay ? new Vector3(0, 0.1f, 0.15f) : new Vector3(0.35f, 0.25f, 0.1f);
+		float middlePos = 160;
+		float sunFinalPos = isDay ? 140 : -400;
+		float moonFinalPos = isDay ? -400 : 140;
+		float skyDayAlpha = isDay ? 1 : 0;
+		final float saturationStep = isDay ? 0.01f : -0.01f;
+		final float brightnessStep = isDay ? 0.005f : -0.005f;
+		final float saturationDest = isDay ? 1f : 0.5f;
+		final float brightnessDest = isDay ? 1f : 0.75f;
+		
+		//applying animation
+		sky_day.addAction(Actions.alpha(skyDayAlpha, 0.5f));
+		sun.addAction(Actions.sequence(Actions.delay(sunDelay.x), Actions.moveTo(sunXPos, middlePos, sunDelay.y), Actions.moveTo(sunXPos, sunFinalPos, sunDelay.z)));
+		moon.addAction(Actions.sequence(Actions.delay(moonDelay.x), Actions.moveTo(moonXPos, middlePos, moonDelay.y), Actions.moveTo(moonXPos, moonFinalPos, moonDelay.z)));
+		CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
+			@Override
+			public void perform() {
+				shaderSaturation += saturationStep;
+				shaderBrightness += brightnessStep;
+				
+				if(getLoopCount() == 50) {
+					shaderSaturation = saturationDest;
+					shaderBrightness = brightnessDest;
+				};
+			}
+		});
 	}
 
-	protected void createBackgroundStage() {
-		sun = Image.get("sun").position(0, 140).centerX();
+	protected void createBackgroundStage(boolean isDay) { 
+		float sunPosition = isDay ? 140 : -400;
+		float moonPosition = isDay ? -400 : 140;
+		
+		sun = Image.get("sun").position(0, sunPosition).centerX();
 		backgroundStage.addActor(sun);
 		sun.toBack();
 		
-		moon = Image.get("moon").position(0, -400).centerX();
+		moon = Image.get("moon").position(0, moonPosition).centerX();
 		backgroundStage.addActor(moon);
 		moon.toBack();
 		
 		sky_day = Image.get("sky_day").width(Main.SCREEN_WIDTH).position(0, -Main.SCREEN_HEIGHT/2f).centerX();
+		if(!isDay){
+			sky_day.addAction(Actions.alpha(0));
+		}
 		backgroundStage.addActor(sky_day);
 		sky_day.toBack();
 		

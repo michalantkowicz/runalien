@@ -14,6 +14,7 @@ public class Main extends Game {
     // 20x40 in box2d units
     public static final float SCREEN_WIDTH = 1280f, SCREEN_HEIGHT = 800f;
     public final static float GROUND_LEVEL = -3.5f;
+	public static final int DAYTIME_CHANGE_INTERVAL = 120; //seconds
     public static boolean FADE_IN = true;
     
     public static GameCallback gameCallback;
