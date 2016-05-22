@@ -16,7 +16,7 @@ public class RunningPlugin extends AbstractPlugin {
 	private final int SPEED_EVERY_X_METERS = 100;
 	
 	//max speed level
-	private final float MAX_SPEED_LEVEL = 14;
+	private final float MAX_SPEED_LEVEL = Main.MAX_SPEED_LEVEL;
 	
 	//curent speed level (not the same what velocity)
 	private int speedLevel = 0;

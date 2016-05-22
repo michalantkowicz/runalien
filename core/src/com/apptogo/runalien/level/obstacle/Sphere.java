@@ -23,8 +23,8 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
 	
 	private final float BASE_OFFSET = 25f;
-	private final int MIN_LEVEL = 5;
-	private final int MAX_LEVEL = 10;
+	public static final int MIN_LEVEL = 5;
+	public static final int MAX_LEVEL = 10;
 	
 	private final float ROPE_WIDTH = 8.5f;
 
@@ -124,5 +124,15 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		//ropeBody.setTransform(getBody().getPosition().x + ROPE_WIDTH/2f, getBody().getPosition().y, 0);
 	}
 
+int poolIndex;
+	
+	@Override
+	public void setPoolIndex(int poolIndex) {
+		this.poolIndex = poolIndex;
+	}
 
+	@Override
+	public int getPoolIndex() {
+		return poolIndex;
+	}
 }

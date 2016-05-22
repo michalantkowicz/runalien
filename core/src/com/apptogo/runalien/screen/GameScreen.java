@@ -5,7 +5,6 @@ import com.apptogo.runalien.game.ImmaterialGameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.game.ParticleEffectActor;
 import com.apptogo.runalien.level.LevelGenerator;
-import com.apptogo.runalien.level.ObstaclesPool;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
@@ -48,7 +47,6 @@ public class GameScreen extends BasicScreen {
 	protected World world;
 	protected Stage middleBackgroundStage;
 	protected Stage gameworldStage;
-	protected ObstaclesPool obstaclesPool;
 	protected ContactListener contactListener = new ContactListener();
 	protected LevelGenerator levelGenerator;
 	protected GameActor player;
@@ -139,12 +137,6 @@ public class GameScreen extends BasicScreen {
 		//create infinite ground body
 		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).create();
 
-		//create obstacle pool
-		obstaclesPool = new ObstaclesPool();
-		
-		//create obstacle generator
-		levelGenerator = new LevelGenerator(player);
-		
 		//create Parallaxes
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "spaceRubbish").setFixedSpeed(0.002f).moveToY(UnitConverter.toBox2dUnits(1090)) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.004f).moveToY(2) );
@@ -169,6 +161,9 @@ public class GameScreen extends BasicScreen {
 			topScore.setPosition(sign.getX() + 1.6f - topScore.getWidth()/2f,  sign.getY() + 1.5f);
 			gameworldStage.addActor(topScore);
 		}
+		
+		//create obstacle generator
+		levelGenerator = new LevelGenerator(player);
 	}
 	
 	@Override
@@ -176,15 +171,12 @@ public class GameScreen extends BasicScreen {
 		//simulate physics and handle body contacts
 		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
-
-		//update pools
-		obstaclesPool.freePools();
 		
 		//generate obstacles
 		levelGenerator.generate();
 
 		//update shader if need to
-		if(shaderSaturation < 1 && shaderSaturation > 0.5f) {System.out.println("TOGGLE " + Gdx.graphics.getFrameId());
+		if(shaderSaturation < 1 && shaderSaturation > 0.5f) {
 			shaderProgram.begin();
 			shaderProgram.setUniformf("saturation", shaderSaturation);
 			shaderProgram.setUniformf("brightness", shaderBrightness);
@@ -428,10 +420,6 @@ public class GameScreen extends BasicScreen {
 
 	public Stage getGameworldStage() {
 		return gameworldStage;
-	}
-
-	public ObstaclesPool getObstaclesPool() {
-		return obstaclesPool;
 	}
 
 	public void removeTutorialButton() {

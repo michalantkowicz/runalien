@@ -2,7 +2,7 @@ package com.apptogo.runalien.level.segment;
 
 import com.apptogo.runalien.level.Spawnable;
 
-public class SegmentDefinition implements Spawnable{
+public class SegmentDefinition {
 	private int definition[][];
 	private int minLevel;
 	private int maxLevel;

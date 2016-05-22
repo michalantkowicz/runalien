@@ -167,4 +167,9 @@ public class BodyBuilder {
 		
 		return body;
 	}
+	
+	//Getters and setters
+	public Array<FixtureDef> getFixtureDefs() {
+		return this.fixtureDefs;
+	}
 }

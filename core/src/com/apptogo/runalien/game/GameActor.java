@@ -99,8 +99,6 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	
 
 	/* ----------- POOL STUFF ----------- */
-	private boolean alive;
-	
 	@Override
 	public void reset() {
 		body.setActive(false);
@@ -112,16 +110,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	}
 	
 	public void init() {
-		setAlive(true);
 		body.setActive(true);
 		Main.getInstance().getGameScreen().getGameworldStage().addActor(this);
-	}
-
-	public boolean isAlive() {
-		return alive;
-	}
-
-	public void setAlive(boolean alive) {
-		this.alive = alive;
 	}
 }

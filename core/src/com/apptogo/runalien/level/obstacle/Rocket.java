@@ -20,8 +20,8 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 8123133757302816575L;
 	
 	private float BASE_OFFSET = 25f;
-	private final int MIN_LEVEL = 0;
-	private final int MAX_LEVEL = 5;
+	public static final int MIN_LEVEL = 0;
+	public static final int MAX_LEVEL = 5;
 
 	private final float ROCKET_SPEED = -15;
 	
@@ -101,5 +101,17 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 		this.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f)));
 		
 		BASE_OFFSET = 25 + DELAY;
+	}
+
+int poolIndex;
+	
+	@Override
+	public void setPoolIndex(int poolIndex) {
+		this.poolIndex = poolIndex;
+	}
+
+	@Override
+	public int getPoolIndex() {
+		return poolIndex;
 	}
 }

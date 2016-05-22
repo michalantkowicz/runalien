@@ -16,6 +16,7 @@ public class Main extends Game {
     public final static float GROUND_LEVEL = -3.5f;
 	public static final int DAYTIME_CHANGE_INTERVAL = 120; //seconds
     public static boolean FADE_IN = true;
+    public static final float MAX_SPEED_LEVEL = 14f;
     
     public static GameCallback gameCallback;
 

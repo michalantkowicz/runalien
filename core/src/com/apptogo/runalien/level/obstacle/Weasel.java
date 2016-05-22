@@ -25,8 +25,8 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 8123133757302816575L;
 	
 	private final float BASE_OFFSET = 25f;
-	private final int MIN_LEVEL = 0;
-	private final int MAX_LEVEL = 5;
+	public static final int MIN_LEVEL = 0;
+	public static final int MAX_LEVEL = 5;
 
 	float a = 0;
 	
@@ -99,5 +99,15 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 		body.setTransform(getBody().getPosition().x - 4, getBody().getPosition().y - 0.12f, 0);
 	}
 
+int poolIndex;
+	
+	@Override
+	public void setPoolIndex(int poolIndex) {
+		this.poolIndex = poolIndex;
+	}
 
+	@Override
+	public int getPoolIndex() {
+		return poolIndex;
+	}
 }
