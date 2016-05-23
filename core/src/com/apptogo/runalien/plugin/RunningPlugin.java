@@ -13,7 +13,7 @@ public class RunningPlugin extends AbstractPlugin {
 	private final int BASIC_SPEED = 12;
 	
 	//interval in box2d meters after which run alien speeds up 
-	private final int SPEED_EVERY_X_METERS = 100;
+	private final int SPEED_EVERY_X_METERS = Main.SPEEDUP_INTERVAL;
 	
 	//max speed level
 	private final float MAX_SPEED_LEVEL = Main.MAX_SPEED_LEVEL;

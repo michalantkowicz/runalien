@@ -22,10 +22,10 @@ public class Segment extends GameActor implements Spawnable, Poolable{
 	public static int MIN_LEVEL = 0;
 	public static int MAX_LEVEL = (int)Main.MAX_SPEED_LEVEL;
 	
-	public Segment(String name, int minLevel, int maxLevel, float baseOffset) {
+	public Segment(String name, int minLevel, int maxLevel, float baseOffset) { 
 		super(name);
 		fields = new Array<Field>();
-		this.baseOffset = baseOffset;
+		this.baseOffset = baseOffset;System.out.println("HELLO WORLD!");
 	}
 
 	public void addField(String fieldName, BodyBuilder fieldBodyDef, Vector2 transform) {
@@ -76,6 +76,8 @@ public class Segment extends GameActor implements Spawnable, Poolable{
 	@Override
 	public void reset() {
 		super.reset();
+		
+		getBody().setTransform(-1000, Main.GROUND_LEVEL, 0);
 	}
 	
 	@Override
