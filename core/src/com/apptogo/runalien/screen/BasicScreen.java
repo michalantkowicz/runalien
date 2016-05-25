@@ -126,7 +126,7 @@ public abstract class BasicScreen implements Screen {
     }
     
     protected void handleInput() {
-    	if(Gdx.input.isKeyJustPressed(Keys.BACK)) {
+    	if(Gdx.input.isKeyJustPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
     		game.setScreen(new MenuScreen(game));
     	}
     }

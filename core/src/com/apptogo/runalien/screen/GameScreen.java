@@ -66,6 +66,8 @@ public class GameScreen extends BasicScreen {
 	
 	public GameScreen(Main game) {
 		super(game);
+		//TODO steps not disposed after going to menu 
+		//TODO check the daytime changing
 	}
 	
 	@Override
@@ -102,7 +104,7 @@ public class GameScreen extends BasicScreen {
 		
 		//get isDay flag [t:day f:night] from Preferences and check whether it is time to change daytime
 		if(Gdx.app.getPreferences("SETTINGS").getInteger("LASTDAYCHANGE", 0) + Main.DAYTIME_CHANGE_INTERVAL < TimeUtils.millis()/1000 ) {
-			Gdx.app.getPreferences("SETTINGS").putBoolean("DAYTIME", !isDay);
+			Gdx.app.getPreferences("SETTINGS").putBoolean("DAYTIME", !isDay).flush();
 			Gdx.app.getPreferences("SETTINGS").putInteger("LASTDAYCHANGE", (int) (TimeUtils.millis()/1000)).flush();
 		
 			CustomActionManager.getInstance().registerAction(new CustomAction(0.5f){

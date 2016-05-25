@@ -20,13 +20,13 @@ public class SegmentDefinitions {
 	
 	/* ------------------ LEVEL 0 ------------------ */
 
-	private static final SegmentDefinition CRATE_1 = new SegmentDefinition(0, 1, 6f,
+	private static final SegmentDefinition CRATE_1 = new SegmentDefinition(0, 14, 6f,
 			new int[][]
 			{ 
 				{ 1 },
 			});
 	
-	private static final SegmentDefinition LOG_3 = new SegmentDefinition(0, 5, 6f,
+	private static final SegmentDefinition LOG_3 = new SegmentDefinition(0, 14, 6f,
 			new int[][]
 			{ 
 				{ 5 },

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.apptogo.runalien.exception.LevelGeneratorException;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.segment.SegmentDefinition;
 import com.apptogo.runalien.level.segment.SegmentDefinitions;
@@ -68,23 +69,37 @@ public class LevelGenerator {
 	}
 	
 	public void fulfillObstaclesQueue(float maxObstaclePosition) {
+		for(IntArray possiblePools : poolsLevel.values())
+			if(possiblePools.size < 2)
+				throw new LevelGeneratorException("Every speedLevel (from 0 - "+Main.MAX_SPEED_LEVEL+") needs to have at least two possible obstacles!");
+		
 		float nextPosition = 17f;
 		Integer speedLevel;
+		
+		//Last generated value to avoid repeating - initialized with whatever value (it could be sth else)
+		int lastPoolIndex = 0; 
 		
 		while(nextPosition < maxObstaclePosition) {
 			speedLevel = (int)(nextPosition/Main.SPEEDUP_INTERVAL);
 			speedLevel = (speedLevel > Main.MAX_SPEED_LEVEL) ? Main.MAX_SPEED_LEVEL : speedLevel;
 			
-			int possiblePoolsIndex = speedLevel > 0 ? random.nextInt(speedLevel + 1) : 0;
-			IntArray possiblePools = poolsLevel.get(possiblePoolsIndex);
+			IntArray possiblePools = poolsLevel.get(speedLevel);
 			
 			if (possiblePools.size > 0) {
-				int drawnPoolIndex = random.nextInt(possiblePools.size);
+				possiblePools.shuffle();
+				
+				int drawnPoolIndex = possiblePools.first();
+				
+				//Avoid repating
+				//TODO make sure that every array has more than one element (as assertion)
+				if(drawnPoolIndex == lastPoolIndex)
+					drawnPoolIndex = possiblePools.peek();
+				lastPoolIndex = drawnPoolIndex;	
 				
 				obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel));
 				
 				//Now obtain obstacle just for a while to get it's BaseOffset
-				Pool<GameActor> drawnPool = pools.get(possiblePools.get(drawnPoolIndex));
+				Pool<GameActor> drawnPool = pools.get(drawnPoolIndex);
 				GameActor obstacle = drawnPool.obtain();
 				
 				nextPosition += ((Spawnable) obstacle).getBaseOffset() + speedLevel;
@@ -109,15 +124,16 @@ public class LevelGenerator {
 			activeObstacles.add(randomObstacle);
 			
 			obstacleToSet = obstaclesQueue.pollFirst();
+			System.out.println(obstacleToSet.poolIndex);
 		}
 
 		//free out of screen obstacles
 		freePools();
 		
-		for(Pool<GameActor> p : pools) {
-			System.out.print(p.getFree()+", ");
-		}
-		System.out.println();
+//		for(Pool<GameActor> p : pools) {
+//			System.out.print(p.getFree()+", ");
+//		}
+//		System.out.println();
 	}
 	
 	private void freePools() {
