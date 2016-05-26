@@ -88,9 +88,9 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	{		
 		if(!sliding){
 			actor.changeAnimation("slide");
-			soundHandler.playSound("slide");
 			soundHandler.pauseSound("scream");
 			soundHandler.pauseSound("run");
+			soundHandler.playSound("slide");
 		}
 		
 		sliding = true;
