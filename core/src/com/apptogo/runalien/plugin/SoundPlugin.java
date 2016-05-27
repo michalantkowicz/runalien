@@ -11,7 +11,8 @@ public class SoundPlugin extends AbstractPlugin {
 
 	private Map<String, Sound> sounds = new HashMap<String, Sound>();
 
-	//trzeba dodac zmiane glosnosci sounda w zaleznosci od pozycji kamery
+	//TODO add sound volume handling (player position)
+	//TODO keep references of all actually played sound so we can easly stop all of them
 
 	public SoundPlugin(String... soundNames) {
 		for (String soundName : soundNames)
@@ -68,6 +69,15 @@ public class SoundPlugin extends AbstractPlugin {
 		get(soundName).resume();
 	}
 
+	/**
+	 * Stops all sounds (not played staticly)
+	 */
+	public void stopAllSounds(){
+		for (Sound sound : sounds.values()){
+			sound.stop();
+		}
+	}
+	
 	private Sound get(String soundName) {
 		Sound sound = sounds.get(soundName);
 		if (sound == null)
