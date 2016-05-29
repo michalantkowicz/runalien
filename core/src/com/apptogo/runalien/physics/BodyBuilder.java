@@ -108,10 +108,10 @@ public class BodyBuilder {
 		
 		for(int i = 0; i < vertices.length/2; i++)
 		{
-			if(vertices[i] < min_x) min_x = vertices[i];
-			if(vertices[i] > max_x) max_x = vertices[i];
-			if(vertices[i + 1] < min_y) min_y = vertices[i];
-			if(vertices[i + 1] > max_y) max_y = vertices[i];				
+			if(vertices[i*2] < min_x) min_x = vertices[i*2];
+			if(vertices[i*2] > max_x) max_x = vertices[i*2];
+			if(vertices[i*2 + 1] < min_y) min_y = vertices[i*2 + 1];
+			if(vertices[i*2 + 1] > max_y) max_y = vertices[i*2 + 1];				
 		}
 			
 		fixtureDatas.peek().width = max_x - min_x;
@@ -153,6 +153,16 @@ public class BodyBuilder {
 	public BodyBuilder origin(float x, float y)
 	{
 		//set fixture position
+		return this;
+	}
+	
+	public BodyBuilder categoryBits(short categoryBits) {
+		fixtureDefs.peek().filter.categoryBits = categoryBits;
+		return this;
+	}
+	
+	public BodyBuilder maskBits(short maskBits) {
+		fixtureDefs.peek().filter.maskBits = maskBits;
 		return this;
 	}
 		

@@ -137,7 +137,7 @@ public class GameScreen extends BasicScreen {
 		player.addPlugin(new TouchSteeringPlugin());
 		
 		//create infinite ground body
-		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).create();
+		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).categoryBits(Main.GROUND_BITS).create();
 
 		//create Parallaxes
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "spaceRubbish").setFixedSpeed(0.002f).moveToY(UnitConverter.toBox2dUnits(1090)) );

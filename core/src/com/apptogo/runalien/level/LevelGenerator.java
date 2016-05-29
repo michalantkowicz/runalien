@@ -10,6 +10,7 @@ import java.util.Random;
 
 import com.apptogo.runalien.exception.LevelGeneratorException;
 import com.apptogo.runalien.game.GameActor;
+import com.apptogo.runalien.level.obstacle.CutBottom;
 import com.apptogo.runalien.level.obstacle.FallingSphere;
 import com.apptogo.runalien.level.obstacle.Rocket;
 import com.apptogo.runalien.level.segment.SegmentGenerator;
@@ -103,15 +104,15 @@ public class LevelGenerator {
 				lastPoolIndex = drawnPoolIndex;	
 								
 				//If rocket generate sequence
-				if(drawnPoolIndex == 1) {
-					for(int i = 0; i <= 3; i++)
-					{
-						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, i));
-						nextPosition += 7.5f;
-					}
-				}
-				else
-					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel));
+//				if(drawnPoolIndex == 1) {
+//					for(int i = 0; i <= 3; i++)
+//					{
+//						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, i));
+//						nextPosition += 7.5f;
+//					}
+//				}
+//				else
+					obstaclesQueue.add(new QueuedObstacle(nextPosition, 0, speedLevel));
 				
 				//Now obtain obstacle just for a while to get it's BaseOffset
 				Pool<GameActor> drawnPool = pools.get(drawnPoolIndex);
@@ -195,7 +196,7 @@ public class LevelGenerator {
 		Pool<GameActor> pool = new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
-				GameActor obstacleActor = new FallingSphere("fallingSphere");
+				GameActor obstacleActor = new CutBottom("cutbotom");
 				((Spawnable)obstacleActor).setPoolIndex(poolIndex);
 				return obstacleActor;
 			}
