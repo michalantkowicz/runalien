@@ -1,5 +1,7 @@
 package com.apptogo.runalien.level.obstacle;
 
+import java.util.Random;
+
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.level.segment.SegmentFieldDefinitions;
@@ -14,22 +16,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RopeJoint;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
-	static int id = 0; int iid = 0;
 	private final float BASE_OFFSET = 25f;
 	public static final int MIN_LEVEL = 0;
-	public static final int MAX_LEVEL = 5;
+	public static final int MAX_LEVEL = 14;
 	
-	private final float ROPE_WIDTH = 8.5f;
-	
-	private final float MAX_ROPE_LENGTH = 6.6f;
-	private final int FALL_INTERVAL = 20;
+	private float MAX_ROPE_LENGTH = 6.6f;
+	private final int FALL_INTERVAL = 15;
 	private final float STEP = 2.2f;
 	
 	private boolean doFall = false;
@@ -47,9 +45,9 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private World world;
 
 	public FallingSphere(String name) {
-		super(name);
+		super(name);System.out.println("FALLING");
 		world = Main.getInstance().getGameScreen().getWorld();
-		iid = ++id;
+
 		final float x = 10;
 		final float y = 6;
 		
@@ -61,7 +59,7 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 		
 		chain = ResourcesManager.getInstance().getAtlasRegion("chain");
 		
-		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(0.7f).friction(0.5f).position(x + ROPE_WIDTH, y).sensor(true).create();	
+		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(0.7f).friction(0.5f).position(x + 0.2f, y + 0.2f).sensor(true).create();	
 		ballBody.setTransform(ballBody.getPosition(), MathUtils.degRad * 30f);
 		ballBody.setAngularDamping(5f);
 		
@@ -91,7 +89,7 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
     		doFall = true;
     	    	
     	if(doFall && interval > FALL_INTERVAL) {
-    		joint.setMaxLength(joint.getMaxLength() + STEP);
+    		joint.setMaxLength((joint.getMaxLength() + STEP) > MAX_ROPE_LENGTH ? MAX_ROPE_LENGTH : ((joint.getMaxLength() + STEP)));
     		doFall = false;
     		interval = 0;
     	}
@@ -129,14 +127,30 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void reset() {
 		super.reset();
+		
+		getBody().setTransform(getBody().getPosition().x - 1000,  getBody().getPosition().y, 0);
+		ballBody.setTransform(ballBody.getPosition().x - 1000,  ballBody.getPosition().y, 0);
 	}
 
 	@Override
 	public void init() {
 		super.init();
-		ballBody.setTransform(getBody().getPosition().x, getBody().getPosition().y - 0.5f, 0);
+		joint.setMaxLength(2.2f);
+		ballBody.setTransform(getBody().getPosition().x + 0.2f, getBody().getPosition().y - 1.5f, MathUtils.degRad * 180f);
+		
+		doFall = false;
+		interval = 0;
+		
+		if(random.nextDouble() < 0.1)
+			MAX_ROPE_LENGTH = 4.4f;
+		else if (random.nextDouble() < 0.6)
+			MAX_ROPE_LENGTH = 6.6f;
+		else
+			MAX_ROPE_LENGTH = 8f;
 	}
 
+	Random random = new Random();
+	
 int poolIndex;
 	
 	@Override

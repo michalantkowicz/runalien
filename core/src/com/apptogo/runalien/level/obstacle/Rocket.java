@@ -21,7 +21,7 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	
 	private float BASE_OFFSET = 25f;
 	public static final int MIN_LEVEL = 0;
-	public static final int MAX_LEVEL = 5;
+	public static final int MAX_LEVEL = 14;
 
 	private final float ROCKET_SPEED = -15;
 	
@@ -32,6 +32,7 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	private World world;
 
 	int counter = 0;
+	int level = 0;
 	
 	public Rocket(String name) {
 		super(name);
@@ -92,15 +93,19 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void init(int speedLevel) {
 		super.init();
-		System.out.println("ROCKET!");
+
 		float DELAY = (-ROCKET_SPEED + speedLevel + 12);
 		
-		body.setTransform(getBody().getPosition().x + DELAY, getBody().getPosition().y, 0);
+		body.setTransform(getBody().getPosition().x + DELAY, -2.9f + level, 0);
 		body.setLinearVelocity(ROCKET_SPEED, 0);
 		
 		this.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f)));
 		
 		BASE_OFFSET = 25 + DELAY;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 int poolIndex;
