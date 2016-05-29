@@ -97,6 +97,15 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		return plugin;
 	}
 	
+	/**
+	 * @param plugin class. Always getSimpleName() of plugin class
+	 * @return plugin
+	 * @throws PluginException 
+	 */
+	public <T extends AbstractPlugin> T getPlugin(Class<T> clazz) throws PluginException{
+		return getPlugin(clazz.getSimpleName());
+	}
+	
 
 	/* ----------- POOL STUFF ----------- */
 	@Override

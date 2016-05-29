@@ -54,7 +54,7 @@ public class DeathPlugin extends AbstractPlugin {
 
 	@Override
 	public void setUpDependencies() {	
-		soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
+		soundHandler = actor.getPlugin(SoundPlugin.class);
 		
 		if(body.getFixtureList().size <= 0)
 			throw new PluginDependencyException("Actor's body must have at least one (default) fixture!");

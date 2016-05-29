@@ -137,7 +137,7 @@ public class TutorialScreen extends GameScreen {
 				break;
 				
 			case START:
-				if(currentGroup.getActions().size == 0 && ((RunningPlugin)player.getPlugin("RunningPlugin")).isStarted()) {
+				if(currentGroup.getActions().size == 0 && player.getPlugin(RunningPlugin.class).isStarted()) {
 					currentPhase = TutorialPhase.TRANSITION;
 					nextPhase = TutorialPhase.SLIDEPREPARE;
 					fadeOutCurrentGroup(0.5f);

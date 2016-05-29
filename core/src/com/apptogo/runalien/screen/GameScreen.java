@@ -270,6 +270,7 @@ public class GameScreen extends BasicScreen {
 		world.dispose();
 		gameworldStage.dispose();
 		Main.gameCallback.setBannerVisible(false);
+		player.getPlugin(SoundPlugin.class).stopAllSounds();
 	}
 	
 	void toggleDaytime(boolean isDay)

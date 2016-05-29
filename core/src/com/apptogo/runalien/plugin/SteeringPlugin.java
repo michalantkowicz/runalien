@@ -161,9 +161,9 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	
 	@Override
 	public void setUpDependencies() {
-		soundHandler = actor.getPlugin(SoundPlugin.class.getSimpleName());
-		running = actor.getPlugin(RunningPlugin.class.getSimpleName());
-		deathPlugin = actor.getPlugin(DeathPlugin.class.getSimpleName());
+		soundHandler = actor.getPlugin(SoundPlugin.class);
+		running = actor.getPlugin(RunningPlugin.class);
+		deathPlugin = actor.getPlugin(DeathPlugin.class);
 		
 						
 		//Default fixture check
