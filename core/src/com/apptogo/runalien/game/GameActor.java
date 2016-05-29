@@ -114,6 +114,10 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 		remove();
 	}
 	
+	public void init(int speedLevel, float arg) {
+		init();
+	}
+	
 	public void init(int speedLevel) {
 		init();
 	}

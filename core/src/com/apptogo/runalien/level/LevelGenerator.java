@@ -25,16 +25,17 @@ public class LevelGenerator {
 		public float position;
 		public int poolIndex;
 		public int speedLevel;
-		public int rocketLevel;
+		//additional argument for the obstacle (like cutBottom angle or rocket level)
+		public float arg;
 		public QueuedObstacle(float position, int poolIndex, int speedLevel) {
 			this.position = position;
 			this.poolIndex = poolIndex;
 			this.speedLevel = speedLevel;
-			this.rocketLevel = 0;
+			this.arg = 0;
 		}
-		public QueuedObstacle(float position, int poolIndex, int speedLevel, int rocketLevel) {
+		public QueuedObstacle(float position, int poolIndex, int speedLevel, float arg) {
 			this(position, poolIndex, speedLevel);
-			this.rocketLevel = rocketLevel;
+			this.arg = arg;
 		}
 	}
 	
@@ -51,6 +52,9 @@ public class LevelGenerator {
 	
 	private final float SPAWN_DISTANCE = 15f;
 	private final float DISAPPEAR_DISTANCE = 8f;
+	
+	private int ROCKET_POOL_INDEX;
+	private int CUTBOTTOM_POOL_INDEX;
 
 	private GameActor player;
 
@@ -104,14 +108,25 @@ public class LevelGenerator {
 				lastPoolIndex = drawnPoolIndex;	
 								
 				//If rocket generate sequence
-//				if(drawnPoolIndex == 1) {
-//					for(int i = 0; i <= 3; i++)
-//					{
-//						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, i));
-//						nextPosition += 7.5f;
-//					}
-//				}
-//				else
+				if(drawnPoolIndex == ROCKET_POOL_INDEX) {
+					IntArray rocketLevels = new IntArray();
+					int rocketsCount = random.nextInt(4) + 1;
+					for(int i = 0; i <= rocketsCount; i++)
+						rocketLevels.add(i);
+					
+					rocketLevels.shuffle();
+					
+					for(int i = 0; i < rocketLevels.size; i++) {
+						int rocketLevel = rocketLevels.get(i);
+						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, rocketLevel));
+						nextPosition += 7.5f;
+					}
+				}
+				//If cutbottom random the obstacle start angle
+				else if(drawnPoolIndex == CUTBOTTOM_POOL_INDEX) {
+					obstaclesQueue.add(new QueuedObstacle(nextPosition, 0, speedLevel, random.nextFloat() - 0.8f));
+				}
+				else
 					obstaclesQueue.add(new QueuedObstacle(nextPosition, 0, speedLevel));
 				
 				//Now obtain obstacle just for a while to get it's BaseOffset
@@ -135,12 +150,9 @@ public class LevelGenerator {
 			Pool<GameActor> drawnPool = pools.get(obstacleToSet.poolIndex);
 				
 			GameActor randomObstacle = drawnPool.obtain();
-			
-			if(obstacleToSet.rocketLevel != 0)
-				((Rocket)randomObstacle).setLevel(obstacleToSet.rocketLevel);
-			
+
 			randomObstacle.getBody().setTransform(obstacleToSet.position, randomObstacle.getBody().getPosition().y, 0);
-			randomObstacle.init(obstacleToSet.speedLevel);
+			randomObstacle.init(obstacleToSet.speedLevel, obstacleToSet.arg);
 			activeObstacles.add(randomObstacle);
 			
 			obstacleToSet = obstaclesQueue.pollFirst();
@@ -193,6 +205,7 @@ public class LevelGenerator {
 		
 		setAvailablePoolLevels(pools.size, FallingSphere.MIN_LEVEL, FallingSphere.MAX_LEVEL);
 		final int poolIndex = pools.size;
+		CUTBOTTOM_POOL_INDEX = pools.size;
 		Pool<GameActor> pool = new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
@@ -209,6 +222,7 @@ public class LevelGenerator {
 		
 		setAvailablePoolLevels(pools.size, Rocket.MIN_LEVEL, Rocket.MAX_LEVEL);
 		final int poolIndex2 = pools.size;
+		ROCKET_POOL_INDEX = pools.size;
 		pool = new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {

@@ -32,7 +32,6 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	private World world;
 
 	int counter = 0;
-	int level = 0;
 	
 	public Rocket(String name) {
 		super(name);
@@ -91,7 +90,7 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	}
 
 	@Override
-	public void init(int speedLevel) {
+	public void init(int speedLevel, float level) {
 		super.init();
 
 		float DELAY = (-ROCKET_SPEED + speedLevel + 12);
@@ -102,10 +101,6 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 		this.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f)));
 		
 		BASE_OFFSET = 25 + DELAY;
-	}
-	
-	public void setLevel(int level) {
-		this.level = level;
 	}
 
 int poolIndex;
