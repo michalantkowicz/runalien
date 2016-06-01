@@ -2,10 +2,7 @@ package com.apptogo.runalien.level.obstacle;
 
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.Spawnable;
-import com.apptogo.runalien.level.segment.SegmentFieldDefinitions;
 import com.apptogo.runalien.main.Main;
-import com.apptogo.runalien.manager.CustomAction;
-import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.tools.UnitConverter;
@@ -22,16 +19,16 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class Sphere extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
 	
-	private final float BASE_OFFSET = 25f;
-	public static final int MIN_LEVEL = 5;
-	public static final int MAX_LEVEL = 10;
+	private float ROPE_WIDTH = 8.7f;
 	
-	private final float ROPE_WIDTH = 8.5f;
+	private final float BASE_OFFSET = 25f;
+	public static final int MIN_LEVEL = 3;
+	public static final int MAX_LEVEL = 7;
 
 	private AtlasRegion ball;
 	private AtlasRegion chain;
 	private Vector2 ballSize;
-	private Vector2 ballPositionOffset = (new Vector2(ROPE_WIDTH, 0)).setAngle(-25);
+	private Vector2 ballPositionOffset;
 	
 	private RopeJoint joint;
 	private float ropeLength, startU2Length;
@@ -42,9 +39,15 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	
 	private World world;
 
-	public Sphere(String name) {
+	public Sphere(String name, boolean shortRope) {
 		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();
+		
+		if(shortRope) {
+			ROPE_WIDTH -= 1;
+		}
+		
+		ballPositionOffset = (new Vector2(0, -ROPE_WIDTH)).rotate(7.5f);
 		
 		final float x = 10;
 		final float y = 6.2f;
@@ -57,9 +60,9 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		
 		chain = ResourcesManager.getInstance().getAtlasRegion("chain");
 		
-		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(1).friction(0.5f).position(x + ballPositionOffset.x, ballPositionOffset.y).sensor(true).create();	
+		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(1).friction(0.5f).position(x + ballPositionOffset.x, ballPositionOffset.y).sensor(true).create();
 		//ropeBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ROPE_WIDTH, 0.1f).sensor(true).position(x + ROPE_WIDTH/2f, y).create();
-
+		
 		setBody(anchor);
 		
 		RopeJointDef jointDef = new RopeJointDef();
@@ -82,6 +85,11 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		super.act(delta);
 		ropeLength = ballBody.getPosition().cpy().add(joint.getLocalAnchorB()).sub(anchor.getPosition()).len();
 		
+//		float rightEdge = Main.getInstance().getGameScreen().getGameworldStage().getCamera().position.x + UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH/2f);
+//		
+//		if(!ballBody.isActive() && ballBody.getPosition().x <= rightEdge + 4f) {
+//			ballBody.setActive(true);
+//		}
 		//ballBody.setLinearDamping(0.3f);
 	}
 	
@@ -115,13 +123,15 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void reset() {
 		super.reset();
+		getBody().setTransform(getBody().getPosition().x - 1000,  getBody().getPosition().y, 0);
+		ballBody.setTransform(getBody().getPosition().x + ballPositionOffset.x, getBody().getPosition().y + ballPositionOffset.y, 0);
 	}
 
 	@Override
-	public void init() { System.out.println("SPHERE INIT");
+	public void init() {
 		super.init();
-		ballBody.setTransform(getBody().getPosition().x + ballPositionOffset.x, getBody().getPosition().y + ballPositionOffset.y, 0);		
-		//ropeBody.setTransform(getBody().getPosition().x + ROPE_WIDTH/2f, getBody().getPosition().y, 0);
+		ballBody.setTransform(getBody().getPosition().x + ballPositionOffset.x, getBody().getPosition().y + ballPositionOffset.y, 0);
+		ballBody.setLinearVelocity(35, 0);
 	}
 
 int poolIndex;

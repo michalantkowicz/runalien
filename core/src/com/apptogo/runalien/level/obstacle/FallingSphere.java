@@ -23,8 +23,8 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
 	private final float BASE_OFFSET = 25f;
-	public static final int MIN_LEVEL = 0;
-	public static final int MAX_LEVEL = 14;
+	public static final int MIN_LEVEL = 2;
+	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 	
 	private float MAX_ROPE_LENGTH = 6.6f;
 	private final int FALL_INTERVAL = 15;

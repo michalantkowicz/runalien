@@ -25,8 +25,8 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 8123133757302816575L;
 	
 	private final float BASE_OFFSET = 25f;
-	public static final int MIN_LEVEL = 0;
-	public static final int MAX_LEVEL = 5;
+	public static final int MIN_LEVEL = 2;
+	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 
 	float a = 0;
 	
@@ -35,7 +35,7 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 	private Body body;
 	
 	private World world;
-
+	//TODO weasel reset
 	public Weasel(String name) {
 		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();

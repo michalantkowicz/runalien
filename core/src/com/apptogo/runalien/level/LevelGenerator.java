@@ -13,6 +13,10 @@ import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.obstacle.CutBottom;
 import com.apptogo.runalien.level.obstacle.FallingSphere;
 import com.apptogo.runalien.level.obstacle.Rocket;
+import com.apptogo.runalien.level.obstacle.Sphere;
+import com.apptogo.runalien.level.obstacle.Weasel;
+import com.apptogo.runalien.level.segment.SegmentDefinition;
+import com.apptogo.runalien.level.segment.SegmentDefinitions;
 import com.apptogo.runalien.level.segment.SegmentGenerator;
 import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.utils.Array;
@@ -102,7 +106,6 @@ public class LevelGenerator {
 				int drawnPoolIndex = possiblePools.first();
 				
 				//Avoid repating
-				//TODO make sure that every array has more than one element (as assertion)
 				if(drawnPoolIndex == lastPoolIndex)
 					drawnPoolIndex = possiblePools.peek();
 				lastPoolIndex = drawnPoolIndex;	
@@ -124,10 +127,10 @@ public class LevelGenerator {
 				}
 				//If cutbottom random the obstacle start angle
 				else if(drawnPoolIndex == CUTBOTTOM_POOL_INDEX) {
-					obstaclesQueue.add(new QueuedObstacle(nextPosition, 0, speedLevel, random.nextFloat() - 0.8f));
+					obstaclesQueue.add(new QueuedObstacle(nextPosition, CUTBOTTOM_POOL_INDEX, speedLevel, random.nextFloat() - 0.8f));
 				}
 				else
-					obstaclesQueue.add(new QueuedObstacle(nextPosition, 0, speedLevel));
+					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel));
 				
 				//Now obtain obstacle just for a while to get it's BaseOffset
 				Pool<GameActor> drawnPool = pools.get(drawnPoolIndex);
@@ -186,80 +189,99 @@ public class LevelGenerator {
 		logger.debug("Creating obstacles pools: ");
 				
 		//create segments
-//		for (final SegmentDefinition definition : SegmentDefinitions.SEGMENT_DEFINITIONS) {
-//			setAvailablePoolLevels(pools.size, definition.getMinLevel(), definition.getMaxLevel());
-//			final int poolIndex = pools.size;
-//			Pool<GameActor> pool = new Pool<GameActor>(4) {
-//				@Override
-//				protected GameActor newObject() {
-//					GameActor obstacleActor = segmentGenerator.getSegment(definition);
-//					((Spawnable)obstacleActor).setPoolIndex(poolIndex);
-//					return obstacleActor;
-//				}
-//			};
-//			
-//			pools.add(pool);
-//			fulfillPool(pool, 1);
-//		}
+		for (final SegmentDefinition definition : SegmentDefinitions.SEGMENT_DEFINITIONS) {
+			final int poolIndex = pools.size;
+			setAvailablePoolLevels(pools.size, definition.getMinLevel(), definition.getMaxLevel());
+			pools.add( new Pool<GameActor>(4) {
+				@Override
+				protected GameActor newObject() {
+					GameActor obstacleActor = segmentGenerator.getSegment(definition);
+					((Spawnable)obstacleActor).setPoolIndex(poolIndex);
+					return obstacleActor;
+				}
+			});
+			fulfillPool(pools.peek(), 2);
+		}
 		
-		
-		setAvailablePoolLevels(pools.size, FallingSphere.MIN_LEVEL, FallingSphere.MAX_LEVEL);
-		final int poolIndex = pools.size;
+		//create cutbottom
+		final int cutbottomPoolIndex = pools.size;
+		setAvailablePoolLevels(pools.size, CutBottom.MIN_LEVEL, CutBottom.MAX_LEVEL);
 		CUTBOTTOM_POOL_INDEX = pools.size;
-		Pool<GameActor> pool = new Pool<GameActor>(4) {
+		pools.add( new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
 				GameActor obstacleActor = new CutBottom("cutbotom");
-				((Spawnable)obstacleActor).setPoolIndex(poolIndex);
+				((Spawnable)obstacleActor).setPoolIndex(cutbottomPoolIndex);
 				return obstacleActor;
 			}
-		};
+		});
+		fulfillPool(pools.peek(), 2);
 		
-		pools.add(pool);
-		fulfillPool(pool, 1);
+		//create fallingsphere
+		final int fallingspherePoolIndex = pools.size;
+		setAvailablePoolLevels(pools.size, FallingSphere.MIN_LEVEL, FallingSphere.MAX_LEVEL);
+		pools.add( new Pool<GameActor>(4) {
+			@Override
+			protected GameActor newObject() {
+				GameActor obstacleActor = new FallingSphere("fallingsphere");
+				((Spawnable)obstacleActor).setPoolIndex(fallingspherePoolIndex);
+				return obstacleActor;
+			}
+		});
+		fulfillPool(pools.peek(), 2);
 		
-		//---
-		
+		//create rocket
+		final int rocketPoolIndex = pools.size;
 		setAvailablePoolLevels(pools.size, Rocket.MIN_LEVEL, Rocket.MAX_LEVEL);
-		final int poolIndex2 = pools.size;
 		ROCKET_POOL_INDEX = pools.size;
-		pool = new Pool<GameActor>(4) {
+		pools.add( new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
 				GameActor obstacleActor = new Rocket("rocket");
-				((Spawnable)obstacleActor).setPoolIndex(poolIndex2);
+				((Spawnable)obstacleActor).setPoolIndex(rocketPoolIndex);
 				return obstacleActor;
 			}
-		};
+		});
+		fulfillPool(pools.peek(), 10); //we need more rocket since max count in sequence is 5
 		
-		pools.add(pool);
-		fulfillPool(pool, 1);
+		//create sphere short
+		final int sphereshortPoolIndex = pools.size;
+		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
+		pools.add( new Pool<GameActor>(4) {
+			@Override
+			protected GameActor newObject() {
+				GameActor obstacleActor = new Sphere("sphere", true);
+				((Spawnable)obstacleActor).setPoolIndex(sphereshortPoolIndex);
+				return obstacleActor;
+			}
+		});
+		fulfillPool(pools.peek(), 2);
 		
+		//create sphere long
+		final int spherelongPoolIndex = pools.size;
+		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
+		pools.add( new Pool<GameActor>(4) {
+			@Override
+			protected GameActor newObject() {
+				GameActor obstacleActor = new Sphere("sphere", false);
+				((Spawnable)obstacleActor).setPoolIndex(spherelongPoolIndex);
+				return obstacleActor;
+			}
+		});
+		fulfillPool(pools.peek(), 2);
 		
-		
-//		//create spheres
-//		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
-//		pools.add(new Pool<GameActor>(4) {
-//			@Override
-//			protected GameActor newObject() {
-//				GameActor obstacleActor = new Sphere("sphere");
-//				obstacleActor.setAlive(false);
-//
-//				return obstacleActor;
-//			}
-//		});
-//		
-//		//create weasles
-//		setAvailablePoolLevels(pools.size, Rocket.MIN_LEVEL, Rocket.MAX_LEVEL);
-//		pools.add(new Pool<GameActor>(4) {
-//			@Override
-//			protected GameActor newObject() {
-//				GameActor obstacleActor = new Rocket("rocket");
-//				obstacleActor.setAlive(false);
-//
-//				return obstacleActor;
-//			}
-//		});
+		//create weasel
+		final int weaselPoolIndex = pools.size;
+		setAvailablePoolLevels(pools.size, Weasel.MIN_LEVEL, Weasel.MAX_LEVEL);
+		pools.add( new Pool<GameActor>(4) {
+			@Override
+			protected GameActor newObject() {
+				GameActor obstacleActor = new Weasel("weasel");
+				((Spawnable)obstacleActor).setPoolIndex(weaselPoolIndex);
+				return obstacleActor;
+			}
+		});
+		fulfillPool(pools.peek(), 2);
 	}
 	
 	private void fulfillPool(Pool<GameActor> pool, int objectsCount) {
