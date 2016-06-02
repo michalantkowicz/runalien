@@ -20,28 +20,23 @@ public class SegmentDefinitions {
 	
 	/* ------------------ LEVEL 0 ------------------ */
 
-	private static final SegmentDefinition CRATE_1 = new SegmentDefinition(0, 14, 6f,
-			new int[][]
-			{ 
-				{ 1 },
-			});
+	final static float DEFAULT_OFFSET = 7f;
 	
-	private static final SegmentDefinition LOG_3 = new SegmentDefinition(0, 14, 6f,
+	private static final SegmentDefinition LOG_1 = new SegmentDefinition(0, 2, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 5 },
-				{ 5 },
-				{ 5 },
 			});
 	
-	private static final SegmentDefinition LOG_2 = new SegmentDefinition(0, 3, 6f,
+	private static final SegmentDefinition LOG_3 = new SegmentDefinition(0, 4, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 5 },
 				{ 5 },
+				{ 5 },
 			});
 	
-	private static final SegmentDefinition BIG_BELL = new SegmentDefinition(0, 5, 6f,
+	private static final SegmentDefinition BIG_BELL = new SegmentDefinition(0, 4, DEFAULT_OFFSET - 2,
 			new int[][]
 			{ 
 				{ 6 },
@@ -54,7 +49,7 @@ public class SegmentDefinitions {
 				{ 0 },
 			});
 	/* ------------------ LEVEL 1 ------------------ */
-	private static final SegmentDefinition LOG_BELL = new SegmentDefinition(1, 5, 6f,
+	private static final SegmentDefinition LOG_BELL = new SegmentDefinition(1, 5, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 6 },
@@ -68,60 +63,30 @@ public class SegmentDefinitions {
 				{ 5 },
 			});
 
-	private static final SegmentDefinition BIG_BELL_CRATE = new SegmentDefinition(1, 5, 6f,
+	private static final SegmentDefinition BELL_THEN_BELL_AND_LOG = new SegmentDefinition(1, 5, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 2, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 6, 0, 0, 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+				{ 6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 },
 			});
 
 	/* ------------------ LEVEL 2 ------------------ */
 	
-	private static final SegmentDefinition BIG_CRATE = new SegmentDefinition(2, 4, 6f,
+	private static final SegmentDefinition BIG_CRATE = new SegmentDefinition(2, 4, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 3, 3 },
-				{ 3, 3 },
+				{ 3, 3, 0},
+				{ 3, 3, 1},
 			});
 	
-	private static final SegmentDefinition SMALL_LOG_PYRAMID = new SegmentDefinition(2, 4, 6f,
-			new int[][]
-			{ 
-				{ 0, 5, 0 },
-				{ 5, 5, 5 },
-			});
-	
-	private static final SegmentDefinition LOG_4 = new SegmentDefinition(2, 5, 6f,
-			new int[][]
-			{ 
-				{ 5 },
-				{ 5 },
-				{ 5 },
-				{ 5 },
-			});
-	/* ------------------ LEVEL 3 ------------------ */
-	private static final SegmentDefinition PYRAMID_BELL = new SegmentDefinition(3, 6, 6f,
-			new int[][]
-			{ 
-				{ 0, 6, 0 },
-				{ 0, 6, 0 },
-				{ 0, 6, 0 },
-				{ 0, 0, 0 },
-				{ 0, 0, 0 },
-				{ 0, 0, 0 },
-				{ 0, 0, 0 },
-				{ 0, 5, 0 },
-				{ 5, 5, 5 },
-			});
-	
-	private static final SegmentDefinition BIG_CRATE_WITH_SMALL = new SegmentDefinition(3, 6, 6f,
+	private static final SegmentDefinition BIG_CRATE_WITH_SMALL = new SegmentDefinition(2, 6, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 0, 1 },
@@ -129,54 +94,51 @@ public class SegmentDefinitions {
 				{ 3, 3 },
 			});
 	
-	private static final SegmentDefinition TWO_BIG_CRATES = new SegmentDefinition(3, 7, 6f,
+	private static final SegmentDefinition SMALL_LOG_PYRAMID = new SegmentDefinition(2, 4, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 4, 4 },
-				{ 4, 4 },
-				{ 0, 0 },
-				{ 0, 0 },
-				{ 0, 0 },
-				{ 0, 0 },
-				{ 3, 3 },
-				{ 3, 3 },
+				{ 0, 5, 0 },
+				{ 5, 5, 5 },
 			});
-	/* ------------------ LEVEL 4 ------------------ */
-	private static final SegmentDefinition LONG_SLIDE_BELLS = new SegmentDefinition(4, 8, 5f,
+	/* ------------------ LEVEL 3 ------------------ */
+	private static final SegmentDefinition PYRAMID_BELL = new SegmentDefinition(3, 6, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 6, 6, 6, 6, 6, 6, 6, 6, 6 },
-				{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{ 0, 6, 0 },
+				{ 0, 6, 0 },
+				{ 0, 6, 0 },
+				{ 0, 0, 0 },
+				{ 0, 0, 0 },
+				{ 0, 0, 0 },
+				{ 0, 0, 0 },
+				{ 0, 5, 0 },
+				{ 5, 5, 5 },
 			});
-	
-	private static final SegmentDefinition THREE_PYRAMIDS = new SegmentDefinition(4, 8, 6f,
+	/* ------------------ LEVEL 4 ------------------ */	
+	private static final SegmentDefinition GREAT_PYRAMID = new SegmentDefinition(4, 8, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 0, 5, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 0},
-				{ 5, 5, 5, 0, 0, 0, 5, 5, 5, 0, 0, 0, 5, 5, 5},
+				{ 0, 0, 0, 5, 0, 0 },
+				{ 0, 0, 5, 5, 0, 0 },
+				{ 0, 5, 5, 5, 5, 0 },
+				{ 5, 5, 5, 5, 5, 5 },
 			});
 	
-	private static final SegmentDefinition WALL_AND_BELL = new SegmentDefinition(4, 8, 6f,
+	private static final SegmentDefinition WALL_AND_BELL = new SegmentDefinition(4, 8, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 0 },
 			});
 
 	/* ------------------ LEVEL 5 ------------------ */
-	private static final SegmentDefinition BIG_LOG_PYRAMID = new SegmentDefinition(5, 9, 6f,
+	private static final SegmentDefinition BIG_LOG_PYRAMID = new SegmentDefinition(5, 9, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 0, 0, 5, 0, 0 },
@@ -184,45 +146,21 @@ public class SegmentDefinitions {
 				{ 5, 5, 5, 5, 5 },
 			});
 	
-	private static final SegmentDefinition BIG_CRATE_BELLS = new SegmentDefinition(5, 9, 6f,
-			new int[][]
-			{ 
-				{ 6, 6 },
-				{ 6, 6 },
-				{ 0, 6 },
-				{ 0, 0 },
-				{ 0, 0 },
-				{ 0, 0 },
-				{ 1, 0 },
-				{ 3, 3 },
-				{ 3, 3 },
-			});
-	
-	private static final SegmentDefinition LONG_JUMP = new SegmentDefinition(5, 9, 6f,
-			new int[][]
-			{ 
-				{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			});
 	/* ------------------ LEVEL 6 ------------------ */
-	private static final SegmentDefinition PYRAMID_BELL_2 = new SegmentDefinition(6, 10, 6f,
+	private static final SegmentDefinition PYRAMID_BELL_2 = new SegmentDefinition(6, 10, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 0, 6, 0, 0, 0, 0, 6 },
-				{ 0, 6, 0, 0, 0, 0, 6 },
-				{ 0, 6, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 5, 0, 0, 0, 0, 0 },
-				{ 5, 5, 5, 0, 0, 0, 0 },
+				{ 0, 6, 0, 0, 0, 0, 0, 6 },
+				{ 0, 6, 0, 0, 0, 0, 0, 6 },
+				{ 0, 6, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 5, 0, 0, 0, 0, 0, 0 },
+				{ 5, 5, 5, 0, 0, 0, 0, 0 },
 			});
-	private static final SegmentDefinition JUMP_SEQUENCE = new SegmentDefinition(6, 10, 6f,
-			new int[][]
-			{ 
-				{ 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1 }
-			});
-	
+	//TODO create more types of definitions
 	/* ------------------ LEVEL 7 ------------------ */
 	/* ------------------ LEVEL 8 ------------------ */
 	/* ------------------ LEVEL 9 ------------------ */

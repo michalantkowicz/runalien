@@ -22,9 +22,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
-	private final float BASE_OFFSET = 25f;
+	private final float BASE_OFFSET = 18f;
 	public static final int MIN_LEVEL = 2;
-	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
+	public static final int MAX_LEVEL = 12;
 	
 	private float MAX_ROPE_LENGTH = 6.6f;
 	private final int FALL_INTERVAL = 15;
@@ -127,9 +127,8 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void reset() {
 		super.reset();
-		
-		getBody().setTransform(getBody().getPosition().x - 1000,  getBody().getPosition().y, 0);
-		ballBody.setTransform(ballBody.getPosition().x - 1000,  ballBody.getPosition().y, 0);
+		getBody().setTransform(getBody().getPosition().x - 100, getBody().getPosition().y, getBody().getAngle());
+		ballBody.setTransform(ballBody.getPosition().x - 100, ballBody.getPosition().y, ballBody.getAngle());
 	}
 
 	@Override

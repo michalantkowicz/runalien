@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class Rocket extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 8123133757302816575L;
 	
-	private float BASE_OFFSET = 25f;
+	private float BASE_OFFSET = 16f;
 	public static final int MIN_LEVEL = 2;
 	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 
@@ -87,6 +87,7 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void reset() {
 		super.reset();
+		getBody().setTransform(getBody().getPosition().x - 100, getBody().getPosition().y, getBody().getAngle());
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	
 	private float ROPE_WIDTH = 8.7f;
 	
-	private final float BASE_OFFSET = 25f;
+	private final float BASE_OFFSET = 18f;
 	public static final int MIN_LEVEL = 3;
 	public static final int MAX_LEVEL = 7;
 
@@ -123,8 +123,8 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void reset() {
 		super.reset();
-		getBody().setTransform(getBody().getPosition().x - 1000,  getBody().getPosition().y, 0);
-		ballBody.setTransform(getBody().getPosition().x + ballPositionOffset.x, getBody().getPosition().y + ballPositionOffset.y, 0);
+		getBody().setTransform(getBody().getPosition().x - 100, getBody().getPosition().y, getBody().getAngle());
+		ballBody.setTransform(ballBody.getPosition().x - 100, ballBody.getPosition().y, ballBody.getAngle());
 	}
 
 	@Override

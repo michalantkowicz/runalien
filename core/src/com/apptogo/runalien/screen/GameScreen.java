@@ -145,7 +145,7 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
 		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
 		gameworldStage.addActor( ground.moveToY(Main.GROUND_LEVEL - ground.getHeight()) );
-		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL);
+		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL - 0.01f);
 		gameworldStage.addActor( grass );
 		
 		tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game)));
@@ -196,7 +196,7 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.draw();
 		
 		//debug renderer
-		debugRenderer.render(world, gameworldStage.getCamera().combined);
+//		debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
 		//make player always on top
 		player.toFront();

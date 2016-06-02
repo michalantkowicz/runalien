@@ -54,7 +54,7 @@ public class LevelGenerator {
 	
 	private SegmentGenerator segmentGenerator;
 	
-	private final float SPAWN_DISTANCE = 15f;
+	private final float SPAWN_DISTANCE = 16f;
 	private final float DISAPPEAR_DISTANCE = 8f;
 	
 	private int ROCKET_POOL_INDEX;
@@ -122,12 +122,12 @@ public class LevelGenerator {
 					for(int i = 0; i < rocketLevels.size; i++) {
 						int rocketLevel = rocketLevels.get(i);
 						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, rocketLevel));
-						nextPosition += 7.5f;
+						nextPosition += 5f + speedLevel/2f;
 					}
 				}
 				//If cutbottom random the obstacle start angle
 				else if(drawnPoolIndex == CUTBOTTOM_POOL_INDEX) {
-					obstaclesQueue.add(new QueuedObstacle(nextPosition, CUTBOTTOM_POOL_INDEX, speedLevel, random.nextFloat() - 0.8f));
+					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, random.nextFloat() - 0.2f));
 				}
 				else
 					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel));
@@ -136,7 +136,7 @@ public class LevelGenerator {
 				Pool<GameActor> drawnPool = pools.get(drawnPoolIndex);
 				GameActor obstacle = drawnPool.obtain();
 				
-				nextPosition += ((Spawnable) obstacle).getBaseOffset() + speedLevel;
+				nextPosition += ((Spawnable)obstacle).getBaseOffset() + speedLevel;
 				
 				//Free the obstacle - it is not necessary any longer now
 				drawnPool.free(obstacle);
@@ -159,16 +159,15 @@ public class LevelGenerator {
 			activeObstacles.add(randomObstacle);
 			
 			obstacleToSet = obstaclesQueue.pollFirst();
-			System.out.println(obstacleToSet.poolIndex);
 		}
 
 		//free out of screen obstacles
 		freePools();
 		
-//		for(Pool<GameActor> p : pools) {
-//			System.out.print(p.getFree()+", ");
-//		}
-//		System.out.println();
+		for(Pool<GameActor> p : pools) {
+			System.out.print(p.getFree()+", ");
+		}
+		System.out.println();
 	}
 	
 	private void freePools() {

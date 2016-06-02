@@ -17,9 +17,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class CutBottom extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
 	
-	private final float BASE_OFFSET = 25f;
-	public static final int MIN_LEVEL = 5;
-	public static final int MAX_LEVEL = 10;
+	private final float BASE_OFFSET = 18f;
+	public static final int MIN_LEVEL = 2;
+	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 
 	Body body;
 	
@@ -77,7 +77,7 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void reset() {
 		super.reset();
-		getBody().setTransform(getBody().getPosition().x - 1000,  getBody().getPosition().y, 0);
+		getBody().setTransform(getBody().getPosition().x - 100, getBody().getPosition().y, getBody().getAngle());
 	}
 
 	@Override

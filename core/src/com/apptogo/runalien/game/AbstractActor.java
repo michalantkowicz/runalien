@@ -20,7 +20,7 @@ public class AbstractActor extends Actor {
 	
 	public AbstractActor(String name) {
 		setName(name);
-		setDebug(true);
+		//setDebug(true);
 	}
 	
 	/**-------- ANIMATIONS/STATIC IMAGE -------- **/
