@@ -142,10 +142,10 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 		
 		if(random.nextDouble() < 0.1)
 			MAX_ROPE_LENGTH = 4.4f;
-		else if (random.nextDouble() < 0.6)
+		else //if (random.nextDouble() < 0.6)
 			MAX_ROPE_LENGTH = 6.6f;
-		else
-			MAX_ROPE_LENGTH = 8f;
+//		else
+//			MAX_ROPE_LENGTH = 8f;
 	}
 
 	Random random = new Random();

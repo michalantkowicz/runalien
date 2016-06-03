@@ -122,7 +122,7 @@ public class LevelGenerator {
 					for(int i = 0; i < rocketLevels.size; i++) {
 						int rocketLevel = rocketLevels.get(i);
 						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, rocketLevel));
-						nextPosition += 5f + speedLevel/2f;
+						nextPosition += 8f + speedLevel/2f;
 					}
 				}
 				//If cutbottom random the obstacle start angle
@@ -244,6 +244,8 @@ public class LevelGenerator {
 		fulfillPool(pools.peek(), 10); //we need more rocket since max count in sequence is 5
 		
 		//create sphere short
+		//it is possible to create longer but it is too much
+		//TODO to make balls same as in old version
 		final int sphereshortPoolIndex = pools.size;
 		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
 		pools.add( new Pool<GameActor>(4) {
@@ -251,19 +253,6 @@ public class LevelGenerator {
 			protected GameActor newObject() {
 				GameActor obstacleActor = new Sphere("sphere", true);
 				((Spawnable)obstacleActor).setPoolIndex(sphereshortPoolIndex);
-				return obstacleActor;
-			}
-		});
-		fulfillPool(pools.peek(), 2);
-		
-		//create sphere long
-		final int spherelongPoolIndex = pools.size;
-		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
-		pools.add( new Pool<GameActor>(4) {
-			@Override
-			protected GameActor newObject() {
-				GameActor obstacleActor = new Sphere("sphere", false);
-				((Spawnable)obstacleActor).setPoolIndex(spherelongPoolIndex);
 				return obstacleActor;
 			}
 		});
