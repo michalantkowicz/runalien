@@ -1,16 +1,5 @@
 package com.apptogo.runalien;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.FrameLayout;
-
 import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.screen.GameScreen;
@@ -29,6 +18,17 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.PlusShare;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
 
 public class AndroidLauncher extends AndroidApplication implements OnConnectionFailedListener, ConnectionCallbacks, GameCallback {
 	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
@@ -85,6 +85,16 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		setContentView(layout);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == 10001){
+			//The GoogleApiClient is in an inconsistent state and must reconnect to the service to resolve the issue.
+			//caused by sign off
+	    	mGoogleApiClient.disconnect();
+	    }
+	}
+
 	private void createBanner() {
 		// Create and setup the AdMob view
 		gameBannerAdView = new AdView(this);
@@ -136,46 +146,20 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 
 		mGoogleApiClient.disconnect();
 	}
-
 	
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		try {
-			result.startResolutionForResult(this, 4);
-			result.startResolutionForResult(this, 8);
-		} catch (SendIntentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+		logger.debug("OnConnectionFailed, result: " + result);
+		if (result.hasResolution()) {
+			try {
+				logger.debug("ErrorCode: " + result.getErrorCode());
+				result.startResolutionForResult(this, result.getErrorCode());
+			} catch (SendIntentException e) {
+				logger.debug("Exception during startResultionForResult: ", e);
+			}		
+		}
 	}
-	
-//	@Override
-//	public void onConnectionFailed(ConnectionResult connectionResult) {
-//		logger.debug("Connection to Google Play has not been connected due to: " + connectionResult.toString());
-//		if (mResolvingConnectionFailure) {
-//			// already resolving
-//			return;
-//		}
-//
-//		// if the sign-in button was clicked or if auto sign-in is enabled,
-//		// launch the sign-in flow
-//		if (mSignInClicked || mAutoStartSignInFlow) {
-//			mAutoStartSignInFlow = false;
-//			mSignInClicked = false;
-//			mResolvingConnectionFailure = true;
-//
-//			// Attempt to resolve the connection failure using BaseGameUtils.
-//			// The R.string.signin_other_error value should reference a generic
-//			// error string in your strings.xml file, such as "There was
-//			// an issue with sign-in, please try again later."
-//			if (!BaseGameUtils.resolveConnectionFailure(this, mGoogleApiClient, connectionResult, RC_SIGN_IN, getResources().getString(R.string.signin_other_error))) {
-//				mResolvingConnectionFailure = false;
-//			}
-//		}
-//
-//		// Put code here to display the sign-in button
-//	}
-
+   
 	@Override
 	public void onConnected(Bundle arg0) {
 		logger.debug("Connection to Google Play has been established");
