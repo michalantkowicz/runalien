@@ -70,7 +70,7 @@ public abstract class BasicScreen implements Screen {
         
         this.fadingStage = new Stage(this.backgroundViewport);
         fadingStage.addActor(Image.get("black").size(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT).position(-Main.SCREEN_WIDTH/2f, -Main.SCREEN_HEIGHT/2f));
-        fadingStage.addAction(Actions.alpha(0, 0.3f));
+        fadingStage.addAction(Actions.alpha(0, 0.15f));
         
         ((OrthographicCamera) backgroundStage.getCamera()).position.set(0f, 0f, 0f);
         
@@ -146,7 +146,7 @@ public abstract class BasicScreen implements Screen {
     public void fadeOut(Screen screenToChange) {
     	this.screenToChange = screenToChange;
     	this.FADING_OUT = true;
-    	fadingStage.addAction(Actions.alpha(1, 0.2f));
+    	fadingStage.addAction(Actions.alpha(1, 0.15f));
     }
     
     protected void handleInput() {

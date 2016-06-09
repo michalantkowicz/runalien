@@ -22,8 +22,8 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	private float ROPE_WIDTH = 8.7f;
 	
 	private final float BASE_OFFSET = 18f;
-	public static final int MIN_LEVEL = 3;
-	public static final int MAX_LEVEL = 7;
+	public static final int MIN_LEVEL = 1;
+	public static final int MAX_LEVEL = 9;
 
 	private AtlasRegion ball;
 	private AtlasRegion chain;
@@ -47,7 +47,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 			ROPE_WIDTH -= 1;
 		}
 		
-		ballPositionOffset = (new Vector2(0, -ROPE_WIDTH)).rotate(7.5f);
+		ballPositionOffset = (new Vector2(0, -ROPE_WIDTH)).rotate(-25f);
 		
 		final float x = 10;
 		final float y = 6.2f;
@@ -128,10 +128,11 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	}
 
 	@Override
-	public void init() {
+	public void init(int speedLevel, float arg) {
 		super.init();
+		getBody().setTransform(getBody().getPosition().x + 3f + (speedLevel>5 ? 5f : 0f), getBody().getPosition().y, getBody().getAngle());
 		ballBody.setTransform(getBody().getPosition().x + ballPositionOffset.x, getBody().getPosition().y + ballPositionOffset.y, 0);
-		ballBody.setLinearVelocity(35, 0);
+		ballBody.setLinearVelocity((new Vector2(-25, 0)).rotate(-25f));
 	}
 
 int poolIndex;

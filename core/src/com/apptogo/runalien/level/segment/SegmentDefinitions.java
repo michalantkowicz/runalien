@@ -20,7 +20,7 @@ public class SegmentDefinitions {
 	
 	/* ------------------ LEVEL 0 ------------------ */
 
-	final static float DEFAULT_OFFSET = 7f;
+	final static float DEFAULT_OFFSET = 6f;
 	
 	private static final SegmentDefinition LOG_1 = new SegmentDefinition(0, 2, DEFAULT_OFFSET,
 			new int[][]
@@ -36,7 +36,7 @@ public class SegmentDefinitions {
 				{ 5 },
 			});
 	
-	private static final SegmentDefinition BIG_BELL = new SegmentDefinition(0, 4, DEFAULT_OFFSET - 2,
+	private static final SegmentDefinition BIG_BELL = new SegmentDefinition(0, 4, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 6 },
@@ -47,6 +47,20 @@ public class SegmentDefinitions {
 				{ 6 },
 				{ 6 },
 				{ 0 },
+			});
+	
+	private static final SegmentDefinition JUMP_AND_SLIDE = new SegmentDefinition(1, 5, DEFAULT_OFFSET,
+			new int[][]
+			{ 
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				{0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0 },
+				{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			});
 	/* ------------------ LEVEL 1 ------------------ */
 	private static final SegmentDefinition LOG_BELL = new SegmentDefinition(1, 5, DEFAULT_OFFSET,
@@ -127,14 +141,14 @@ public class SegmentDefinitions {
 	private static final SegmentDefinition WALL_AND_BELL = new SegmentDefinition(4, 8, DEFAULT_OFFSET,
 			new int[][]
 			{ 
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 0, 0, 0, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 0, 0, 6 },
-				{ 5, 0, 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 0, 0, 6 },
+				{ 5, 0, 0, 0, 0, 0, 0, 0, 0 },
 			});
 
 	/* ------------------ LEVEL 5 ------------------ */
