@@ -61,7 +61,7 @@ public class SplashScreen implements Screen
             {
                 ResourcesManager.getInstance().loadSkin();
 
-                logo.addAction(Actions.sequence(Actions.alpha(1, 0), Actions.alpha(0, 0)));
+                logo.addAction(Actions.sequence(Actions.alpha(1, 0), Actions.alpha(0, 0.2f)));
 
                 currentPhase = SplashPhase.END;
             }

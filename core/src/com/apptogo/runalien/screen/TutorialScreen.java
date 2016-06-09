@@ -68,7 +68,6 @@ public class TutorialScreen extends GameScreen {
 		
 		tutorialViewport = new FitViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		tutorialStage = new Stage(tutorialViewport);
-		stagesToFade.add(tutorialStage);
 		tutorialStage.getCamera().position.set(0, 0, 0);
 		
 		//Initializing currentGroup

@@ -10,7 +10,7 @@ public class DeathPlugin extends AbstractPlugin {
 
 	public boolean dead;
 	
-	private final boolean DEBUG_IMMORTAL = true;
+	private final boolean DEBUG_IMMORTAL = false;
 	
 	private SoundPlugin soundHandler;
 

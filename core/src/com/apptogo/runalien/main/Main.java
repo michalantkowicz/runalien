@@ -3,6 +3,7 @@ package com.apptogo.runalien.main;
 import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.screen.BasicScreen;
 import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.screen.SplashScreen;
 import com.badlogic.gdx.Application;
@@ -15,12 +16,13 @@ public class Main extends Game {
     public static final float SCREEN_WIDTH = 1280f, SCREEN_HEIGHT = 800f;
     public final static float GROUND_LEVEL = -3.5f;
 	public static final int DAYTIME_CHANGE_INTERVAL = 120; //seconds
-    public static boolean FADE_IN = true;
     public static final int MAX_SPEED_LEVEL = 14;
 	public static final int SPEEDUP_INTERVAL = 100;
 	public static final short GROUND_BITS = 2;
     
     public static GameCallback gameCallback;
+    
+    private Screen screenToSet;
 
     public static Main getInstance() {
     	return (Main)Gdx.app.getApplicationListener();
@@ -28,7 +30,7 @@ public class Main extends Game {
     
     public Main(GameCallback gameCallback) {
     	super();
-    	this.gameCallback = gameCallback;
+    	Main.gameCallback = gameCallback;
     }
     
     public GameScreen getGameScreen() {
@@ -37,11 +39,17 @@ public class Main extends Game {
     
     @Override
     public void setScreen(Screen screen) {
+        if (this.screen != null && this.screen instanceof BasicScreen) {
+        	((BasicScreen)this.screen).fadeOut(screen);
+    	}
+        else
+        	doSetScreen(screen);
+    }
+    
+    public void doSetScreen(Screen screen) {
         if (this.screen != null) {
-            this.screen.dispose();
-        	FADE_IN = (this.screen.getClass() == screen.getClass()) ? false : true;
-        }
-         
+        	this.screen.dispose();
+    	}
         super.setScreen(screen);
     }
 

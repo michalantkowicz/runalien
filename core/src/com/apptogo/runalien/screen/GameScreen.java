@@ -337,8 +337,6 @@ public class GameScreen extends BasicScreen {
 		middleBackgroundStage.getCamera().position.set(0, 0, 0);
 		
 		middleBackgroundStage.addActor(Image.get("background_game").centerX().centerY());
-		
-		stagesToFade.add(middleBackgroundStage);
 	}
 	
 	protected void createGameWorldStage() {
@@ -346,8 +344,6 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.setViewport(new FillViewport(UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT)));
 		//((OrthographicCamera) gameworldStage.getCamera()).setToOrtho(false, UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH), UnitConverter.toBox2dUnits(Main.SCREEN_HEIGHT));
 		//((OrthographicCamera) gameworldStage.getCamera()).zoom = 1f;
-		
-		stagesToFade.add(gameworldStage);
 	}
 	
 	protected void createStage() {
