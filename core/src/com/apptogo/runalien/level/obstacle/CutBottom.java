@@ -83,7 +83,7 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void init(int speedLevel, float angle) {
 		super.init();
-		getBody().setTransform(getBody().getPosition().x,  Main.GROUND_LEVEL + 113/64f, MathUtils.degRad * angle);
+		getBody().setTransform(getBody().getPosition().x + (angle>0 ? 3:0),  Main.GROUND_LEVEL + 113/64f, MathUtils.degRad * angle);
 	}
 
 int poolIndex;

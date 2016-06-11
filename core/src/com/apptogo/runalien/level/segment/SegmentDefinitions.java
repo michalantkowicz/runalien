@@ -20,7 +20,7 @@ public class SegmentDefinitions {
 	
 	/* ------------------ LEVEL 0 ------------------ */
 
-	final static float DEFAULT_OFFSET = 6f;
+	final static float DEFAULT_OFFSET = 8f;
 	
 	private static final SegmentDefinition LOG_1 = new SegmentDefinition(0, 2, DEFAULT_OFFSET,
 			new int[][]
@@ -36,7 +36,7 @@ public class SegmentDefinitions {
 				{ 5 },
 			});
 	
-	private static final SegmentDefinition BIG_BELL = new SegmentDefinition(0, 4, DEFAULT_OFFSET,
+	private static final SegmentDefinition BIG_BELL = new SegmentDefinition("BIG_BELL", 0, 4, DEFAULT_OFFSET,
 			new int[][]
 			{ 
 				{ 6 },

@@ -1,19 +1,24 @@
 package com.apptogo.runalien.level.segment;
 
-import com.apptogo.runalien.level.Spawnable;
 
 public class SegmentDefinition {
 	private int definition[][];
 	private int minLevel;
 	private int maxLevel;
 	private float baseOffset;
-
+	private String name = "segment";
+	
+	public SegmentDefinition(String name, int minLevel, int maxLevel, float basicOffset, int definition[][]) {
+		this(minLevel, maxLevel, basicOffset, definition);
+		this.name = name;
+	}
+	
 	public SegmentDefinition(int minLevel, int maxLevel, float basicOffset, int definition[][]) {
 		super();
 		this.definition = definition;
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
-		this.baseOffset = basicOffset + definition.length;
+		this.baseOffset = basicOffset;
 		
 		SegmentDefinitions.SEGMENT_DEFINITIONS.add(this);
 	}
@@ -44,6 +49,13 @@ public class SegmentDefinition {
 	 */
 	public float getBaseOffset() {
 		return baseOffset;
+	}
+	
+	/**
+	 * @return name
+	 */
+	public String getName() {
+		return name;
 	}
 
 }

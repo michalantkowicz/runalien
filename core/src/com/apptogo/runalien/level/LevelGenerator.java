@@ -122,7 +122,7 @@ public class LevelGenerator {
 					for(int i = 0; i < rocketLevels.size; i++) {
 						int rocketLevel = rocketLevels.get(i);
 						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, rocketLevel));
-						nextPosition += 6.5f + speedLevel/2f;
+						nextPosition += 6f + speedLevel/2f;
 					}
 				}
 				//If cutbottom random the obstacle start angle
@@ -137,7 +137,7 @@ public class LevelGenerator {
 				GameActor obstacle = drawnPool.obtain();
 				
 				nextPosition += ((Spawnable)obstacle).getBaseOffset() + speedLevel;
-				
+				//System.out.println(drawnPoolIndex + ": " + nextPosition + "   [" + ((Spawnable)obstacle).getBaseOffset() + "; " + speedLevel + "]");
 				//Free the obstacle - it is not necessary any longer now
 				drawnPool.free(obstacle);
 			}
@@ -243,27 +243,14 @@ public class LevelGenerator {
 		});
 		fulfillPool(pools.peek(), 10); //we need more rocket since max count in sequence is 5
 		
-		//create sphere short
-		final int sphereshortPoolIndex = pools.size;
+		//create sphere (it will make short and long by itself)
+		final int spherePoolIndex = pools.size;
 		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
 		pools.add( new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
-				GameActor obstacleActor = new Sphere("sphere", true);
-				((Spawnable)obstacleActor).setPoolIndex(sphereshortPoolIndex);
-				return obstacleActor;
-			}
-		});
-		fulfillPool(pools.peek(), 2);
-		
-		//create sphere long
-		final int spherelongPoolIndex = pools.size;
-		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
-		pools.add( new Pool<GameActor>(4) {
-			@Override
-			protected GameActor newObject() {
-				GameActor obstacleActor = new Sphere("sphere", false);
-				((Spawnable)obstacleActor).setPoolIndex(spherelongPoolIndex);
+				GameActor obstacleActor = new Sphere("sphere");
+				((Spawnable)obstacleActor).setPoolIndex(spherePoolIndex);
 				return obstacleActor;
 			}
 		});

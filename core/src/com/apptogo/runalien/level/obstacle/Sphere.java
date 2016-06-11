@@ -24,6 +24,8 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	private final float BASE_OFFSET = 18f;
 	public static final int MIN_LEVEL = 1;
 	public static final int MAX_LEVEL = 9;
+	
+	private static int sphereId = 0;
 
 	private AtlasRegion ball;
 	private AtlasRegion chain;
@@ -39,11 +41,11 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	
 	private World world;
 
-	public Sphere(String name, boolean shortRope) {
+	public Sphere(String name) {
 		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();
 		
-		if(shortRope) {
+		if((sphereId++)%2 == 0) {
 			ROPE_WIDTH -= 1;
 		}
 		

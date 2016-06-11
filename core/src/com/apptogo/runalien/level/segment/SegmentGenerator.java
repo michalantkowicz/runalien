@@ -1,6 +1,7 @@
 package com.apptogo.runalien.level.segment;
 
 import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.math.Vector2;
 
 public class SegmentGenerator {
@@ -15,8 +16,9 @@ public class SegmentGenerator {
 		
 		//TODO exception for maximum size
 	    //TODO set name for each segment by type
-		Segment segment = new Segment("segment", segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset() + definition[0].length);
+		Segment segment = new Segment(segmentDefinition.getName(), segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset() + SegmentFieldDefinitions.OBSTACLE_SIZE * definition[0].length);
 
+	System.out.println(segmentDefinition.getName() + ": " + segmentDefinition.getBaseOffset());
 		for (int i = 0; i < definition[0].length; i++) {
 			for (int j = definition.length - 1; j >= 0; j--) {
 				//iteration through columns(bottom->top) -> rows(left->right) because we need column blocks like bells or logs

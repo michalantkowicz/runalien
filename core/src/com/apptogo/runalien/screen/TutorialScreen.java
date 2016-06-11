@@ -85,13 +85,13 @@ public class TutorialScreen extends GameScreen {
 		rightHand = Image.get("touchRight").position(350, -390);
 		
 		//Setting up labels
-		welcomeLabel = Label.get("Welcome to the tutorial! Follow the instructions", "tutorial").centerX().centerY(300);
+		welcomeLabel = Label.get("Welcome to the tutorial! Follow instructions", "tutorial").centerX().centerY(300);
 		startLabel = Label.get("Tap anywhere to start running", "tutorial").centerX().centerY(300);
 		slideLabel = Label.get("Tap left side of screen to slide", "tutorial").centerX().centerY(300);
-		longSlideLabel = Label.get("Keep tapping left side of screen to do long slide", "tutorial").centerX().centerY(300);
+		longSlideLabel = Label.get("Keep tapping left side of screen to make a long slide", "tutorial").centerX().centerY(300);
 		jumpLabel = Label.get("Tap right side of screen to jump", "tutorial").centerX().centerY(300);
 		doubleJumpLabel = Label.get("Tap twice right side of screen to double jump", "tutorial").centerX().centerY(300);
-		chargeDownLabel = Label.get("Tap left side of screen when airborne to charge down", "tutorial").centerX().centerY(300);
+		chargeDownLabel = Label.get("Tap left side of screen when jumping to fall down faster", "tutorial").centerX().centerY(300);
 		speedLabel = Label.get("Remember that alien is running faster and faster!", "tutorial").centerX().centerY(300);
 		endLabel = Label.get("That's all! Now you are ready for the adventure", "tutorial").centerX().centerY(300);
 
@@ -251,6 +251,7 @@ public class TutorialScreen extends GameScreen {
 			case END:
 				if(currentGroup.getActions().size == 0) {
 					game.setScreen(new GameScreen(game));
+					currentPhase = TutorialPhase.NONE;
 				}
 				break;
 			case NONE:
