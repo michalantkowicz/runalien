@@ -5,8 +5,10 @@ import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -30,6 +32,8 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	private Body body;
 	
 	private World world;
+	
+	private SoundPlugin soundHandler;
 
 	int counter = 0;
 	
@@ -48,6 +52,9 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 		setBody(body);
 		
 		alert = new AtlasRegion(ResourcesManager.getInstance().getAtlasRegion("alert"));
+		
+		addPlugin(new SoundPlugin("rocket"));
+		soundHandler = getPlugin(SoundPlugin.class);
 	}
 
 	@Override
@@ -102,6 +109,8 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 		this.addAction(Actions.sequence(Actions.alpha(0), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.alpha(1, 0.2f)));
 		
 		BASE_OFFSET = 25 + DELAY;
+		
+		soundHandler.getSound("rocket").setPitch(soundHandler.playSound("rocket"), 1 + speedLevel/32f);
 	}
 
 int poolIndex;

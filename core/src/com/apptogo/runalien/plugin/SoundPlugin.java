@@ -49,8 +49,8 @@ public class SoundPlugin extends AbstractPlugin {
 		this.sounds.put(soundName, sound);
 	}
 
-	public void playSound(String soundName) {
-		get(soundName).play();
+	public long playSound(String soundName) {
+		return get(soundName).play();
 	}
 
 	public void loopSound(String soundName) {
