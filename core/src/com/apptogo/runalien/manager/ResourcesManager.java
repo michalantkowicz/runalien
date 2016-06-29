@@ -56,6 +56,13 @@ public class ResourcesManager {
 		manager.load("whoosh.ogg", Sound.class);
 		manager.load("click.ogg", Sound.class);
 		manager.load("rocket.ogg", Sound.class);
+		manager.load("weasel.ogg", Sound.class);
+		manager.load("fallingTree.ogg", Sound.class);
+		manager.load("explosion.ogg", Sound.class);
+		manager.load("creak.ogg", Sound.class);
+		manager.load("chain.ogg", Sound.class);
+		manager.load("ballHit.ogg", Sound.class);
+		manager.load("weaselHit.ogg", Sound.class);
 	}
 
 	public void loadSkin() {

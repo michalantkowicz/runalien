@@ -1,8 +1,11 @@
 package com.apptogo.runalien.scene2d;
 
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class TextButton extends com.badlogic.gdx.scenes.scene2d.ui.TextButton {
     public static TextButton get(String label, String buttonName) {
@@ -16,10 +19,12 @@ public class TextButton extends com.badlogic.gdx.scenes.scene2d.ui.TextButton {
     public TextButton(String label, Skin skin, String buttonName) {
         super(label, skin, buttonName);
         this.getLabelCell().padLeft(90).padBottom(14);
+        addClickSound();
     }
 
     public TextButton(String label, Skin skin) {
         super(label, skin);
+        addClickSound();
     }
 
     public TextButton position(float x, float y)
@@ -51,5 +56,14 @@ public class TextButton extends com.badlogic.gdx.scenes.scene2d.ui.TextButton {
     {
         this.addListener(listener);
         return this;
+    }
+    
+    private void addClickSound(){
+    	addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				SoundPlugin.playSingleSound("click");
+			}
+		});
     }
 }

@@ -33,6 +33,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -63,6 +64,17 @@ public class GameScreen extends BasicScreen {
 	
 	protected boolean endGame = false, gameFinished = false;
 	public boolean LEFT = false, RIGHT = false;
+	
+	private ClickListener steeringListener = new ClickListener(){ 
+		@Override
+		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+			if(x <= 0)
+				LEFT = true;
+			else
+				RIGHT = true;
+			return super.touchDown(event, x, y, pointer, button);
+		}
+	};
 	
 	public GameScreen(Main game) {
 		super(game);
@@ -130,7 +142,7 @@ public class GameScreen extends BasicScreen {
 		player.modifyCustomOffsets(-0.4f, 0f);
 		gameworldStage.addActor(player);
 		
-		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run", "bell", "die"));
+		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run", "bell", "die", "explosion", "ballHit", "weaselHit"));
 		player.addPlugin(new CameraFollowingPlugin());		
 		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
@@ -149,6 +161,19 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.addActor( grass );
 		
 		tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game)));
+		//To not start running when clicking tutorialButton
+		tutorialButton.setListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				stage.removeListener(steeringListener);
+				return super.touchDown(event, x, y, pointer, button);
+			}
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				stage.addListener(steeringListener);
+				super.touchUp(event, x, y, pointer, button);
+			}
+		});
 		
 		//Sign and tutorial button if not TutorialScreen instance
 		if(!(this instanceof TutorialScreen)) {		
@@ -380,16 +405,7 @@ public class GameScreen extends BasicScreen {
 		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
 		stage.addActor(scoreLabel);
 		
-		stage.addListener(new ClickListener(){ 
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if(x <= 0)
-					LEFT = true;
-				else
-					RIGHT = true;
-				return super.touchDown(event, x, y, pointer, button);
-			}
-		});
+		stage.addListener(steeringListener);
 	}
 	
 	protected Group createTopScore(String score, float scale) {

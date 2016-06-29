@@ -4,6 +4,7 @@ import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +25,8 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 	Body body;
 	
 	private World world;
-
+	private SoundPlugin soundHandler;
+	
 	public CutBottom(String name) {
 		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();
@@ -32,7 +34,7 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 		final float x = 0;
 		final float y = Main.GROUND_LEVEL + 113/64f;
 		
-		body = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingBottom").
+		body = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingBottom", "log").
 				loop(new float[]{0, -113/64f, 38/64f, -78/64f, 38/64f, 113/64f, -38/64f, 113/64f, -38/64f, -78/64f}).
 				friction(0.5f).position(x, y).maskBits(Main.GROUND_BITS).create();
 		
@@ -42,6 +44,10 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 				
 		setBody(body);
 		setStaticImage("bottomcut");
+		
+		
+		addPlugin(new SoundPlugin("fallingTree"));
+		soundHandler = getPlugin(SoundPlugin.class);
 	}
 	@Override
 	public void act(float delta) {
@@ -84,6 +90,7 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 	public void init(int speedLevel, float angle) {
 		super.init();
 		getBody().setTransform(getBody().getPosition().x + (angle>0 ? 3:0),  Main.GROUND_LEVEL + 113/64f, MathUtils.degRad * angle);
+		soundHandler.playSound("fallingTree");
 	}
 
 int poolIndex;

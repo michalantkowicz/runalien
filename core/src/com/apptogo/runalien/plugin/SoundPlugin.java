@@ -68,7 +68,7 @@ public class SoundPlugin extends AbstractPlugin {
 	public void resumeSound(String soundName) {
 		get(soundName).resume();
 	}
-
+	
 	/**
 	 * Stops all sounds (not played staticly)
 	 */
@@ -135,5 +135,17 @@ public class SoundPlugin extends AbstractPlugin {
 	public static void stopSingleSound(String soundName) {
 		Sound sound = ResourcesManager.getInstance().getSound(soundName);
 		sound.stop();
+	}
+	
+	/**
+	 * Sets volume of specified played sound instance of specified sound type.
+	 * 
+	 * @param soundName of sound for changing sound
+	 * @param soundId instance of played sound
+	 * @param volume between 0 to 1
+	 */
+	public static void setVolume(String soundName, long soundId, float volume) {
+		Sound sound = ResourcesManager.getInstance().getSound(soundName);
+		sound.setVolume(soundId, volume);
 	}
 }

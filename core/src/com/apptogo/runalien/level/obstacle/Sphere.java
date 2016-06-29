@@ -5,6 +5,8 @@ import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.plugin.SoundPlugin;
+import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -40,7 +42,10 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	//private Body ropeBody;
 	
 	private World world;
-
+	private SoundPlugin soundHandler;
+	
+	private boolean playSound = true;
+	
 	public Sphere(String name) {
 		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();
@@ -62,7 +67,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		
 		chain = ResourcesManager.getInstance().getAtlasRegion("chain");
 		
-		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(1).friction(0.5f).position(x + ballPositionOffset.x, ballPositionOffset.y).sensor(true).create();
+		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop", "ball").circle(1).friction(0.5f).position(x + ballPositionOffset.x, ballPositionOffset.y).sensor(true).create();
 		//ropeBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("RopeBall").box(ROPE_WIDTH, 0.1f).sensor(true).position(x + ROPE_WIDTH/2f, y).create();
 		
 		setBody(anchor);
@@ -80,12 +85,17 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		joint = (RopeJoint) world.createJoint(jointDef);
 		
 		startU2Length = chain.getU2() - chain.getU();
+		
+		addPlugin(new SoundPlugin("creak"));
+		soundHandler = getPlugin(SoundPlugin.class);
 	}
 
 	@Override
 	public void act(float delta) {
 		super.act(delta);
 		ropeLength = ballBody.getPosition().cpy().add(joint.getLocalAnchorB()).sub(anchor.getPosition()).len();
+
+		handleBallSound();
 		
 //		float rightEdge = Main.getInstance().getGameScreen().getGameworldStage().getCamera().position.x + UnitConverter.toBox2dUnits(Main.SCREEN_WIDTH/2f);
 //		
@@ -137,7 +147,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		ballBody.setLinearVelocity((new Vector2(-25, 0)).rotate(-25f));
 	}
 
-int poolIndex;
+	int poolIndex;
 	
 	@Override
 	public void setPoolIndex(int poolIndex) {
@@ -147,5 +157,25 @@ int poolIndex;
 	@Override
 	public int getPoolIndex() {
 		return poolIndex;
+	}
+	
+	private long currentlyPlayedSoundId;
+	private void handleBallSound(){
+		if(ballBody.getPosition().cpy().sub(anchor.getPosition()).angle() < 280 && ballBody.getPosition().cpy().sub(anchor.getPosition()).angle() > 260 && playSound){
+			currentlyPlayedSoundId = soundHandler.playSound("creak");
+			playSound = false;
+		}
+		
+		if(!playSound && Math.abs(ballBody.getLinearVelocity().x) < 1){
+			playSound = true;
+		}
+		
+		
+		float yFactor = Main.getInstance().getGameScreen().getGameworldStage().getRoot().getY() + anchor.getPosition().y - 6f;
+		
+		float distance = Main.getInstance().getGameScreen().getGameworldStage().getCamera().position.dst(anchor.getPosition().x, yFactor, 0);
+		System.out.println(1 - distance/15 + " | " + distance);
+		SoundPlugin.setVolume("creak", currentlyPlayedSoundId, distance > 15 ? 0 : 1 - distance/15);
+		
 	}
 }

@@ -47,7 +47,7 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 		addAvailableAnimation(Animation.get(0.02f, "rocket", PlayMode.LOOP));
 		queueAnimation("rocket");
 		
-		body = BodyBuilder.get().type(BodyType.KinematicBody).addFixture("killingTop").box(1f, 0.5f).friction(0.5f).position(x, y).sensor(true).create();	
+		body = BodyBuilder.get().type(BodyType.KinematicBody).addFixture("killingTop", getName()).box(1f, 0.5f).friction(0.5f).position(x, y).sensor(true).create();	
 		
 		setBody(body);
 		

@@ -5,6 +5,7 @@ import com.apptogo.runalien.level.Spawnable;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -25,6 +26,7 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 	private AtlasRegion weasel;
 		
 	private Body body;
+	private SoundPlugin soundHandler;
 	
 	public Weasel(String name) {
 		super(name);
@@ -38,9 +40,12 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 		
 		setAvailableAnimations("molehill");
 		
-		body = BodyBuilder.get().type(BodyType.StaticBody).addFixture("killingBottom").box(0.5f, 1.8f).friction(0.5f).position(x, y).sensor(true).create();	
+		body = BodyBuilder.get().type(BodyType.StaticBody).addFixture("killingBottom", "weasel").box(0.5f, 1.8f).friction(0.5f).position(x, y).sensor(true).create();	
 		
 		setBody(body);
+		
+		addPlugin(new SoundPlugin("weasel"));
+		soundHandler = getPlugin(SoundPlugin.class);
 	}
 
 	@Override
@@ -84,9 +89,11 @@ public class Weasel extends GameActor implements Spawnable, Poolable {
 	@Override
 	public void init(int speedLevel, float arg) {
 		super.init();
+		soundHandler.playSound("weasel");
 		body.setTransform(getBody().getPosition().x - (speedLevel < 5 ? 1 : 0), Main.GROUND_LEVEL + 0.88f, 0);
 		queueAnimation("molehill");
 		animationProgress = 0;
+
 	}
 
 int poolIndex;

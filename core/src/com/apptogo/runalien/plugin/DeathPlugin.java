@@ -37,6 +37,13 @@ public class DeathPlugin extends AbstractPlugin {
 					soundHandler.playSound("die"); 
 				else if("crate".equals(obstacleType))
 					soundHandler.playSound("die"); 
+				else if("rocket".equals(obstacleType))
+					soundHandler.playSound("explosion");
+				else if("ball".equals(obstacleType))
+					soundHandler.playSound("ballHit");
+				else if("weasel".equals(obstacleType))
+					soundHandler.playSound("weaselHit");
+				
 				
 				for(Fixture fixture : body.getFixtureList())
 					UserData.get(fixture).ignore = true;

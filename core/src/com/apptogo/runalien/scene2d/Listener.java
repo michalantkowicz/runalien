@@ -14,7 +14,6 @@ public class Listener {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	SoundPlugin.playSingleSound("click");
                 game.setScreen(screen);
             }
         };

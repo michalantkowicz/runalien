@@ -8,6 +8,7 @@ import com.apptogo.runalien.level.segment.SegmentFieldDefinitions;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
+import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -43,7 +44,8 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private float ropeLength, startU2Length;
 	
 	private World world;
-
+	private SoundPlugin soundHandler;
+	
 	public FallingSphere(String name) {
 		super(name);System.out.println("FALLING");
 		world = Main.getInstance().getGameScreen().getWorld();
@@ -59,7 +61,7 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 		
 		chain = ResourcesManager.getInstance().getAtlasRegion("chain");
 		
-		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop").circle(0.7f).friction(0.5f).position(x + 0.2f, y + 0.2f).sensor(true).create();	
+		ballBody = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingTop", "ball").circle(0.7f).friction(0.5f).position(x + 0.2f, y + 0.2f).sensor(true).create();	
 		ballBody.setTransform(ballBody.getPosition(), MathUtils.degRad * 30f);
 		ballBody.setAngularDamping(5f);
 		
@@ -77,6 +79,9 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
     	joint = (RopeJoint)world.createJoint(jointDef);
     	
     	startU2Length = chain.getU2() - chain.getU();
+    	
+		addPlugin(new SoundPlugin("chain"));
+		soundHandler = getPlugin(SoundPlugin.class);
 	}
 	
 	@Override 
@@ -92,6 +97,7 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
     		joint.setMaxLength((joint.getMaxLength() + STEP) > MAX_ROPE_LENGTH ? MAX_ROPE_LENGTH : ((joint.getMaxLength() + STEP)));
     		doFall = false;
     		interval = 0;
+    		soundHandler.playSound("chain");
     	}
     	else
     		interval++;
@@ -142,10 +148,10 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 		
 		if(random.nextDouble() < 0.1)
 			MAX_ROPE_LENGTH = 4.4f;
-		else //if (random.nextDouble() < 0.6)
+		else
 			MAX_ROPE_LENGTH = 6.6f;
-//		else
-//			MAX_ROPE_LENGTH = 8f;
+		
+		soundHandler.playSound("chain");
 	}
 
 	Random random = new Random();
