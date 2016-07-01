@@ -11,6 +11,7 @@ import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
+import com.apptogo.runalien.plugin.AchievementPlugin;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
@@ -33,7 +34,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -56,8 +56,10 @@ public class GameScreen extends BasicScreen {
 	protected FPSLogger logger = new FPSLogger();
 	protected int score = 0;
 	protected Image sky_day, sky_night, sun, moon;
+	private boolean day;
 	protected Label scoreLabel;
 	public Button tutorialButton, submitButton;
+	private boolean tutorial;
 	
 	protected ShaderProgram shaderProgram;
 	protected float shaderBrightness, shaderSaturation;
@@ -142,11 +144,13 @@ public class GameScreen extends BasicScreen {
 		player.modifyCustomOffsets(-0.4f, 0f);
 		gameworldStage.addActor(player);
 		
+		player.addPlugin(new AchievementPlugin());
 		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run", "bell", "die", "explosion", "ballHit", "weaselHit"));
 		player.addPlugin(new CameraFollowingPlugin());		
 		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
 		player.addPlugin(new TouchSteeringPlugin());
+		
 		
 		//create infinite ground body
 		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).categoryBits(Main.GROUND_BITS).create();
@@ -178,6 +182,7 @@ public class GameScreen extends BasicScreen {
 		//Sign and tutorial button if not TutorialScreen instance
 		if(!(this instanceof TutorialScreen)) {		
 			stage.addActor(tutorialButton);
+			tutorial = true;
 			
 			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
 			sign.setStaticImage("board");
@@ -331,6 +336,8 @@ public class GameScreen extends BasicScreen {
 				};
 			}
 		});
+		
+		this.day = isDay;
 	}
 
 	protected void createBackgroundStage(boolean isDay) { 
@@ -442,5 +449,17 @@ public class GameScreen extends BasicScreen {
 			this.tutorialButton.clearListeners();
 			this.tutorialButton.addAction(Actions.fadeOut(1, Interpolation.pow5Out));
 		}
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public boolean isDay() {
+		return day;
+	}
+
+	public boolean isTutorial() {
+		return tutorial;
 	}
 }

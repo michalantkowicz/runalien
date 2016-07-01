@@ -3,7 +3,6 @@ package com.apptogo.runalien.desktop;
 import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.screen.GameScreen;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Logger;
@@ -15,38 +14,53 @@ public class DesktopLauncher {
 
 		@Override
 		public void showLeaderboard() {
-			logger.debug("Available only in Android");
+			logger.debug("showLeaderboard() is available only in Android");
 		}
 
 		@Override
 		public void showAchievements() {
-			logger.debug("Available only in Android");
+			logger.debug("showAchievements() is available only in Android");
 		}
 
 		@Override
 		public void shareOnGooglePlus() {
-			logger.debug("Available only in Android");
+			logger.debug("shareOnGooglePlus() is available only in Android");
 		}
 
 		@Override
 		public void submitScore(int score) {
-			logger.debug("Available only in Android");
+			logger.debug("submitScore() is available only in Android");
 		}
 		
 		@Override
 		public void setBannerVisible(boolean visible) {
-			logger.debug("Available only in Android");
+			logger.debug("setBannerVisible() is available only in Android");
 		}
 
 		@Override
 		public void showFullscreenAd() {
-			logger.debug("Available only in Android");
+			logger.debug("showFullscreenAd() is available only in Android");
 			Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
 		}
 
 		@Override
 		public void vibrate() {
-			logger.debug("BRRRR - vibrations are available only in Android");
+			logger.debug("vibrate() is available only in Android");
+		}
+
+		@Override
+		public void incrementAchievement(String achievementId) {
+			logger.debug("incrementAchievement() is available only in Android");
+		}
+
+		@Override
+		public void incrementAchievement(String achievementId, int step) {
+			logger.debug("incrementAchievement() is available only in Android");
+		}
+
+		@Override
+		public void unlockAchievement(String achievementId) {
+			logger.debug("unlockAchievement() is available only in Android");
 		}
 
 	};

@@ -19,6 +19,7 @@ public class Main extends Game {
     public static final int MAX_SPEED_LEVEL = 14;
 	public static final int SPEEDUP_INTERVAL = 100;
 	public static final short GROUND_BITS = 2;
+	public static final short PLAYER_BITS = 4;
     
     public static GameCallback gameCallback;
     

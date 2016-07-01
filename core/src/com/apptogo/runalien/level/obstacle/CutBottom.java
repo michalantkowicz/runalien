@@ -34,7 +34,7 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 		final float x = 0;
 		final float y = Main.GROUND_LEVEL + 113/64f;
 		
-		body = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingBottom", "log").
+		body = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingBottom", "cutBottom").
 				loop(new float[]{0, -113/64f, 38/64f, -78/64f, 38/64f, 113/64f, -38/64f, 113/64f, -38/64f, -78/64f}).
 				friction(0.5f).position(x, y).maskBits(Main.GROUND_BITS).create();
 		

@@ -171,10 +171,8 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		}
 		
 		
-		float yFactor = Main.getInstance().getGameScreen().getGameworldStage().getRoot().getY() + anchor.getPosition().y - 6f;
-		
+		float yFactor = Main.getInstance().getGameScreen().getGameworldStage().getRoot().getY() + anchor.getPosition().y - 6f;	
 		float distance = Main.getInstance().getGameScreen().getGameworldStage().getCamera().position.dst(anchor.getPosition().x, yFactor, 0);
-		System.out.println(1 - distance/15 + " | " + distance);
 		SoundPlugin.setVolume("creak", currentlyPlayedSoundId, distance > 15 ? 0 : 1 - distance/15);
 		
 	}

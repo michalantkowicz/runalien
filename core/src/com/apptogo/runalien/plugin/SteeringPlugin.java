@@ -1,5 +1,8 @@
 package com.apptogo.runalien.plugin;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
@@ -10,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public abstract class SteeringPlugin extends AbstractPlugin {
 
@@ -18,6 +22,8 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	protected RunningPlugin running;
 	protected DeathPlugin deathPlugin;
 	private SoundPlugin soundHandler;
+	
+	private AchievementPlugin achievementPlugin;	
 	
 	protected Fixture defaultFixture, slidingFixture;
 	
@@ -49,6 +55,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			soundHandler.pauseSound("run");
 			soundHandler.playSound("jump");
 			
+			achievementPlugin.handleJump();
 		}
 		else
 		{
@@ -91,6 +98,8 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			soundHandler.pauseSound("scream");
 			soundHandler.pauseSound("run");
 			soundHandler.playSound("slide");
+			
+			achievementPlugin.fire(AchievementPlugin.SLIDER);
 		}
 		
 		sliding = true;
@@ -164,7 +173,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		soundHandler = actor.getPlugin(SoundPlugin.class);
 		running = actor.getPlugin(RunningPlugin.class);
 		deathPlugin = actor.getPlugin(DeathPlugin.class);
-		
+		achievementPlugin = actor.getPlugin(AchievementPlugin.class);
 						
 		//Default fixture check
 		for(Fixture fixture : body.getFixtureList())

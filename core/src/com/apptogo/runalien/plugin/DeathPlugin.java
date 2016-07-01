@@ -4,6 +4,7 @@ import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.physics.UserData;
+import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class DeathPlugin extends AbstractPlugin {
@@ -13,6 +14,7 @@ public class DeathPlugin extends AbstractPlugin {
 	private final boolean DEBUG_IMMORTAL = false;
 	
 	private SoundPlugin soundHandler;
+	private AchievementPlugin achievementPlugin;
 
 	public DeathPlugin() {
 		super();
@@ -37,12 +39,22 @@ public class DeathPlugin extends AbstractPlugin {
 					soundHandler.playSound("die"); 
 				else if("crate".equals(obstacleType))
 					soundHandler.playSound("die"); 
-				else if("rocket".equals(obstacleType))
+				else if("cutBottom".equals(obstacleType)){
+					achievementPlugin.fire(AchievementPlugin.LUMBERJACK);
+					soundHandler.playSound("die"); 
+				}
+				else if("rocket".equals(obstacleType)){
+					achievementPlugin.fire(AchievementPlugin.ROCKET_SCIENCE);
 					soundHandler.playSound("explosion");
-				else if("ball".equals(obstacleType))
+				}
+				else if("ball".equals(obstacleType)){
+					achievementPlugin.fire(AchievementPlugin.BALLS_OF_STEEL);
 					soundHandler.playSound("ballHit");
-				else if("weasel".equals(obstacleType))
+				}
+				else if("weasel".equals(obstacleType)){
+					achievementPlugin.fire(AchievementPlugin.I_HATE_WEASELS);
 					soundHandler.playSound("weaselHit");
+				}
 				
 				
 				for(Fixture fixture : body.getFixtureList())
@@ -53,15 +65,34 @@ public class DeathPlugin extends AbstractPlugin {
 				else
 					actor.changeAnimation("diebottom");
 				
+				handleAchievements();
+				
 				Main.getInstance().getGameScreen().setEndGame(true);
 				
 				break;
 			}
 	}
 
+	private void handleAchievements(){
+		if(Main.getInstance().getGameScreen().getScore() < 2)
+			achievementPlugin.fire(AchievementPlugin.NOOB);
+		
+		achievementPlugin.fire(AchievementPlugin.I_LIKE_THAT_GAME);
+		achievementPlugin.fire(AchievementPlugin.MARATHON);
+		achievementPlugin.fire(AchievementPlugin.BEST_GAMER_EVER);
+		
+		if(Main.getInstance().getGameScreen().isDay()){
+			achievementPlugin.fire(AchievementPlugin.DAY_RUSH);
+		}
+		else{
+			achievementPlugin.fire(AchievementPlugin.NIGHT_OWL);
+		}
+	}
+	
 	@Override
 	public void setUpDependencies() {	
 		soundHandler = actor.getPlugin(SoundPlugin.class);
+		achievementPlugin = actor.getPlugin(AchievementPlugin.class);
 		
 		if(body.getFixtureList().size <= 0)
 			throw new PluginDependencyException("Actor's body must have at least one (default) fixture!");

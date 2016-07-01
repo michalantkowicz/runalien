@@ -8,4 +8,7 @@ public interface GameCallback {
 	public void setBannerVisible(boolean visible);
 	public void showFullscreenAd();
 	public void vibrate();
+	public void incrementAchievement(String achievementId);
+	public void incrementAchievement(String achievementId, int step);
+	public void unlockAchievement(String achievementId);
 }

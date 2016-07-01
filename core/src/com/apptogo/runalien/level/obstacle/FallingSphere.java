@@ -47,7 +47,7 @@ public class FallingSphere extends GameActor implements Spawnable, Poolable {
 	private SoundPlugin soundHandler;
 	
 	public FallingSphere(String name) {
-		super(name);System.out.println("FALLING");
+		super(name);
 		world = Main.getInstance().getGameScreen().getWorld();
 
 		final float x = 10;

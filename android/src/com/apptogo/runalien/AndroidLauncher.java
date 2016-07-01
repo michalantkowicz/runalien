@@ -32,7 +32,7 @@ import android.widget.FrameLayout;
 
 public class AndroidLauncher extends AndroidApplication implements OnConnectionFailedListener, ConnectionCallbacks, GameCallback {
 	private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
-	
+
 	//result codes
 	public static final int ACHIEVEMENTS_RESULT_CODE = 1;
 	public static final int LEADERBOARDS_RESULT_CODE = 2;
@@ -54,7 +54,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 
 	private static final int FULLSCREEN_AD_INTERVAL = 7;
 	private int fullscreenAdCounter = 0;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,11 +88,11 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == 10001){
+		if (resultCode == 10001) {
 			//The GoogleApiClient is in an inconsistent state and must reconnect to the service to resolve the issue.
 			//caused by sign off
-	    	mGoogleApiClient.disconnect();
-	    }
+			mGoogleApiClient.disconnect();
+		}
 	}
 
 	private void createBanner() {
@@ -103,10 +103,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		gameBannerAdView.setVisibility(AdView.GONE);
 		gameBannerAdView.refreshDrawableState();
 
-		AdRequest gameBannerAdRequest = new AdRequest.Builder()
-				.addTestDevice("7712162DDB4F4C5C4A3FF71455D368A4")
-				.addTestDevice("D23AB5C0EB6156E6B120419ABB943C21")
-				.build();
+		AdRequest gameBannerAdRequest = new AdRequest.Builder().addTestDevice("7712162DDB4F4C5C4A3FF71455D368A4").addTestDevice("D23AB5C0EB6156E6B120419ABB943C21").build();
 
 		//Load ad to view
 		gameBannerAdView.loadAd(gameBannerAdRequest);
@@ -122,7 +119,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		mInterstitialAd = new InterstitialAd(this);
 		mInterstitialAd.setAdUnitId(getResources().getString(R.string.fullscreen_ad_unit_id));
 		requestNewFullscreenAd();
-		
+
 		mInterstitialAd.setAdListener(new AdListener() {
 			@Override
 			public void onAdClosed() {
@@ -132,21 +129,18 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 		});
 	}
 
-	private void requestNewFullscreenAd(){
-		AdRequest adRequest = new AdRequest.Builder()
-				.addTestDevice("7712162DDB4F4C5C4A3FF71455D368A4")
-				.addTestDevice("D23AB5C0EB6156E6B120419ABB943C21")
-				.build();
+	private void requestNewFullscreenAd() {
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice("7712162DDB4F4C5C4A3FF71455D368A4").addTestDevice("D23AB5C0EB6156E6B120419ABB943C21").build();
 		mInterstitialAd.loadAd(adRequest);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 
 		mGoogleApiClient.disconnect();
 	}
-	
+
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		logger.debug("OnConnectionFailed, result: " + result);
@@ -156,10 +150,10 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 				result.startResolutionForResult(this, result.getErrorCode());
 			} catch (SendIntentException e) {
 				logger.debug("Exception during startResultionForResult: ", e);
-			}		
+			}
 		}
 	}
-   
+
 	@Override
 	public void onConnected(Bundle arg0) {
 		logger.debug("Connection to Google Play has been established");
@@ -175,48 +169,41 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	//GameCallback methods implementations
 	@Override
 	public void showLeaderboard() {
-		if(mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+		if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.connect();
-		}
-		else {
+		} else {
 			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getResources().getString(R.string.leaderboard_id)), LEADERBOARDS_RESULT_CODE);
 		}
 	}
 
 	@Override
 	public void showAchievements() {
-		if(mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+		if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.connect();
-		}
-		else {
+		} else {
 			startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), ACHIEVEMENTS_RESULT_CODE);
 		}
 	}
 
 	@Override
 	public void shareOnGooglePlus() {
-		Intent shareIntent = new PlusShare
-				.Builder(this)
-				.setType("text/plain")
-				.setText("I just played Run Alien and it was awesome! You should try it!")
-				.setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.apptogo.runalien"))
-				.getIntent();
+		Intent shareIntent = new PlusShare.Builder(this).setType("text/plain").setText("I just played Run Alien and it was awesome! You should try it!")
+				.setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.apptogo.runalien")).getIntent();
 
 		startActivityForResult(shareIntent, 0);
 	}
 
 	@Override
 	public void submitScore(int score) {
-		if(mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+		if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.connect();
-		}
-		else {
+		} else {
 			logger.debug("Submitting score");
 			Games.Leaderboards.submitScore(mGoogleApiClient, getResources().getString(R.string.leaderboard_id), score);
 			showLeaderboard();
 		}
 	}
-	
+
 	@Override
 	public void setBannerVisible(boolean visible) {
 		logger.debug("Setting banner visible: " + visible);
@@ -229,36 +216,64 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	@Override
 	public void showFullscreenAd() {
 		fullscreenAdCounter++;
-		
-		if(fullscreenAdCounter >= FULLSCREEN_AD_INTERVAL){
+
+		if (fullscreenAdCounter >= FULLSCREEN_AD_INTERVAL) {
 			logger.debug("Trying to show fullscreen ad");
-	
+
 			runOnUiThread(new Runnable() {
-		        @Override public void run() {
-		        	if (mInterstitialAd.isLoaded()) {
-		    			logger.debug("Showing fullscreen ad");
-		            	mInterstitialAd.show();
-		            	fullscreenAdCounter = 0;
-		        	}
-		        	else{
-		        		resumeGame();
-		        	}
-		        }
-		    });
-		}
-		else{
+				@Override
+				public void run() {
+					if (mInterstitialAd.isLoaded()) {
+						logger.debug("Showing fullscreen ad");
+						mInterstitialAd.show();
+						fullscreenAdCounter = 0;
+					} else {
+						resumeGame();
+					}
+				}
+			});
+		} else {
 			resumeGame();
 		}
 	}
-	
-	private void resumeGame(){
+
+	@Override
+	public void vibrate() {
+		if (Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
+			Gdx.input.vibrate(200);
+	}
+
+	@Override
+	public void incrementAchievement(String achievementId) {
+		incrementAchievement(achievementId, 1);
+	}
+
+	@Override
+	public void incrementAchievement(String achievementId, int step) {
+		if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+			Games.Achievements.increment(mGoogleApiClient, achievementId, step);
+		} else {
+			logger.debug("Google API is not connected");
+		}
+	}
+
+	@Override
+	public void unlockAchievement(String achievementId) {
+		if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+			Games.Achievements.unlock(mGoogleApiClient, achievementId);
+		} else {
+			logger.debug("Google API is not connected");
+		}
+	}
+
+	private void resumeGame() {
 		Gdx.app.postRunnable(new Runnable() {
 
-            @Override
-            public void run() {
-            	Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
-            }
-        });
+			@Override
+			public void run() {
+				Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
+			}
+		});
 	}
 
 	//Ads thread handler
@@ -276,11 +291,5 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 			}
 		}
 	};
-
-	@Override
-	public void vibrate() {
-		if(Gdx.app.getPreferences("SETTINGS").getBoolean("VIBRATIONS"))
-			Gdx.input.vibrate(200);
-	}
 
 }

@@ -137,7 +137,6 @@ public class LevelGenerator {
 				GameActor obstacle = drawnPool.obtain();
 				
 				nextPosition += ((Spawnable)obstacle).getBaseOffset() + speedLevel;
-				//System.out.println(drawnPoolIndex + ": " + nextPosition + "   [" + ((Spawnable)obstacle).getBaseOffset() + "; " + speedLevel + "]");
 				//Free the obstacle - it is not necessary any longer now
 				drawnPool.free(obstacle);
 			}

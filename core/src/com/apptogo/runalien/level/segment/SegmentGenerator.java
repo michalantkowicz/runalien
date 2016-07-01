@@ -18,7 +18,6 @@ public class SegmentGenerator {
 	    //TODO set name for each segment by type
 		Segment segment = new Segment(segmentDefinition.getName(), segmentDefinition.getMinLevel(), segmentDefinition.getMaxLevel(), segmentDefinition.getBaseOffset() + SegmentFieldDefinitions.OBSTACLE_SIZE * definition[0].length);
 
-	System.out.println(segmentDefinition.getName() + ": " + segmentDefinition.getBaseOffset());
 		for (int i = 0; i < definition[0].length; i++) {
 			for (int j = definition.length - 1; j >= 0; j--) {
 				//iteration through columns(bottom->top) -> rows(left->right) because we need column blocks like bells or logs
