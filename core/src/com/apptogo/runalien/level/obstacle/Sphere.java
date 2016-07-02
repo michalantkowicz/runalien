@@ -184,4 +184,10 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 		SoundPlugin.setVolume("creak", currentlyPlayedSoundId, distance > 15 ? 0 : 1 - distance/15);
 		
 	}
+	
+	@Override
+	public void clear() {
+		super.clear();
+		soundHandler.stopAllSounds();
+	}
 }

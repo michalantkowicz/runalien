@@ -20,7 +20,7 @@ public class TouchSteeringPlugin extends SteeringPlugin {
 					chargeDown();
 			}
 			//if(!deathPlugin.dead && Gdx.input.justTouched()){
-			else if(!deathPlugin.dead && (Main.getInstance().getGameScreen().LEFT || Main.getInstance().getGameScreen().RIGHT)) {
+			else if(!deathPlugin.dead && Main.getInstance().getGameScreen().START) {
 				if(!running.isStarted())
 					startRunning();
 			}

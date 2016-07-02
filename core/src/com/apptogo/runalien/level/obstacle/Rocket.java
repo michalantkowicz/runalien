@@ -124,4 +124,10 @@ int poolIndex;
 	public int getPoolIndex() {
 		return poolIndex;
 	}
+	
+	@Override
+	public void clear() {
+		super.clear();
+		soundHandler.stopAllSounds();
+	}
 }

@@ -64,11 +64,11 @@ public class Main extends Game {
         
         ResourcesManager.create();
         CustomActionManager.create();
-        ResourcesManager.getInstance().loadResources();
-        ResourcesManager.getInstance().manager.finishLoading();
-        ResourcesManager.getInstance().loadSkin();
-        this.setScreen(new GameScreen(this));
-//        this.setScreen(new SplashScreen(this));
+//        ResourcesManager.getInstance().loadResources();
+//        ResourcesManager.getInstance().manager.finishLoading();
+//        ResourcesManager.getInstance().loadSkin();
+//        this.setScreen(new GameScreen(this));
+        this.setScreen(new SplashScreen(this));
     }
 
     @Override
