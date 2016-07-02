@@ -14,6 +14,7 @@ import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.AchievementPlugin;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
+import com.apptogo.runalien.plugin.KeyboardSteeringPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
 import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.plugin.TouchSteeringPlugin;
@@ -92,6 +93,8 @@ public class GameScreen extends BasicScreen {
 		world.setContactListener(contactListener);
 		
 		boolean isDay = Gdx.app.getPreferences("SETTINGS").getBoolean("DAYTIME", false);
+		//set day flag to achievement handling purposes
+		this.day = isDay;
 		
 		createBackgroundStage(isDay);
 		createMiddleBackgroundStage();
@@ -150,6 +153,7 @@ public class GameScreen extends BasicScreen {
 		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
 		player.addPlugin(new TouchSteeringPlugin());
+		player.addPlugin(new KeyboardSteeringPlugin());
 		
 		
 		//create infinite ground body
@@ -182,7 +186,6 @@ public class GameScreen extends BasicScreen {
 		//Sign and tutorial button if not TutorialScreen instance
 		if(!(this instanceof TutorialScreen)) {		
 			stage.addActor(tutorialButton);
-			tutorial = true;
 			
 			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
 			sign.setStaticImage("board");
@@ -192,6 +195,9 @@ public class GameScreen extends BasicScreen {
 			Group topScore = createTopScore(String.valueOf(Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")), 1/UnitConverter.PPM/1.5f);
 			topScore.setPosition(sign.getX() + 1.6f - topScore.getWidth()/2f,  sign.getY() + 1.5f);
 			gameworldStage.addActor(topScore);
+		}
+		else {
+			tutorial = true;
 		}
 		
 		//create obstacle generator
@@ -305,6 +311,9 @@ public class GameScreen extends BasicScreen {
 	
 	void toggleDaytime(boolean isDay)
 	{ 
+		//set day flag to achievement handling purposes
+		this.day = isDay;
+		
 		//setting up values for animation
 		float sunXPos = -sun.getWidth()/2f;
 		float moonXPos = -moon.getWidth()/2f;
@@ -335,9 +344,7 @@ public class GameScreen extends BasicScreen {
 					shaderBrightness = brightnessDest;
 				};
 			}
-		});
-		
-		this.day = isDay;
+		});		
 	}
 
 	protected void createBackgroundStage(boolean isDay) { 

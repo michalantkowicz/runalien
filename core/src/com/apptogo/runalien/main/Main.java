@@ -57,18 +57,18 @@ public class Main extends Game {
     @Override
     public void create() {
     	//use this to define log level. It overrides local settings
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_ERROR);
 
 		//set handle back button
         Gdx.input.setCatchBackKey(true);
         
         ResourcesManager.create();
         CustomActionManager.create();
-        //ResourcesManager.getInstance().loadResources();
-        //ResourcesManager.getInstance().manager.finishLoading();
-        //ResourcesManager.getInstance().loadSkin();
-        //this.setScreen(new GameScreen(this));
-        this.setScreen(new SplashScreen(this));
+        ResourcesManager.getInstance().loadResources();
+        ResourcesManager.getInstance().manager.finishLoading();
+        ResourcesManager.getInstance().loadSkin();
+        this.setScreen(new GameScreen(this));
+//        this.setScreen(new SplashScreen(this));
     }
 
     @Override

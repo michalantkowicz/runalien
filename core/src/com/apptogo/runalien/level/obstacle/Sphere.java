@@ -23,12 +23,13 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	
 	private float ROPE_WIDTH = 8.7f;
 	
-	private final float BASE_OFFSET = 18f;
-	public static final int MIN_LEVEL = 1;
-	public static final int MAX_LEVEL = 9;
+	private final float BASE_OFFSET = 14f;
+	public static final int SHORT_MIN_LEVEL = 3;
+	public static final int SHORT_MAX_LEVEL = Main.MAX_SPEED_LEVEL;
+	public static final int LONG_MIN_LEVEL = 1;
+	public static final int LONG_MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 	
-	private static int sphereId = 0;
-
+	private boolean isShort;
 	private AtlasRegion ball;
 	private AtlasRegion chain;
 	private Vector2 ballSize;
@@ -46,12 +47,13 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	
 	private boolean playSound = true;
 	
-	public Sphere(String name) {
+	public Sphere(String name, boolean isShort) {
 		super(name);
+		this.isShort = isShort;
 		world = Main.getInstance().getGameScreen().getWorld();
 		
-		if((sphereId++)%2 == 0) {
-			ROPE_WIDTH -= 1;
+		if(isShort) {
+			ROPE_WIDTH -= 1.2f;
 		}
 		
 		ballPositionOffset = (new Vector2(0, -ROPE_WIDTH)).rotate(-25f);
@@ -124,12 +126,18 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 
 	@Override
 	public int getMinLevel() {
-		return MIN_LEVEL;
+		if(isShort)
+			return SHORT_MIN_LEVEL;
+		else
+			return LONG_MIN_LEVEL;
 	}
 
 	@Override
 	public int getMaxLevel() {
-		return MAX_LEVEL;
+		if(isShort)
+			return SHORT_MAX_LEVEL;
+		else
+			return LONG_MAX_LEVEL;
 	}
 
 	@Override

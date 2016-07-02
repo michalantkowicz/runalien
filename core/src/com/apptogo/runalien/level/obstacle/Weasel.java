@@ -17,9 +17,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class Weasel extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 8123133757302816575L;
 	
-	private final float BASE_OFFSET = 10f;
+	private final float BASE_OFFSET = 3f;
 	public static final int MIN_LEVEL = 2;
-	public static final int MAX_LEVEL = 9;
+	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 
 	float animationProgress = 0;
 	

@@ -39,7 +39,7 @@ public class AchievementPlugin extends AbstractPlugin {
 	public void fire(String achievementName) {
 		logger.debug("Achievement fired: " + achievementName);
 		
-		if(Main.getInstance().getGameScreen().isTutorial())
+		if(Main.getInstance().getGameScreen().isTutorial() && !EDUCATED.equals(achievementName))
 			return;
 		
 		switch (achievementName) {
@@ -121,18 +121,10 @@ public class AchievementPlugin extends AbstractPlugin {
 		jumpMoments.add(currentMoment);
 		
 		if(jumpMoments.size() >= JUMP_AMOUNT) {
-			
 			if(currentMoment - jumpMoments.poll() <= JUMP_INTERVAL) {
 				fire(FAST_FINGERS);
-				logger.debug("XXX SUCCESS! " + (currentMoment - lastMoment) );
-			}
-			else{
-				logger.debug("XXX fail " + (currentMoment - lastMoment) );
 			}
 		}
-		
-
-		logger.debug("XXX jumps: " + jumpMoments.size() + "time: " + (currentMoment - lastMoment));
 	}
 
 }

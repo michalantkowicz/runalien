@@ -19,6 +19,7 @@ import com.apptogo.runalien.level.segment.SegmentDefinition;
 import com.apptogo.runalien.level.segment.SegmentDefinitions;
 import com.apptogo.runalien.level.segment.SegmentGenerator;
 import com.apptogo.runalien.main.Main;
+import com.apptogo.runalien.plugin.RunningPlugin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Logger;
@@ -80,6 +81,14 @@ public class LevelGenerator {
 		createObstaclePools();
 		
 		fulfillObstaclesQueue(10000);
+//		
+//		System.out.println("OBSTACLES POOLS:");
+//		for(Integer key : poolsLevel.keySet()) {
+//			if(key == RunningPlugin.DEBUG_LEVEL)
+//				System.out.println(key + ": " + poolsLevel.get(key));
+//		}
+//		System.out.println("--------");
+		
 		obstacleToSet = obstaclesQueue.pollFirst();
 	}
 	
@@ -113,11 +122,18 @@ public class LevelGenerator {
 				//If rocket generate sequence
 				if(drawnPoolIndex == ROCKET_POOL_INDEX) {
 					IntArray rocketLevels = new IntArray();
-					int rocketsCount = random.nextInt(4) + 1;
-					for(int i = 0; i <= rocketsCount; i++)
-						rocketLevels.add(i);
 					
-					rocketLevels.shuffle();
+					//long slide
+					if(random.nextFloat() > 0.8f) {
+						rocketLevels.addAll(1, 2, 1, 1, 2, 1);
+					}
+					else { //random seq o rockets
+						int rocketsCount = random.nextInt(4) + 1;
+						for(int i = 0; i <= rocketsCount; i++)
+							rocketLevels.add(i);
+						
+						rocketLevels.shuffle();
+					}
 					
 					for(int i = 0; i < rocketLevels.size; i++) {
 						int rocketLevel = rocketLevels.get(i);
@@ -202,7 +218,7 @@ public class LevelGenerator {
 		}
 		
 		//create cutbottom
-		final int cutbottomPoolIndex = pools.size;
+		final int cutbottomPoolIndex = pools.size; System.out.println("Cutbottom: " + cutbottomPoolIndex);
 		setAvailablePoolLevels(pools.size, CutBottom.MIN_LEVEL, CutBottom.MAX_LEVEL);
 		CUTBOTTOM_POOL_INDEX = pools.size;
 		pools.add( new Pool<GameActor>(4) {
@@ -216,7 +232,7 @@ public class LevelGenerator {
 		fulfillPool(pools.peek(), 2);
 		
 		//create fallingsphere
-		final int fallingspherePoolIndex = pools.size;
+		final int fallingspherePoolIndex = pools.size; System.out.println("Fallingsphere: " + fallingspherePoolIndex);
 		setAvailablePoolLevels(pools.size, FallingSphere.MIN_LEVEL, FallingSphere.MAX_LEVEL);
 		pools.add( new Pool<GameActor>(4) {
 			@Override
@@ -229,7 +245,7 @@ public class LevelGenerator {
 		fulfillPool(pools.peek(), 2);
 		
 		//create rocket
-		final int rocketPoolIndex = pools.size;
+		final int rocketPoolIndex = pools.size; System.out.println("Rocket: " + rocketPoolIndex);
 		setAvailablePoolLevels(pools.size, Rocket.MIN_LEVEL, Rocket.MAX_LEVEL);
 		ROCKET_POOL_INDEX = pools.size;
 		pools.add( new Pool<GameActor>(4) {
@@ -242,21 +258,34 @@ public class LevelGenerator {
 		});
 		fulfillPool(pools.peek(), 10); //we need more rocket since max count in sequence is 5
 		
-		//create sphere (it will make short and long by itself)
-		final int spherePoolIndex = pools.size;
-		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
+		//create long sphere (it will make short and long by itself)
+		final int longSpherePoolIndex = pools.size; System.out.println("Sphere: " + longSpherePoolIndex);
+		setAvailablePoolLevels(pools.size, Sphere.LONG_MIN_LEVEL, Sphere.LONG_MAX_LEVEL);
 		pools.add( new Pool<GameActor>(4) {
 			@Override
 			protected GameActor newObject() {
-				GameActor obstacleActor = new Sphere("sphere");
-				((Spawnable)obstacleActor).setPoolIndex(spherePoolIndex);
+				GameActor obstacleActor = new Sphere("sphere", false);
+				((Spawnable)obstacleActor).setPoolIndex(longSpherePoolIndex);
+				return obstacleActor;
+			}
+		});
+		fulfillPool(pools.peek(), 2);
+		
+		//create short sphere (it will make short and long by itself)
+		final int shortSpherePoolIndex = pools.size; System.out.println("Sphere: " + shortSpherePoolIndex);
+		setAvailablePoolLevels(pools.size, Sphere.SHORT_MIN_LEVEL, Sphere.SHORT_MAX_LEVEL);
+		pools.add( new Pool<GameActor>(4) {
+			@Override
+			protected GameActor newObject() {
+				GameActor obstacleActor = new Sphere("sphere", true);
+				((Spawnable)obstacleActor).setPoolIndex(shortSpherePoolIndex);
 				return obstacleActor;
 			}
 		});
 		fulfillPool(pools.peek(), 2);
 		
 		//create weasel
-		final int weaselPoolIndex = pools.size;
+		final int weaselPoolIndex = pools.size; System.out.println("Weasel: " + weaselPoolIndex); System.out.println("======================================");
 		setAvailablePoolLevels(pools.size, Weasel.MIN_LEVEL, Weasel.MAX_LEVEL);
 		pools.add( new Pool<GameActor>(4) {
 			@Override

@@ -260,6 +260,7 @@ public class AndroidLauncher extends AndroidApplication implements OnConnectionF
 	@Override
 	public void unlockAchievement(String achievementId) {
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+			logger.debug("XXXXXXXXXXXX " + achievementId);
 			Games.Achievements.unlock(mGoogleApiClient, achievementId);
 		} else {
 			logger.debug("Google API is not connected");

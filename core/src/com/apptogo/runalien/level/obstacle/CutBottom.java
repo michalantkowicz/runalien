@@ -7,7 +7,6 @@ import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.plugin.SoundPlugin;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.MassData;
@@ -19,7 +18,7 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 6444715985674444198L;
 	
 	private final float BASE_OFFSET = 15f;
-	public static final int MIN_LEVEL = 2;
+	public static final int MIN_LEVEL = 3;
 	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 
 	Body body;
@@ -34,9 +33,16 @@ public class CutBottom extends GameActor implements Spawnable, Poolable {
 		final float x = 0;
 		final float y = Main.GROUND_LEVEL + 113/64f;
 		
-		body = BodyBuilder.get().type(BodyType.DynamicBody).addFixture("killingBottom", "cutBottom").
-				loop(new float[]{0, -113/64f, 38/64f, -78/64f, 38/64f, 113/64f, -38/64f, 113/64f, -38/64f, -78/64f}).
-				friction(0.5f).position(x, y).maskBits(Main.GROUND_BITS).create();
+		body = BodyBuilder.get().type(BodyType.DynamicBody)
+				.addFixture("killingBottom")
+				.loop(new float[]{0, -113/64f, 38/64f, -78/64f, 38/64f, 113/64f, -38/64f, 113/64f, -38/64f, -78/64f})
+				.friction(0.5f).position(x, y)
+				.maskBits(Main.GROUND_BITS)
+				.addFixture("killingBottom", "cutBottom")
+				.loop(new float[]{0, -113/64f, 38/64f, -78/64f, 38/64f, 113/64f, -38/64f, 113/64f, -38/64f, -78/64f})
+				.friction(0.5f).position(x, y)
+				.sensor(true)
+				.create();
 		
 		MassData md = new MassData();
 		md.I = 1;
