@@ -44,13 +44,12 @@ public class ResourcesManager {
 
 		//sounds
 		//TODO muzyka w podfolderze i funkcja do zwracania instancji (jak przy regionach)
-		manager.load("scream.ogg", Sound.class);
+		manager.load("runscream.ogg", Sound.class);
 		manager.load("slide.ogg", Sound.class);
 		manager.load("jump.ogg", Sound.class);
 		manager.load("doubleJump.ogg", Sound.class);
 		manager.load("land.ogg", Sound.class);
 		manager.load("chargeDown.ogg", Sound.class);
-		manager.load("run.ogg", Sound.class);
 		manager.load("bell.ogg", Sound.class);
 		manager.load("die.ogg", Sound.class);
 		manager.load("whoosh.ogg", Sound.class);

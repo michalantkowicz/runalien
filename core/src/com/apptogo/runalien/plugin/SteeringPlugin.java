@@ -1,8 +1,5 @@
 package com.apptogo.runalien.plugin;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
@@ -10,10 +7,7 @@ import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.physics.UserData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public abstract class SteeringPlugin extends AbstractPlugin {
 
@@ -22,7 +16,6 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	protected RunningPlugin running;
 	protected DeathPlugin deathPlugin;
 	private SoundPlugin soundHandler;
-	
 	private AchievementPlugin achievementPlugin;	
 	
 	protected Fixture defaultFixture, slidingFixture;
@@ -51,8 +44,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			jumping = true;
 			actor.changeAnimation("jump");
 
-			soundHandler.pauseSound("scream");
-			soundHandler.pauseSound("run");
+			soundHandler.stopSound("runscream");
 			soundHandler.playSound("jump");
 			
 			achievementPlugin.handleJump();
@@ -95,8 +87,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	{		
 		if(!sliding){
 			actor.changeAnimation("slide");
-			soundHandler.pauseSound("scream");
-			soundHandler.pauseSound("run");
+			soundHandler.stopSound("runscream");
 			soundHandler.playSound("slide");
 			
 			achievementPlugin.fire(AchievementPlugin.SLIDER);
@@ -121,8 +112,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 		actor.changeAnimation("standup");
 		actor.queueAnimation("run");
 		
-		soundHandler.resumeSound("scream");
-		soundHandler.resumeSound("run");
+		soundHandler.loopSound("runscream");
 		
 		UserData.get(slidingFixture).ignore = true;
 		slidingFixture.setSensor(true);
@@ -140,21 +130,18 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 			actor.queueAnimation("run");
 			
 			soundHandler.playSound("land");
-			soundHandler.resumeSound("scream");
-			soundHandler.resumeSound("run");
+			soundHandler.loopSound("runscream");
 		}
 	}
 	
 	public void startRunning(){		
 		running.setStarted(true);
-		soundHandler.loopSound("scream");
-		soundHandler.loopSound("run");
+		soundHandler.loopSound("runscream");
 	}
 	
 	public void stopRunning(){		
 		running.setStarted(false);
-		soundHandler.pauseSound("scream");
-		soundHandler.pauseSound("run");
+		soundHandler.stopSound("runscream");
 	}
 
 	@Override

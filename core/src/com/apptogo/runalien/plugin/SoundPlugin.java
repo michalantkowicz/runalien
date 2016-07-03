@@ -53,8 +53,8 @@ public class SoundPlugin extends AbstractPlugin {
 		return get(soundName).play();
 	}
 
-	public void loopSound(String soundName) {
-		get(soundName).loop();
+	public long loopSound(String soundName) {
+		return get(soundName).loop();
 	}
 
 	public void stopSound(String soundName) {

@@ -152,7 +152,7 @@ public class GameScreen extends BasicScreen {
 		gameworldStage.addActor(player);
 
 		player.addPlugin(new AchievementPlugin());
-		player.addPlugin(new SoundPlugin("scream", "slide", "chargeDown", "land", "jump", "doubleJump", "run", "bell", "die", "explosion", "ballHit", "weaselHit"));
+		player.addPlugin(new SoundPlugin("runscream", "slide", "chargeDown", "land", "jump", "doubleJump", "bell", "die", "explosion", "ballHit", "weaselHit"));
 		player.addPlugin(new CameraFollowingPlugin());
 		player.addPlugin(new DeathPlugin());
 		player.addPlugin(new RunningPlugin());
@@ -212,7 +212,7 @@ public class GameScreen extends BasicScreen {
 		//simulate physics and handle body contacts
 		ContactListener.SNAPSHOT.clear();
 		world.step(delta, 3, 3);
-
+		
 		//generate obstacles
 		levelGenerator.generate();
 

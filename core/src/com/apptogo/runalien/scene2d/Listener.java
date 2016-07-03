@@ -1,7 +1,6 @@
 package com.apptogo.runalien.scene2d;
 
 import com.apptogo.runalien.main.Main;
-import com.apptogo.runalien.plugin.SoundPlugin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

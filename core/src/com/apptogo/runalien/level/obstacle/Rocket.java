@@ -8,7 +8,6 @@ import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.plugin.SoundPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.apptogo.runalien.tools.UnitConverter;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;

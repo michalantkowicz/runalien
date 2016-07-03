@@ -6,7 +6,6 @@ import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.plugin.SoundPlugin;
-import com.apptogo.runalien.screen.GameScreen;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;

@@ -1,6 +1,5 @@
 package com.apptogo.runalien.level.segment;
 
-import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.UserData;

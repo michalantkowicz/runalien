@@ -4,7 +4,6 @@ import com.apptogo.runalien.exception.PluginDependencyException;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.physics.UserData;
-import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class DeathPlugin extends AbstractPlugin {
@@ -28,8 +27,7 @@ public class DeathPlugin extends AbstractPlugin {
 				dead = true;
 				String obstacleType = ContactListener.SNAPSHOT.getCollision(UserData.get(bodyFixture), "killing").getValue().type;
 				
-				soundHandler.stopSound("run");
-				soundHandler.stopSound("scream");
+				soundHandler.stopSound("runscream");
 				
 				Main.gameCallback.vibrate();
 				
