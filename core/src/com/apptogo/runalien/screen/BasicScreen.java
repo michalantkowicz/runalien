@@ -104,6 +104,8 @@ public abstract class BasicScreen implements Screen {
         prepare();
     }
 
+    protected float DELTA = 1/60f;
+    
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -116,13 +118,13 @@ public abstract class BasicScreen implements Screen {
         }
 
         this.backgroundViewport.apply();
-        this.backgroundStage.act(delta);
+        this.backgroundStage.act(DELTA);
         this.backgroundStage.draw();
         
-        step(delta);
+        step(DELTA);
         
         this.viewport.apply();
-        this.stage.act(delta);
+        this.stage.act(DELTA);
         this.stage.draw();
         
         if(fadingStage.getRoot().getActions().size > 0) {

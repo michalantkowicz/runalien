@@ -9,6 +9,7 @@ import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomAction;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.manager.VideoManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
@@ -23,7 +24,10 @@ import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -33,12 +37,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
@@ -55,14 +61,31 @@ public class GameScreen extends BasicScreen {
 	protected FPSLogger logger = new FPSLogger();
 	protected int score = 0;
 	protected Image sky_day, sky_night, sun, moon;
+	protected Image lastFence, lastPoster, almostLastPoster;
 	protected Label scoreLabel;
 	public Button tutorialButton, submitButton;
+	
+	private boolean RECORD_VIDEO = false;
+	int recordFrame = 0;
+	
+	private float ANIMATION_STEP = 0.02f;
+	
+	Array<Actor> frontActors = new Array<Actor>();
+	Animation anim;
+	long theTime = 0;
+	boolean started = false;
 	
 	protected ShaderProgram shaderProgram;
 	protected float shaderBrightness, shaderSaturation;
 	
 	protected boolean endGame = false, gameFinished = false;
 	public boolean LEFT = false, RIGHT = false;
+	
+	Animation ranim1, ranim2, ranim3, ranim4;
+	Animation hanim1, hanim2, hanim3, hanim4;
+	Animation moonwalk;
+	
+	Image r1,r2,r3,r4,r5,r6;
 	
 	public GameScreen(Main game) {
 		super(game);
@@ -71,7 +94,11 @@ public class GameScreen extends BasicScreen {
 	}
 	
 	@Override
-	protected void prepare() {		
+	protected void prepare() {
+		theTime = TimeUtils.millis();
+		
+		Gdx.app.getPreferences("SETTINGS").putLong("TOPSCORE", 0).flush();
+		
 		debugRenderer = new Box2DDebugRenderer();
 		
 		world = new World(new Vector2(0, -145), true);
@@ -104,16 +131,18 @@ public class GameScreen extends BasicScreen {
 		
 		//get isDay flag [t:day f:night] from Preferences and check whether it is time to change daytime
 		if(Gdx.app.getPreferences("SETTINGS").getInteger("LASTDAYCHANGE", 0) + Main.DAYTIME_CHANGE_INTERVAL < TimeUtils.millis()/1000 ) {
-			Gdx.app.getPreferences("SETTINGS").putBoolean("DAYTIME", !isDay).flush();
-			Gdx.app.getPreferences("SETTINGS").putInteger("LASTDAYCHANGE", (int) (TimeUtils.millis()/1000)).flush();
-		
-			CustomActionManager.getInstance().registerAction(new CustomAction(0.5f){
-				@Override
-				public void perform() {
-					toggleDaytime(Gdx.app.getPreferences("SETTINGS").getBoolean("DAYTIME", true));
-				}
-			});
+//			Gdx.app.getPreferences("SETTINGS").putBoolean("DAYTIME", !isDay).flush();
+//			Gdx.app.getPreferences("SETTINGS").putInteger("LASTDAYCHANGE", (int) (TimeUtils.millis()/1000)).flush();
+//		
+//			CustomActionManager.getInstance().registerAction(new CustomAction(0.5f){
+//				@Override
+//				public void perform() {
+//					toggleDaytime(Gdx.app.getPreferences("SETTINGS").getBoolean("DAYTIME", true));
+//				}
+//			});
+			
 		}
+		toggleDaytime(true);
 		
 		//create player
 		player = new GameActor("player");
@@ -122,8 +151,8 @@ public class GameScreen extends BasicScreen {
 		player.addAvailableAnimation(Animation.get(0.04f, "idle", PlayMode.LOOP));
 		player.queueAnimation("idle");
 
-		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, Main.GROUND_LEVEL).fixedRotation(true)
-				                        .addFixture("player").box(0.6f, 1.9f).friction(0.5f)
+		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(-1.6f, Main.GROUND_LEVEL).fixedRotation(true)
+				                        .addFixture("player").box(0.6f, 1.9f).friction(0f)
 				                        .addFixture("player", "sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.5f)
 				                        .create());
 		
@@ -140,23 +169,203 @@ public class GameScreen extends BasicScreen {
 		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).categoryBits(Main.GROUND_BITS).create();
 
 		//create Parallaxes
+		
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "sky_day").moveToY(Main.GROUND_LEVEL).setSpeedModifier(0));
+		//gameworldStage.addActor(sun.scale(1/UnitConverter.PPM));
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "background_game").moveToY(Main.GROUND_LEVEL).setSpeedModifier(0));
+		
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "spaceRubbish").setFixedSpeed(0.002f).moveToY(UnitConverter.toBox2dUnits(1090)) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "clouds").setFixedSpeed(0.004f).moveToY(2) );
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "wheat").moveToY(Main.GROUND_LEVEL-2.5f).setSpeedModifier(0.5f) );
 		ParallaxActor ground = ParallaxActor.get(gameworldStage.getCamera(), "ground");
 		gameworldStage.addActor( ground.moveToY(Main.GROUND_LEVEL - ground.getHeight()) );
 		grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL - 0.01f);
+		
+		
+		
+		gameworldStage.addActor(Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*0, Main.GROUND_LEVEL));
+		gameworldStage.addActor(Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*1, Main.GROUND_LEVEL));
+		gameworldStage.addActor(Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*2, Main.GROUND_LEVEL));
+		gameworldStage.addActor(Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*3, Main.GROUND_LEVEL));
+		gameworldStage.addActor(Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*4, Main.GROUND_LEVEL));
+		gameworldStage.addActor(Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*5, Main.GROUND_LEVEL));
+		
+		
+		r1 = Image.get(ResourcesManager.getInstance().manager.get("rozmycie.png", Texture.class)).scale(1/UnitConverter.PPM).position(0 + 22.5f/3f*0, Main.GROUND_LEVEL);
+		r2 = Image.get(ResourcesManager.getInstance().manager.get("rozmycie.png", Texture.class)).scale(1/UnitConverter.PPM).position(0 + 22.5f/3f*1, Main.GROUND_LEVEL);
+		r3 = Image.get(ResourcesManager.getInstance().manager.get("rozmycie.png", Texture.class)).scale(1/UnitConverter.PPM).position(0 + 22.5f/3f*2, Main.GROUND_LEVEL);
+		r4 = Image.get(ResourcesManager.getInstance().manager.get("rozmycie.png", Texture.class)).scale(1/UnitConverter.PPM).position(0 + 22.5f/3f*3, Main.GROUND_LEVEL);
+		r5 = Image.get(ResourcesManager.getInstance().manager.get("rozmycie.png", Texture.class)).scale(1/UnitConverter.PPM).position(0 + 22.5f/3f*4, Main.GROUND_LEVEL);
+		r6 = Image.get(ResourcesManager.getInstance().manager.get("rozmycie.png", Texture.class)).scale(1/UnitConverter.PPM).position(0 + 22.5f/3f*5, Main.GROUND_LEVEL);
+		gameworldStage.addActor(r1);
+		gameworldStage.addActor(r2);
+		gameworldStage.addActor(r3);
+		gameworldStage.addActor(r4);
+		gameworldStage.addActor(r5);
+		gameworldStage.addActor(r6);
+		
+		r1.addAction(Actions.alpha(0));
+		r2.addAction(Actions.alpha(0));
+		r3.addAction(Actions.alpha(0));
+		r4.addAction(Actions.alpha(0));
+		r5.addAction(Actions.alpha(0));
+		r6.addAction(Actions.alpha(0));
+		
+		
+		lastFence = Image.get("fence").scale(1/UnitConverter.PPM/4f).position(0 + 22.5f/3f*6, Main.GROUND_LEVEL);
+		gameworldStage.addActor(lastFence);	
+		
+		Image forest = Image.get("forest").scale(1/64f/9f).position(5+5.5f, -3.1f);
+		gameworldStage.addActor(forest);
+		frontActors.add(forest);
+		
+		Image laser = Image.get("laser").scale(1/64f/9f).position(5+6.4f, -2.6f);
+		gameworldStage.addActor(laser);
+		frontActors.add(laser);
+		
+		Image ufo = Image.get("ufo").scale(1/64f/9f).position(5+6.36f, -2.1f);
+		gameworldStage.addActor(ufo);
+		frontActors.add(ufo);
+		
+		Animation animaaa = Animation.get(0.03f, "anima", PlayMode.LOOP).scaleFrames(1/64f/5f).position(5+6.1f, -3.51f);
+		animaaa.addAction(Actions.alpha(0));
+		animaaa.addAction(Actions.sequence(Actions.delay(3.5f), Actions.alpha(0.4f, 0.25f), 
+						                   Actions.alpha(0.2f, 0.25f),
+						                   Actions.alpha(0.3f, 0.25f), 
+						                   Actions.alpha(0.1f, 0.25f), 
+						                   Actions.alpha(0.2f, 0.25f), 
+						                   Actions.alpha(0.1f, 0.25f), 
+						                   Actions.alpha(0.3f, 0.25f),
+						                   Actions.alpha(0.2f, 0.25f), 
+						                   Actions.alpha(0.4f, 0.25f),
+						                   Actions.alpha(0.3f, 0.25f), 
+						                   Actions.alpha(0.5f, 0.25f), 
+						                   Actions.alpha(0.4f, 0.25f), 
+						                   Actions.alpha(0.5f, 0.25f), 
+						                   Actions.alpha(0.6f, 0.25f),
+				                           Actions.alpha(0.8f, 0.25f), 
+				                           Actions.alpha(1f,   0.25f)
+				));
+		gameworldStage.addActor(animaaa);
+		frontActors.add(animaaa);
+		
+		Animation animaa = Animation.get(0.03f, "anima", PlayMode.LOOP).scaleFrames(1/64f/4f).position(5+12.5f, -3.7f);
+		gameworldStage.addActor(animaa);
+		frontActors.add(animaa);
+				
+		Image party1 = Image.get("party1").scale(1/64f/8f).position(5+12.5f+1.5f, -2.8f);
+		gameworldStage.addActor(party1);
+		frontActors.add(party1);
+		
+		Image party2 = Image.get("patry2").scale(1/64f/8f).position(5+20+2, -2.8f);
+		gameworldStage.addActor(party2);
+		frontActors.add(party2);
+		
+		Animation guitar = Animation.get(ANIMATION_STEP, "guitar", PlayMode.LOOP).scaleFrames(1/64f/7.5f).position(party2.getX() + 0.3f, party2.getY() + 0.26f);
+		gameworldStage.addActor(guitar);
+		frontActors.add(guitar);
+		
+		Animation travolta = Animation.get(ANIMATION_STEP, "travolta", PlayMode.LOOP).scaleFrames(1/64f/5f).position(party2.getX() - 0.4f, party2.getY()-0.2f);
+		gameworldStage.addActor(travolta);
+		frontActors.add(travolta);
+		
+		Animation dance = Animation.get(ANIMATION_STEP, "dance", PlayMode.LOOP).scaleFrames(1/64f/5f).position(party2.getX() - 0.8f, party2.getY()-0.2f);
+		gameworldStage.addActor(dance);
+		frontActors.add(dance);
+		
+		moonwalk = Animation.get(ANIMATION_STEP, "moonwalk", PlayMode.LOOP).scaleFrames(1/64f/5.5f).position(party2.getX() - 1.1f, party2.getY()-0.1f);
+		gameworldStage.addActor(moonwalk);
+		frontActors.add(moonwalk);
+		
+		Animation animc = Animation.get(0.03f, "animc", PlayMode.LOOP).scaleFrames(1/64f/7f).position(party2.getX() - 1.9f, party2.getY()-0.6f-0.3f);
+		gameworldStage.addActor(animc);
+		frontActors.add(animc);
+		
+		Image inlove = Image.get("inlove").scale(1/64f/5f).position(5+28f, Main.GROUND_LEVEL + 0.4f);
+		gameworldStage.addActor(inlove);
+		frontActors.add(inlove);
+		
+		
+		Image woman2 = Image.get("woman2").scale(1/64f/8f).position(5+28f + 1.2f, Main.GROUND_LEVEL + 0.8f);
+		gameworldStage.addActor(woman2);
+		frontActors.add(woman2);
+		
+		Image woman1 = Image.get("woman1").scale(1/64f/8f).position(5+28f + 1f, Main.GROUND_LEVEL + 1f);
+		woman1.setOrigin(Align.center);
+		woman1.addAction(Actions.forever(Actions.sequence(Actions.rotateBy(-20, 1), Actions.rotateBy(40, 2), Actions.rotateBy(-20, 1))));
+		gameworldStage.addActor(woman1);
+		frontActors.add(woman1);
+		
+		Animation fanim = Animation.get(ANIMATION_STEP, "fanim", PlayMode.LOOP).scaleFrames(1/64f/4f).position(5+35+0.2f, Main.GROUND_LEVEL + 0.6f);
+		gameworldStage.addActor(fanim);
+		frontActors.add(fanim);
+		
+		Animation fight = Animation.get(ANIMATION_STEP, "fight", PlayMode.LOOP).scaleFrames(1/64f/4f).position(5+35+0.9f, Main.GROUND_LEVEL + 0.6f);
+		gameworldStage.addActor(fight);
+		frontActors.add(fight);
+		
+		Animation scream = Animation.get(0.03f, "scream", PlayMode.LOOP).scaleFrames(1/64f/7f).position(5+35+1.9f, Main.GROUND_LEVEL + 0.35f);
+		gameworldStage.addActor(scream);
+		frontActors.add(scream);
+		
+		hanim1 = Animation.get(0.03f, "hanim", PlayMode.NORMAL).scaleFrames(1/64f/3f/4f).position(5+28f, Main.GROUND_LEVEL + 1.2f);
+		hanim1.stop();
+		//hanim1.rotateBy(-30);
+		gameworldStage.addActor(hanim1);
+		frontActors.add(hanim1);
+		
+		hanim2 = Animation.get(0.03f, "hanim", PlayMode.NORMAL).scaleFrames(1/64f/3f/6f).position(5+28f + 0.1f, Main.GROUND_LEVEL + 1.1f);
+		hanim2.stop();
+		hanim2.rotateBy(-30);
+		gameworldStage.addActor(hanim2);
+		frontActors.add(hanim2);
+		
+		hanim3 = Animation.get(0.03f, "hanim", PlayMode.NORMAL).scaleFrames(1/64f/3f/2.5f).position(5+28f - 0.2f, Main.GROUND_LEVEL + 1.2f);
+		hanim3.stop();
+		hanim3.rotateBy(-10);
+		gameworldStage.addActor(hanim3);
+		frontActors.add(hanim3);
+		
+		hanim4 = Animation.get(0.03f, "hanim", PlayMode.NORMAL).scaleFrames(1/64f/3f/4f).position(5+28f + 0.2f, Main.GROUND_LEVEL + 1.2f);
+		hanim4.stop();
+		hanim4.rotateBy(-30);
+		gameworldStage.addActor(hanim4);
+		frontActors.add(hanim4);
+		
+		Animation animb = Animation.get(0.03f, "animb", PlayMode.LOOP).scaleFrames(1/64f/3f).position(5+43.4f, -4f);
+		gameworldStage.addActor(animb);
+		frontActors.add(animb);
+		
+		ranim1 = Animation.get(0.025f, "ranim", PlayMode.NORMAL).scaleFrames(1/64f/3f/2f).position(5+42.8f, -2.7f);
+		ranim1.stop();
+		gameworldStage.addActor(ranim1);
+		frontActors.add(ranim1);
+		
+		ranim2 = Animation.get(0.022f, "ranim", PlayMode.NORMAL).scaleFrames(1/64f/3f/3f).position(5+43.9f, -2f);
+		ranim2.stop();
+		ranim2.rotateBy(-30);
+		gameworldStage.addActor(ranim2);
+		frontActors.add(ranim2);
+		
+		ranim3 = Animation.get(0.035f, "ranim", PlayMode.NORMAL).scaleFrames(1/64f/3f/1.4f).position(5+42.8f, -3.1f);
+		ranim3.stop();
+		ranim3.rotateBy(10);
+		gameworldStage.addActor(ranim3);
+		frontActors.add(ranim3);
+		
+		
+		
 		gameworldStage.addActor( grass );
 		
 		tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game)));
 		
 		//Sign and tutorial button if not TutorialScreen instance
 		if(!(this instanceof TutorialScreen)) {		
-			stage.addActor(tutorialButton);
+//			stage.addActor(tutorialButton);
 			
 			ImmaterialGameActor sign = new ImmaterialGameActor("sign");
 			sign.setStaticImage("board");
-			sign.setPosition(7, Main.GROUND_LEVEL);
+			sign.setPosition(22.5f*2.5f+7, Main.GROUND_LEVEL);
 			gameworldStage.addActor(sign);
 			
 			Group topScore = createTopScore(String.valueOf(Gdx.app.getPreferences("SETTINGS").getLong("TOPSCORE")), 1/UnitConverter.PPM/1.5f);
@@ -164,15 +373,128 @@ public class GameScreen extends BasicScreen {
 			gameworldStage.addActor(topScore);
 		}
 		
+		gameworldStage.addActor(Image.get("apptogopresents").scale(1/UnitConverter.PPM/4f).position(2, Main.GROUND_LEVEL + 0.25f));
+		
+		gameworldStage.addActor(Image.get("posterLeft").scale(1/UnitConverter.PPM/4f).position(5+ 5, Main.GROUND_LEVEL + 0.05f));
+		
+		gameworldStage.addActor(Image.get("posterRight").scale(1/UnitConverter.PPM/4f).position(5+12.5f, Main.GROUND_LEVEL + 0.05f));
+		
+		gameworldStage.addActor(Image.get("posterLeft").scale(1/UnitConverter.PPM/4f).position(5+20, Main.GROUND_LEVEL + 0.05f));
+		
+		gameworldStage.addActor(Image.get("posterRight").scale(1/UnitConverter.PPM/4f).position(5+27.5f, Main.GROUND_LEVEL + 0.05f));
+		almostLastPoster = Image.get("posterLeft").scale(1/UnitConverter.PPM/4f).position(5+35, Main.GROUND_LEVEL + 0.05f);
+		gameworldStage.addActor(almostLastPoster);
+		
+		lastPoster = Image.get("posterRight").scale(1/UnitConverter.PPM/4f).position(5+42.5f, Main.GROUND_LEVEL + 0.05f);
+		gameworldStage.addActor(lastPoster);
+		
 		//create obstacle generator
 		levelGenerator = new LevelGenerator(player);
+		
+		player.setVisible(false);
+		
+		((OrthographicCamera)gameworldStage.getCamera()).zoom = 0.25f;
+		
+		gameworldStage.addAction(Actions.moveBy(0, 2));
 	}
+	boolean MOVED = false;
 	
 	@Override
 	protected void step(float delta) {
+		
+		if(TimeUtils.millis() > theTime + 4700 && !started) {
+			started = true;
+			RIGHT = true;
+			System.out.println("GOGOGOGOG");
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		float posX = gameworldStage.getCamera().position.x;
+		
+		float XL = 2f, XR = -1f;
+		if(gameworldStage.getCamera().position.x < + 22.5f*2.5f-5 &&
+				(
+						(posX < 5+5+ XL && posX > 5+5 - XR) ||
+						(posX < 5+12.5f + XL && posX > 5+12.5f - XR) ||
+						(posX < 5+20 + XL && posX > 5+20 - XR) ||
+						(posX < 5+27.5f + XL && posX > 5+27.5f - XR) ||
+						(posX < 5+35 + XL && posX > 5+35 - XR) ||
+						(posX < 5+42.5f + XL && posX > 5+42.5f - XR )
+				)
+		  ) {
+			RunningPlugin.DEBUG_LEVEL = 0.25f;
+		}
+		else {
+			RunningPlugin.DEBUG_LEVEL = 10;
+			
+			if(r1.getActions().size == 0 && posX < 5+42.5f && posX > 4) {
+				r1.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
+				r2.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
+				r3.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
+				r4.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
+				r5.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
+				r6.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
+			}
+		}
+		
+		if(posX > 5+20 - XR && moonwalk.getActions().size == 0) {
+			moonwalk.addAction(Actions.moveBy(-0.5f, 0, 5));
+		}
+		
+		if(posX > 5+42.5f - XR) {
+			ranim1.start();
+		}
+		if(posX > 5+42.5f - XR + 0.5f) {
+			ranim2.start();
+		}
+		if(posX > 5+42.5f - XR + 0.75f) {
+			ranim3.start();
+		}
+		
+		if(posX > 5+27.5f - XR) {
+			hanim1.start();
+			hanim1.addAction(Actions.sequence(Actions.delay(0.5f), Actions.alpha(0, 0.25f)));
+		}
+		if(posX > 5+27.5f - XR + 0.4f) {
+			hanim2.start();
+			hanim2.addAction(Actions.sequence(Actions.delay(0.5f), Actions.alpha(0, 0.25f)));
+		}
+		if(posX > 5+27.5f - XR + 0.55f) {
+			hanim3.start();
+			hanim3.addAction(Actions.sequence(Actions.delay(0.5f), Actions.alpha(0, 0.25f)));
+		}
+		if(posX > 5+27.5f - XR + 0.75f) {
+			hanim4.start();
+			hanim4.addAction(Actions.sequence(Actions.delay(0.5f), Actions.alpha(0, 0.25f)));
+		}
+		
+		if(gameworldStage.getCamera().position.x >=  + 22.5f*2.5f-5 && ((OrthographicCamera)gameworldStage.getCamera()).zoom < 1) {
+			((OrthographicCamera)gameworldStage.getCamera()).zoom += 0.0075f;
+		}
+		if(((OrthographicCamera)gameworldStage.getCamera()).zoom > 1)
+			((OrthographicCamera)gameworldStage.getCamera()).zoom = 1;
+		
+		if(gameworldStage.getCamera().position.x >=  + 22.5f*2.5f-5 && !MOVED) {
+			MOVED = true;
+			gameworldStage.addAction(Actions.moveBy(0, -2, 1.7f));
+		}
+		
+		if(gameworldStage.getCamera().position.x >=  + 22.5f*2.5f-3 && !player.isVisible()) {
+			player.setVisible(true);
+			RunningPlugin.DEBUG_LEVEL = 12;
+		}
+		
+		sun.position(gameworldStage.getCamera().position.x - sun.getWidth()/2f, gameworldStage.getCamera().position.y + 2);
+		
 		//simulate physics and handle body contacts
 		ContactListener.SNAPSHOT.clear();
-		world.step(delta, 3, 3);
+		world.step(DELTA, 3, 3);
 		
 		//generate obstacles
 		levelGenerator.generate();
@@ -187,20 +509,35 @@ public class GameScreen extends BasicScreen {
 		
 		//act and draw main stage
 		middleBackgroundStage.getViewport().apply();
-		middleBackgroundStage.act(delta);
+		middleBackgroundStage.act(DELTA);
 		middleBackgroundStage.draw();
 		
 		//act and draw main stage
 		gameworldStage.getViewport().apply();
-		gameworldStage.act(delta);
+		gameworldStage.act(DELTA);
+		if(recordFrame == 1220) {
+			moon.setPosition(gameworldStage.getCamera().position.x, gameworldStage.getCamera().position.y);
+			gameworldStage.addActor(moon);
+			moon.toFront();
+		}
 		gameworldStage.draw();
+		if(recordFrame == 1220) {
+			moon.remove();
+		}
 		
 		//debug renderer
 //		debugRenderer.render(world, gameworldStage.getCamera().combined);
 		
 		//make player always on top
+		
 		player.toFront();
+		lastFence.toFront();
+		almostLastPoster.toFront();
+		lastPoster.toFront();
 		grass.toFront();
+		
+		for(Actor a : frontActors)
+			a.toFront();
 		
 		if(endGame) {
 			Main.gameCallback.setBannerVisible(true);
@@ -254,6 +591,27 @@ public class GameScreen extends BasicScreen {
 			score = (int) (player.getBody().getPosition().x / 10);
 			scoreLabel.setText("score: " + String.valueOf(score));
 		}
+		
+		
+		
+		if( RECORD_VIDEO )//&& recordFrame%2 == 0 )
+		{
+			VideoManager.getInstance().makeScreenshot();
+			
+			if( Gdx.input.isKeyJustPressed( Keys.V ) )
+			{
+				RECORD_VIDEO = false;
+				VideoManager.getInstance().saveScreenshots();
+				Gdx.app.exit();
+			}			
+		}
+		
+		if(Gdx.input.isKeyJustPressed(Keys.S))
+			RECORD_VIDEO = true;
+		recordFrame++;
+		
+		
+		
 	}
 	
 	@Override
@@ -292,7 +650,7 @@ public class GameScreen extends BasicScreen {
 		
 		//applying animation
 		sky_day.addAction(Actions.alpha(skyDayAlpha, 0.5f));
-		sun.addAction(Actions.sequence(Actions.delay(sunDelay.x), Actions.moveTo(sunXPos, middlePos, sunDelay.y), Actions.moveTo(sunXPos, sunFinalPos, sunDelay.z)));
+		//sun.addAction(Actions.sequence(Actions.delay(sunDelay.x), Actions.moveTo(sunXPos, middlePos, sunDelay.y), Actions.moveTo(sunXPos, sunFinalPos, sunDelay.z)));
 		moon.addAction(Actions.sequence(Actions.delay(moonDelay.x), Actions.moveTo(moonXPos, middlePos, moonDelay.y), Actions.moveTo(moonXPos, moonFinalPos, moonDelay.z)));
 		CustomActionManager.getInstance().registerAction(new CustomAction(0, 50) {
 			@Override
@@ -313,7 +671,7 @@ public class GameScreen extends BasicScreen {
 		float moonPosition = isDay ? -400 : 140;
 		
 		sun = Image.get("sun").position(0, sunPosition).centerX();
-		backgroundStage.addActor(sun);
+//		backgroundStage.addActor(sun);
 		sun.toBack();
 		
 		moon = Image.get("moon").position(0, moonPosition).centerX();
@@ -336,7 +694,7 @@ public class GameScreen extends BasicScreen {
 		middleBackgroundStage = new Stage(new FillViewport(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT));
 		middleBackgroundStage.getCamera().position.set(0, 0, 0);
 		
-		middleBackgroundStage.addActor(Image.get("background_game").centerX().centerY());
+//		middleBackgroundStage.addActor(Image.get("background_game").centerX().centerY());
 	}
 	
 	protected void createGameWorldStage() {
@@ -378,7 +736,7 @@ public class GameScreen extends BasicScreen {
 		stage.addActor(finalScore);
 		
 		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
-		stage.addActor(scoreLabel);
+//		stage.addActor(scoreLabel);
 		
 		stage.addListener(new ClickListener(){ 
 			@Override

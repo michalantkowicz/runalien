@@ -88,7 +88,7 @@ public class LevelGenerator {
 			if(possiblePools.size < 2)
 				throw new LevelGeneratorException("Every speedLevel (from 0 - "+Main.MAX_SPEED_LEVEL+") needs to have at least two possible obstacles!");
 		
-		float nextPosition = 17f;
+		float nextPosition = 22.5f*2.5f+17f;
 		Integer speedLevel;
 		
 		//Last generated value to avoid repeating - initialized with whatever value (it could be sth else)

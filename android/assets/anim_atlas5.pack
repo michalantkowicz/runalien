@@ -1,0 +1,145 @@
+anim_atlas5.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ranim29
+  rotate: false
+  xy: 1, 1
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim3
+  rotate: false
+  xy: 504, 1
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim30
+  rotate: false
+  xy: 1007, 1
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim31
+  rotate: false
+  xy: 1510, 1
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim32
+  rotate: false
+  xy: 1, 404
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim33
+  rotate: false
+  xy: 1, 807
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim34
+  rotate: false
+  xy: 1, 1210
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim35
+  rotate: false
+  xy: 1, 1613
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim36
+  rotate: false
+  xy: 504, 404
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim37
+  rotate: false
+  xy: 1007, 404
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim38
+  rotate: false
+  xy: 1510, 404
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim39
+  rotate: false
+  xy: 504, 807
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim4
+  rotate: false
+  xy: 504, 1210
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim40
+  rotate: false
+  xy: 504, 1613
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim41
+  rotate: false
+  xy: 1007, 807
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim42
+  rotate: false
+  xy: 1510, 807
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim43
+  rotate: false
+  xy: 1007, 1210
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim44
+  rotate: false
+  xy: 1007, 1613
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim45
+  rotate: false
+  xy: 1510, 1210
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1
+ranim46
+  rotate: false
+  xy: 1510, 1613
+  size: 501, 401
+  orig: 501, 401
+  offset: 0, 0
+  index: -1

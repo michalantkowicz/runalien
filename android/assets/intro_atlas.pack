@@ -1,0 +1,26 @@
+intro_atlas.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+apptogopresents
+  rotate: false
+  xy: 1283, 703
+  size: 720, 432
+  orig: 720, 432
+  offset: 0, 0
+  index: -1
+fence
+  rotate: false
+  xy: 1, 1
+  size: 1920, 700
+  orig: 1920, 700
+  offset: 0, 0
+  index: -1
+sky_day
+  rotate: false
+  xy: 1, 703
+  size: 1280, 1000
+  orig: 1280, 1000
+  offset: 0, 0
+  index: -1

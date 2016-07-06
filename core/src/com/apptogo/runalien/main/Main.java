@@ -3,9 +3,9 @@ package com.apptogo.runalien.main;
 import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
+import com.apptogo.runalien.manager.VideoManager;
 import com.apptogo.runalien.screen.BasicScreen;
 import com.apptogo.runalien.screen.GameScreen;
-import com.apptogo.runalien.screen.SplashScreen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -63,11 +63,13 @@ public class Main extends Game {
         
         ResourcesManager.create();
         CustomActionManager.create();
-        //ResourcesManager.getInstance().loadResources();
-        //ResourcesManager.getInstance().manager.finishLoading();
-        //ResourcesManager.getInstance().loadSkin();
-        //this.setScreen(new GameScreen(this));
-        this.setScreen(new SplashScreen(this));
+        VideoManager.create();
+        
+        ResourcesManager.getInstance().loadResources();
+        ResourcesManager.getInstance().manager.finishLoading();
+        ResourcesManager.getInstance().loadSkin();
+        this.setScreen(new GameScreen(this));
+//        this.setScreen(new SplashScreen(this));
     }
 
     @Override

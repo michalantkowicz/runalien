@@ -53,10 +53,13 @@ public class DesktopLauncher {
 
 	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-
-		config.width = (int) Main.SCREEN_WIDTH / 2;
-		config.height = (int) Main.SCREEN_HEIGHT / 2;
-
+			
+		int ratio = 1;
+		config.width = (int) Main.SCREEN_WIDTH / ratio;
+		config.height = (int) Main.SCREEN_HEIGHT / ratio;
+		
+		config.vSyncEnabled = true;
+		
 		new LwjglApplication(new Main(gameCallback), config);
 	}
 

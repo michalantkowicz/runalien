@@ -40,7 +40,28 @@ public class ResourcesManager {
 	public void loadResources() {
 		//textures
 		manager.load("menu_atlas.pack", TextureAtlas.class);
+		manager.load("intro_atlas.pack", TextureAtlas.class);
 		manager.load("game_atlas.pack", TextureAtlas.class);
+		manager.load("anim_atlas0.pack", TextureAtlas.class);
+		manager.load("anim_atlas1.pack", TextureAtlas.class);
+		manager.load("anim_atlas2.pack", TextureAtlas.class);
+		manager.load("anim_atlas3.pack", TextureAtlas.class);
+		manager.load("anim_atlas4.pack", TextureAtlas.class);
+		manager.load("anim_atlas5.pack", TextureAtlas.class);
+		manager.load("anim_atlas6.pack", TextureAtlas.class);
+		manager.load("anim_atlas7.pack", TextureAtlas.class);
+		manager.load("anim_atlas8.pack", TextureAtlas.class);
+		manager.load("anim_atlas9.pack", TextureAtlas.class);
+		manager.load("anim_atlas10.pack", TextureAtlas.class);
+		manager.load("anim_atlas11.pack", TextureAtlas.class);
+		manager.load("anim_atlas12.pack", TextureAtlas.class);
+		manager.load("anim_atlas13.pack", TextureAtlas.class);
+		manager.load("anim_atlas14.pack", TextureAtlas.class);
+		manager.load("anim_atlas15.pack", TextureAtlas.class);
+		manager.load("anim_atlas16.pack", TextureAtlas.class);
+		manager.load("anim_atlas17.pack", TextureAtlas.class);
+		
+		manager.load("rozmycie.png", Texture.class);
 
 		//sounds
 		//TODO muzyka w podfolderze i funkcja do zwracania instancji (jak przy regionach)

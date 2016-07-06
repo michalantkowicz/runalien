@@ -1,0 +1,285 @@
+anim_atlas11.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+anima52
+  rotate: false
+  xy: 1, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima53
+  rotate: false
+  xy: 1, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima70
+  rotate: false
+  xy: 1, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima71
+  rotate: false
+  xy: 1, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima72
+  rotate: false
+  xy: 1, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima73
+  rotate: false
+  xy: 403, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima74
+  rotate: false
+  xy: 805, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima75
+  rotate: false
+  xy: 1207, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima76
+  rotate: false
+  xy: 1609, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima77
+  rotate: false
+  xy: 403, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima78
+  rotate: false
+  xy: 403, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima79
+  rotate: false
+  xy: 403, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima80
+  rotate: false
+  xy: 403, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima81
+  rotate: false
+  xy: 805, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima82
+  rotate: false
+  xy: 1207, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima83
+  rotate: false
+  xy: 1609, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima84
+  rotate: false
+  xy: 805, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima85
+  rotate: false
+  xy: 805, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima86
+  rotate: false
+  xy: 1609, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima87
+  rotate: false
+  xy: 1207, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima88
+  rotate: false
+  xy: 805, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima89
+  rotate: false
+  xy: 403, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima90
+  rotate: false
+  xy: 403, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima91
+  rotate: false
+  xy: 403, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima92
+  rotate: false
+  xy: 403, 403
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima93
+  rotate: false
+  xy: 1609, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima94
+  rotate: false
+  xy: 1207, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima95
+  rotate: false
+  xy: 805, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima96
+  rotate: false
+  xy: 403, 1
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima97
+  rotate: false
+  xy: 1, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima98
+  rotate: false
+  xy: 1, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+anima99
+  rotate: false
+  xy: 1, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb1
+  rotate: false
+  xy: 805, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb10
+  rotate: false
+  xy: 805, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb11
+  rotate: false
+  xy: 1207, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb12
+  rotate: false
+  xy: 1609, 805
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb13
+  rotate: false
+  xy: 1207, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb14
+  rotate: false
+  xy: 1207, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb15
+  rotate: false
+  xy: 1609, 1207
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+animb16
+  rotate: false
+  xy: 1609, 1609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1

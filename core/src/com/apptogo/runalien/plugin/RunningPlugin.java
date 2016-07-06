@@ -7,7 +7,7 @@ public class RunningPlugin extends AbstractPlugin {
 	private final Logger logger = new Logger(getClass().getName(), Logger.ERROR);
 	
 	//set if you want to debug one level without speeding up
-	private final int DEBUG_LEVEL = -1;
+	public static float DEBUG_LEVEL = 3;
 	
 	//speed which alien starts with
 	private final int BASIC_SPEED = 12;
@@ -19,7 +19,7 @@ public class RunningPlugin extends AbstractPlugin {
 	private final float MAX_SPEED_LEVEL = Main.MAX_SPEED_LEVEL;
 	
 	//curent speed level (not the same what velocity)
-	private int speedLevel = 0;
+	private float speedLevel = 0;
 	
 	//position when alien will speed up
 	private int nextSpeedUp = 50;
@@ -36,7 +36,7 @@ public class RunningPlugin extends AbstractPlugin {
 			
 			//fix on one level if set
 			if(DEBUG_LEVEL >= 0){
-				body.setLinearVelocity(BASIC_SPEED + DEBUG_LEVEL , body.getLinearVelocity().y);
+				body.setLinearVelocity(DEBUG_LEVEL , body.getLinearVelocity().y);
 				speedLevel = DEBUG_LEVEL;
 			}
 			else{
@@ -77,7 +77,7 @@ public class RunningPlugin extends AbstractPlugin {
 			deathPlugin = actor.getPlugin(DeathPlugin.class);
 	}
 
-	public int getSpeedLevel() {
+	public float getSpeedLevel() {
 		return speedLevel;
 	}
 }
