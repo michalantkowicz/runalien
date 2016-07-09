@@ -159,6 +159,10 @@ public class GameScreen extends BasicScreen {
 		player.addPlugin(new TouchSteeringPlugin());
 		player.addPlugin(new KeyboardSteeringPlugin());
 
+		//workaround for screen blink after loading gameScreen on Android
+		//setting camera position immediately
+		gameworldStage.getCamera().position.x = player.getBody().getPosition().x + 5f;
+		
 		//create infinite ground body
 		BodyBuilder.get().addFixture("ground").box(10000, 0.1f).position(5000 - 5, Main.GROUND_LEVEL - 0.05f).friction(0.1f).categoryBits(Main.GROUND_BITS).create();
 
