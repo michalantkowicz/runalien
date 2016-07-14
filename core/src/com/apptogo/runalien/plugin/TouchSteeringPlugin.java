@@ -12,21 +12,19 @@ public class TouchSteeringPlugin extends SteeringPlugin {
 		
 		if(Gdx.input.getInputProcessor() != null) {
 			if(running.isStarted()){			
-				//if(Gdx.input.justTouched() && Gdx.input.getX() >  CENTER)
-				if(Main.getInstance().getGameScreen().RIGHT)
+				if(Gdx.input.justTouched() && Gdx.input.getX() >  CENTER)
 					jump();
-				//if(Gdx.input.justTouched() && Gdx.input.getX() <= CENTER)
-				else if(Main.getInstance().getGameScreen().LEFT)
+				if(Gdx.input.justTouched() && Gdx.input.getX() <= CENTER)
 					chargeDown();
 			}
-			//if(!deathPlugin.dead && Gdx.input.justTouched()){
-			else if(!deathPlugin.dead && Main.getInstance().getGameScreen().START) {
-				if(!running.isStarted())
-					startRunning();
+			else if(!running.isStarted() && !deathPlugin.dead ){
+				if(Gdx.input.justTouched() && !Main.getInstance().getGameScreen().tutorialButton.isPressed()) {
+					float Ygrek = Gdx.input.getY();
+					
+					if(Ygrek > 50)
+						startRunning();
+				}
 			}
-			
-			Main.getInstance().getGameScreen().LEFT = false;
-			Main.getInstance().getGameScreen().RIGHT = false;
 		}
 	}
 }

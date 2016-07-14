@@ -22,7 +22,7 @@ public class SegmentDefinitions {
 	
 	/* ------------------ LEVEL 0 ------------------ */
 
-	final static float DEFAULT_OFFSET = 7f;
+	final static float DEFAULT_OFFSET = 8f;
 	
 	private static final SegmentDefinition LOG_1 = new SegmentDefinition(0, 2, DEFAULT_OFFSET,
 			new int[][]

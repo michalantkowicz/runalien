@@ -66,24 +66,6 @@ public class GameScreen extends BasicScreen {
 	protected float shaderBrightness, shaderSaturation;
 
 	protected boolean endGame = false, gameFinished = false;
-	public boolean LEFT = false, RIGHT = false, START = false;
-
-	private ClickListener steeringListener = new ClickListener() {
-
-		@Override
-		public void clicked(InputEvent event, float x, float y) {
-			START = true;
-		}
-
-		@Override
-		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-			if (x <= 0)
-				LEFT = true;
-			else
-				RIGHT = true;
-			return super.touchDown(event, x, y, pointer, button);
-		}
-	};
 
 	public GameScreen(Main game) {
 		super(game);
@@ -177,19 +159,19 @@ public class GameScreen extends BasicScreen {
 
 		tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game)));
 		//To not start running when clicking tutorialButton
-		tutorialButton.setListener(new ClickListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				stage.removeListener(steeringListener);
-				return super.touchDown(event, x, y, pointer, button);
-			}
-
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				stage.addListener(steeringListener);
-				super.touchUp(event, x, y, pointer, button);
-			}
-		});
+//		tutorialButton.setListener(new ClickListener() {
+//			@Override
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				stage.removeListener(steeringListener);
+//				return super.touchDown(event, x, y, pointer, button);
+//			}
+//
+//			@Override
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//				stage.addListener(steeringListener);
+//				super.touchUp(event, x, y, pointer, button);
+//			}
+//		});
 
 		//Sign and tutorial button if not TutorialScreen instance
 		if (!(this instanceof TutorialScreen)) {
@@ -417,7 +399,7 @@ public class GameScreen extends BasicScreen {
 		scoreLabel = Label.get("0", "tutorial").position(-600, 320);
 		stage.addActor(scoreLabel);
 
-		stage.addListener(steeringListener);
+//		stage.addListener(steeringListener);
 	}
 
 	protected Group createTopScore(String score, float scale) {
