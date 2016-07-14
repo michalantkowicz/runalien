@@ -22,7 +22,7 @@ public class Sphere extends GameActor implements Spawnable, Poolable {
 	private float ROPE_WIDTH = 8.7f;
 	
 	private final float BASE_OFFSET = 18f;
-	public static final int MIN_LEVEL = 1;
+	public static final int MIN_LEVEL = 0;
 	public static final int MAX_LEVEL = 9;
 	
 	private static int sphereId = 0;

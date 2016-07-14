@@ -42,7 +42,7 @@ public class LevelGenerator {
 			this.arg = arg;
 		}
 	}
-	
+	int pindex;
 	private final Logger logger = new Logger(getClass().getName(), Logger.ERROR);
 
 	Array<Pool<GameActor>> pools = new Array<Pool<GameActor>>();
@@ -84,64 +84,81 @@ public class LevelGenerator {
 	}
 	
 	public void fulfillObstaclesQueue(float maxObstaclePosition) {
-		for(IntArray possiblePools : poolsLevel.values())
-			if(possiblePools.size < 2)
-				throw new LevelGeneratorException("Every speedLevel (from 0 - "+Main.MAX_SPEED_LEVEL+") needs to have at least two possible obstacles!");
 		
-		float nextPosition = 22.5f*2.5f+17f;
-		Integer speedLevel;
+		float nextPosition = 22.5f*2.5f+17f + 10 + 10;
 		
-		//Last generated value to avoid repeating - initialized with whatever value (it could be sth else)
-		int lastPoolIndex = 0; 
+		obstaclesQueue.add(new QueuedObstacle(nextPosition, 3, 12, 1));
+//		nextPosition += 5f;
+//		obstaclesQueue.add(new QueuedObstacle(nextPosition, ROCKET_POOL_INDEX, 12, 0));
+//		nextPosition += 5f;
+//		obstaclesQueue.add(new QueuedObstacle(nextPosition, ROCKET_POOL_INDEX, 12, 2));
+//		
+//nextPosition += 30f;
+//		
+//		obstaclesQueue.add(new QueuedObstacle(nextPosition, pindex, 0, 0));
+//		
+//nextPosition += 30f;
+//		
+//		obstaclesQueue.add(new QueuedObstacle(nextPosition, 0, 12, 2));
 		
-		while(nextPosition < maxObstaclePosition) {
-			speedLevel = (int)(nextPosition/Main.SPEEDUP_INTERVAL);
-			speedLevel = (speedLevel > Main.MAX_SPEED_LEVEL) ? Main.MAX_SPEED_LEVEL : speedLevel;
-			
-			IntArray possiblePools = poolsLevel.get(speedLevel);
-			
-			if (possiblePools.size > 0) {
-				possiblePools.shuffle();
-				
-				int drawnPoolIndex = possiblePools.first();
-				
-				//Avoid repating
-				if(drawnPoolIndex == lastPoolIndex)
-					drawnPoolIndex = possiblePools.peek();
-				lastPoolIndex = drawnPoolIndex;	
-								
-				//If rocket generate sequence
-				if(drawnPoolIndex == ROCKET_POOL_INDEX) {
-					IntArray rocketLevels = new IntArray();
-					int rocketsCount = random.nextInt(4) + 1;
-					for(int i = 0; i <= rocketsCount; i++)
-						rocketLevels.add(i);
-					
-					rocketLevels.shuffle();
-					
-					for(int i = 0; i < rocketLevels.size; i++) {
-						int rocketLevel = rocketLevels.get(i);
-						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, rocketLevel));
-						nextPosition += 6f + speedLevel/2f;
-					}
-				}
-				//If cutbottom random the obstacle start angle
-				else if(drawnPoolIndex == CUTBOTTOM_POOL_INDEX) {
-					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, random.nextFloat() - 0.2f));
-				}
-				else
-					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel));
-				
-				//Now obtain obstacle just for a while to get it's BaseOffset
-				Pool<GameActor> drawnPool = pools.get(drawnPoolIndex);
-				GameActor obstacle = drawnPool.obtain();
-				
-				nextPosition += ((Spawnable)obstacle).getBaseOffset() + speedLevel;
-				//System.out.println(drawnPoolIndex + ": " + nextPosition + "   [" + ((Spawnable)obstacle).getBaseOffset() + "; " + speedLevel + "]");
-				//Free the obstacle - it is not necessary any longer now
-				drawnPool.free(obstacle);
-			}
-		}
+//		for(IntArray possiblePools : poolsLevel.values())
+//			if(possiblePools.size < 2)
+//				throw new LevelGeneratorException("Every speedLevel (from 0 - "+Main.MAX_SPEED_LEVEL+") needs to have at least two possible obstacles!");
+//		
+//		float nextPosition = 22.5f*2.5f+17f;
+//		Integer speedLevel;
+//		
+//		//Last generated value to avoid repeating - initialized with whatever value (it could be sth else)
+//		int lastPoolIndex = 0; 
+//		
+//		while(nextPosition < maxObstaclePosition) {
+//			speedLevel = (int)(nextPosition/Main.SPEEDUP_INTERVAL);
+//			speedLevel = (speedLevel > Main.MAX_SPEED_LEVEL) ? Main.MAX_SPEED_LEVEL : speedLevel;
+//			
+//			IntArray possiblePools = poolsLevel.get(speedLevel);
+//			
+//			if (possiblePools.size > 0) {
+//				possiblePools.shuffle();
+//				
+//				int drawnPoolIndex = possiblePools.first();
+//				
+//				//Avoid repating
+//				if(drawnPoolIndex == lastPoolIndex)
+//					drawnPoolIndex = possiblePools.peek();
+//				lastPoolIndex = drawnPoolIndex;	
+//								
+//				//If rocket generate sequence
+//				if(drawnPoolIndex == ROCKET_POOL_INDEX) {
+//					IntArray rocketLevels = new IntArray();
+//					int rocketsCount = random.nextInt(4) + 1;
+//					for(int i = 0; i <= rocketsCount; i++)
+//						rocketLevels.add(i);
+//					
+//					rocketLevels.shuffle();
+//					
+//					for(int i = 0; i < rocketLevels.size; i++) {
+//						int rocketLevel = rocketLevels.get(i);
+//						obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, rocketLevel));
+//						nextPosition += 6f + speedLevel/2f;
+//					}
+//				}
+//				//If cutbottom random the obstacle start angle
+//				else if(drawnPoolIndex == CUTBOTTOM_POOL_INDEX) {
+//					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel, random.nextFloat() - 0.2f));
+//				}
+//				else
+//					obstaclesQueue.add(new QueuedObstacle(nextPosition, drawnPoolIndex, speedLevel));
+//				
+//				//Now obtain obstacle just for a while to get it's BaseOffset
+//				Pool<GameActor> drawnPool = pools.get(drawnPoolIndex);
+//				GameActor obstacle = drawnPool.obtain();
+//				
+//				nextPosition += ((Spawnable)obstacle).getBaseOffset() + speedLevel;
+//				//System.out.println(drawnPoolIndex + ": " + nextPosition + "   [" + ((Spawnable)obstacle).getBaseOffset() + "; " + speedLevel + "]");
+//				//Free the obstacle - it is not necessary any longer now
+//				drawnPool.free(obstacle);
+//			}
+//		}
 	}
 	
 	/**
@@ -149,7 +166,7 @@ public class LevelGenerator {
 	 */
 	public void generate() {
 		//set the obstacle if it is time to
-		if(player.getBody().getPosition().x + SPAWN_DISTANCE >= obstacleToSet.position) {
+		if(obstacleToSet != null && player.getBody().getPosition().x + SPAWN_DISTANCE >= obstacleToSet.position) {
 			Pool<GameActor> drawnPool = pools.get(obstacleToSet.poolIndex);
 				
 			GameActor randomObstacle = drawnPool.obtain();
@@ -245,6 +262,9 @@ public class LevelGenerator {
 		
 		//create sphere (it will make short and long by itself)
 		final int spherePoolIndex = pools.size;
+		
+		pindex = spherePoolIndex;
+		
 		setAvailablePoolLevels(pools.size, Sphere.MIN_LEVEL, Sphere.MAX_LEVEL);
 		pools.add( new Pool<GameActor>(4) {
 			@Override

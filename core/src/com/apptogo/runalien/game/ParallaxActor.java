@@ -7,6 +7,7 @@ import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -64,7 +65,13 @@ public class ParallaxActor extends Actor {
 	 * @param textureRegionName - name of region (in texture atlas)
 	 */
 	public ParallaxActor(Camera camera, String textureRegionName) {
-		this.textureRegion = new TextureRegion(ResourcesManager.getInstance().getAtlasRegion(textureRegionName));
+		if(textureRegionName.equals("sunnyday")) {
+			this.textureRegion = new TextureRegion((Texture)ResourcesManager.getInstance().get("sunnyday.png"));
+		}
+		else {
+			this.textureRegion = new TextureRegion(ResourcesManager.getInstance().getAtlasRegion(textureRegionName));
+		}
+		
 		this.setName(textureRegionName);
 		
 		this.camera = (OrthographicCamera)camera;

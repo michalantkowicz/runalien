@@ -22,7 +22,7 @@ public class Rocket extends GameActor implements Spawnable, Poolable {
 	private static final long serialVersionUID = 8123133757302816575L;
 	
 	private float BASE_OFFSET = 16f;
-	public static final int MIN_LEVEL = 2;
+	public static final int MIN_LEVEL = 0;
 	public static final int MAX_LEVEL = Main.MAX_SPEED_LEVEL;
 
 	private final float ROCKET_SPEED = -15;

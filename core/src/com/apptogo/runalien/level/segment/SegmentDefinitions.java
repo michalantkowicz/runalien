@@ -22,6 +22,14 @@ public class SegmentDefinitions {
 
 	final static float DEFAULT_OFFSET = 8f;
 	
+	private static final SegmentDefinition LONG_JUMP = new SegmentDefinition(3, 4, DEFAULT_OFFSET,
+			new int[][]
+			{ 
+				{ 0, 5, 0, 5, 0, 5, 0 },
+				{ 5, 5, 5, 5, 5, 5, 5 },
+			});
+	
+	
 	private static final SegmentDefinition LOG_1 = new SegmentDefinition(0, 2, DEFAULT_OFFSET,
 			new int[][]
 			{ 
@@ -35,6 +43,8 @@ public class SegmentDefinitions {
 				{ 5 },
 				{ 5 },
 			});
+	
+	
 	
 	private static final SegmentDefinition BIG_BELL = new SegmentDefinition("BIG_BELL", 0, 4, DEFAULT_OFFSET,
 			new int[][]

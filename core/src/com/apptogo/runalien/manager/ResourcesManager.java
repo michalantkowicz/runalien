@@ -39,6 +39,8 @@ public class ResourcesManager {
 
 	public void loadResources() {
 		//textures
+		manager.load("sunnyday.png", Texture.class);
+		
 		manager.load("menu_atlas.pack", TextureAtlas.class);
 		manager.load("intro_atlas.pack", TextureAtlas.class);
 		manager.load("game_atlas.pack", TextureAtlas.class);

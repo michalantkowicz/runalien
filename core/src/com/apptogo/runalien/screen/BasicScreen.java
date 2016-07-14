@@ -123,9 +123,9 @@ public abstract class BasicScreen implements Screen {
         
         step(DELTA);
         
-        this.viewport.apply();
-        this.stage.act(DELTA);
-        this.stage.draw();
+//        this.viewport.apply();
+//        this.stage.act(DELTA);
+//        this.stage.draw();
         
         if(fadingStage.getRoot().getActions().size > 0) {
 	        this.backgroundViewport.apply();

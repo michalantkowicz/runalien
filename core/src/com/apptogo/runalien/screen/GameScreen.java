@@ -59,7 +59,7 @@ public class GameScreen extends BasicScreen {
 	protected ParallaxActor grass;
 	protected Group finalScore;
 	protected FPSLogger logger = new FPSLogger();
-	protected int score = 0;
+	protected int score = 163;
 	protected Image sky_day, sky_night, sun, moon;
 	protected Image lastFence, lastPoster, almostLastPoster;
 	protected Label scoreLabel;
@@ -152,7 +152,7 @@ public class GameScreen extends BasicScreen {
 		player.queueAnimation("idle");
 
 		player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(-1.6f, Main.GROUND_LEVEL).fixedRotation(true)
-				                        .addFixture("player").box(0.6f, 1.9f).friction(0f)
+				                        .addFixture("player").box(0.6f, 1.9f).friction(0.25f)
 				                        .addFixture("player", "sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.5f)
 				                        .create());
 		
@@ -170,7 +170,7 @@ public class GameScreen extends BasicScreen {
 
 		//create Parallaxes
 		
-		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "sky_day").moveToY(Main.GROUND_LEVEL).setSpeedModifier(0));
+		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "sunnyday").moveToY(Main.GROUND_LEVEL).setSpeedModifier(0));
 		//gameworldStage.addActor(sun.scale(1/UnitConverter.PPM));
 		gameworldStage.addActor( ParallaxActor.get(gameworldStage.getCamera(), "background_game").moveToY(Main.GROUND_LEVEL).setSpeedModifier(0));
 		
@@ -418,20 +418,21 @@ public class GameScreen extends BasicScreen {
 		float posX = gameworldStage.getCamera().position.x;
 		
 		float XL = 2f, XR = -1f;
-		if(gameworldStage.getCamera().position.x < + 22.5f*2.5f-5 &&
-				(
-						(posX < 5+5+ XL && posX > 5+5 - XR) ||
-						(posX < 5+12.5f + XL && posX > 5+12.5f - XR) ||
-						(posX < 5+20 + XL && posX > 5+20 - XR) ||
-						(posX < 5+27.5f + XL && posX > 5+27.5f - XR) ||
-						(posX < 5+35 + XL && posX > 5+35 - XR) ||
-						(posX < 5+42.5f + XL && posX > 5+42.5f - XR )
-				)
-		  ) {
-			RunningPlugin.DEBUG_LEVEL = 0.25f;
-		}
-		else {
-			RunningPlugin.DEBUG_LEVEL = 10;
+//		if(gameworldStage.getCamera().position.x < + 22.5f*2.5f-5 &&
+//				(
+////						(posX < 5+5+ XL && posX > 5+5 - XR) ||
+////						(posX < 5+12.5f + XL && posX > 5+12.5f - XR) ||
+////						(posX < 5+20 + XL && posX > 5+20 - XR) ||
+////						(posX < 5+27.5f + XL && posX > 5+27.5f - XR) ||
+////						(posX < 5+35 + XL && posX > 5+35 - XR) ||
+//						(posX < 5+42.5f + XL && posX > 5+42.5f - XR )
+//				)
+//		  ) {
+//			RunningPlugin.DEBUG_LEVEL = 0.25f;
+//		}
+//		else {
+		if(true) {
+			RunningPlugin.DEBUG_LEVEL = 14;
 			
 			if(r1.getActions().size == 0 && posX < 5+42.5f && posX > 4) {
 				r1.addAction(Actions.sequence(Actions.delay(0.2f), Actions.alpha(1, 0.2f), Actions.alpha(0, 0.2f), Actions.delay(2)));
@@ -576,22 +577,26 @@ public class GameScreen extends BasicScreen {
 				stars.obtainAndStart(0, -80, 0);
 				finalScore.addActor(stars);
 				stars.toBack();
-				
-				submitButton.addAction(Actions.forever(Actions.sequence(
-						                                           Actions.moveBy(0, 15, 0.05f),
-						                                           Actions.moveBy(0, -30, 0.05f),
-						                                           Actions.moveBy(0, 15, 0.5f, Interpolation.elasticOut),
-						                                           Actions.delay(1))));
+//				
+//				submitButton.addAction(Actions.forever(Actions.sequence(
+//						                                           Actions.moveBy(0, 15, 0.05f),
+//						                                           Actions.moveBy(0, -30, 0.05f),
+//						                                           Actions.moveBy(0, 15, 0.5f, Interpolation.elasticOut),
+//						                                           Actions.delay(1))));
 			}
 			
 			endGame = false;
 			gameFinished = true;
 		}
 		else if(!gameFinished){
-			score = (int) (player.getBody().getPosition().x / 10);
+//			score = (int) (player.getBody().getPosition().x / 10);
 			scoreLabel.setText("score: " + String.valueOf(score));
 		}
 		
+		
+		this.viewport.apply();
+        this.stage.act(DELTA);
+        this.stage.draw();
 		
 		
 		if( RECORD_VIDEO )//&& recordFrame%2 == 0 )
@@ -609,6 +614,7 @@ public class GameScreen extends BasicScreen {
 		if(Gdx.input.isKeyJustPressed(Keys.S))
 			RECORD_VIDEO = true;
 		recordFrame++;
+		
 		
 		
 		
@@ -705,31 +711,31 @@ public class GameScreen extends BasicScreen {
 	}
 	
 	protected void createStage() {
-		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
-		
-		submitButton = Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX()
-				             .setListener(new ClickListener(){
-			                     @Override
-									 public void clicked(InputEvent event, float x, float y) {
-										 Main.gameCallback.submitScore(score);
-									 }
-				             });
-		
-		stage.addActor(submitButton);
-		
-		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX().setListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Main.gameCallback.showFullscreenAd();
-			}
-		}));
+//		stage.addActor(Button.get("menu").position(0,  Main.SCREEN_HEIGHT/2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
+//		
+//		submitButton = Button.get("submit").position(0,  Main.SCREEN_HEIGHT/2f + 390).centerX()
+//				             .setListener(new ClickListener(){
+//			                     @Override
+//									 public void clicked(InputEvent event, float x, float y) {
+//										 Main.gameCallback.submitScore(score);
+//									 }
+//				             });
+//		
+//		stage.addActor(submitButton);
+//		
+//		stage.addActor(Button.get("replay").position(0,  Main.SCREEN_HEIGHT/2f + 240).centerX().setListener(new ClickListener(){
+//			@Override
+//			public void clicked(InputEvent event, float x, float y) {
+//				Main.gameCallback.showFullscreenAd();
+//			}
+//		}));
 		
 		finalScore = new Group();
 		finalScore.setOrigin(Align.center);
 		finalScore.addAction(Actions.rotateBy(-1));
-		finalScore.addAction(Actions.forever(Actions.sequence(Actions.moveBy(0, 40, 4), Actions.moveBy(0, -40, 6))));
+		finalScore.addAction(Actions.forever(Actions.sequence(Actions.moveBy(0, 80, 2.5f), Actions.moveBy(0, 0, 6))));
 		finalScore.addAction(Actions.forever(Actions.sequence(Actions.rotateBy(2, 2), Actions.rotateBy(-2, 2))));
-		finalScore.setPosition(-420,  Main.SCREEN_HEIGHT);
+		finalScore.setPosition(-350,  Main.SCREEN_HEIGHT);
 		
 		finalScore.addActor(Image.get("balloon").centerX().centerY());
 		finalScore.setVisible(false);
