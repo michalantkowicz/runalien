@@ -72,13 +72,17 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 	
 	public void chargeDown()
 	{
-		if(jumping)
+		if(jumping && body.getPosition().y > 0.5f)
 		{
+			System.out.println("charge on: " + body.getPosition().y);
 			this.body.setLinearVelocity(body.getLinearVelocity().x, -45);
 			soundHandler.playSound("chargeDown");
 		}
 		else
 		{
+			System.out.println("land and slide on: " + body.getPosition().y);
+			jumping = false;
+			doubleJumping = false;
 			slide();
 		}
 	}

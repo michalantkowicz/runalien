@@ -10,7 +10,7 @@ public class RunningPlugin extends AbstractPlugin {
 	public static final int DEBUG_LEVEL = -1; //Main.MAX_SPEED_LEVEL;
 
 	//speed which alien starts with
-	private final int BASIC_SPEED = 12;
+	private final int BASIC_SPEED = 10;
 
 	//interval in box2d meters after which run alien speeds up 
 	private final int SPEED_EVERY_X_METERS = Main.SPEEDUP_INTERVAL;
