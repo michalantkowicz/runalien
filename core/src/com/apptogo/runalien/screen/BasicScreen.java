@@ -1,5 +1,9 @@
 package com.apptogo.runalien.screen;
 
+import com.apptogo.runalien.event.GameEvent;
+import com.apptogo.runalien.event.GameEventListener;
+import com.apptogo.runalien.event.GameEventQueue;
+import com.apptogo.runalien.event.GameEventType;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.tools.Movement;
@@ -17,8 +21,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import javafx.event.EventType;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class BasicScreen implements Screen {
+    protected Map<GameEventType, Method> gameEventListeners = new HashMap<>();
+
     protected Main game;
 
     private Stage fadingStage;
@@ -96,7 +108,8 @@ public abstract class BasicScreen implements Screen {
 
             stage.addActor(table);
         }
-        
+
+        initializeGameEventListeners();
         prepare();
     }
 
@@ -104,6 +117,19 @@ public abstract class BasicScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        for(Map.Entry<GameEventType, Method> entry : gameEventListeners.entrySet()) {
+            GameEvent gameEvent = GameEventQueue.getInstance().get(entry.getKey());
+            if(gameEvent != null) {
+                try {
+                    entry.getValue().invoke(this, gameEvent);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         // HANDLING CAMERA MOVEMENT
         if (movement.isRun())
@@ -177,6 +203,14 @@ public abstract class BasicScreen implements Screen {
             }
         }
     };
+
+    protected void initializeGameEventListeners() {
+        for(Method method : getClass().getMethods()) {
+            if(method.isAnnotationPresent(GameEventListener.class)) {
+                gameEventListeners.put(method.getAnnotation(GameEventListener.class).gameEventType(), method);
+            }
+        }
+    }
 
     @Override
     public void resize(int width, int height) {
