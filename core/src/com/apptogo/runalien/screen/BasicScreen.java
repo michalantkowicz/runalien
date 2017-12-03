@@ -1,9 +1,9 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.event.GameEvent;
-import com.apptogo.runalien.event.GameEventListener;
-import com.apptogo.runalien.event.GameEventQueue;
-import com.apptogo.runalien.event.GameEventType;
+import com.apptogo.runalien.event.meta.GameEventListener;
+import com.apptogo.runalien.event.queue.GameEventQueue;
+import com.apptogo.runalien.event.meta.GameEventType;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.scene2d.Image;
 import com.apptogo.runalien.tools.Movement;
@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import javafx.event.EventType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,4 +1,4 @@
-package com.apptogo.runalien.event;
+package com.apptogo.runalien.event.meta;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,7 @@
-package com.apptogo.runalien.event;
+package com.apptogo.runalien.event.queue;
+
+import com.apptogo.runalien.event.GameEvent;
+import com.apptogo.runalien.event.meta.GameEventType;
 
 import java.util.*;
 
