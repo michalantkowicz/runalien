@@ -1,5 +1,6 @@
 package com.apptogo.runalien.screen;
 
+import com.apptogo.runalien.event.*;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.scene2d.Button;
 import com.apptogo.runalien.scene2d.Listener;
@@ -32,13 +33,15 @@ public class MenuScreen extends BasicScreen {
         ClickListener showAchievementsListener = new ClickListener() {
         	@Override
         	public void clicked (InputEvent event, float x, float y) {
-				Main.gameCallback.showAchievements();
+				//Main.gameCallback.showAchievements();
+				GameEventQueue.getInstance().put(new HelloGameEvent());
         	}
         };
         ClickListener showLeaderboardListener = new ClickListener() {
         	@Override
         	public void clicked (InputEvent event, float x, float y) {
-				Main.gameCallback.showLeaderboard();
+				//Main.gameCallback.showLeaderboard();
+				GameEventQueue.getInstance().put(new GoodbyeGameEvent());
         	}
         };
         
@@ -121,5 +124,16 @@ public class MenuScreen extends BasicScreen {
 		music.stop();
 		music.dispose();
 	}
+
+	@GameEventListener(gameEventType = GameEventType.PLAYER_LOGGED_IN)
+	public void onPlayerLogged(GoodbyeGameEvent event) {
+		System.out.println("LOGGED: " + event.getMessage());
+	}
+
+	@GameEventListener(gameEventType = GameEventType.PLAYER_REGISTERED)
+	public void onPlayerRegistered(HelloGameEvent event) {
+		System.out.println("REGISTERED: " + event.getMessage());
+	}
+
 
 }
