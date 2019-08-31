@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "23.0.1"
-    compileSdkVersion 23
+    buildToolsVersion "28.0.1"
+    compileSdkVersion 28
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -11,13 +11,26 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
         }
-
-        instrumentTest.setRoot('tests')
+    }
+    packagingOptions {
+        exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
         applicationId "com.apptogo.runalien"
-        minSdkVersion 8
-        targetSdkVersion 23
+        minSdkVersion 9
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

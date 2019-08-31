@@ -24,7 +24,7 @@ public class GameActor extends AbstractActor implements Poolable, Serializable{
 	}
 
 	Map<String, AbstractPlugin> plugins = new HashMap<String, AbstractPlugin>();
-	Array<AbstractPlugin> pluginsQueue = new Array<AbstractPlugin>();
+	Array<AbstractPlugin> pluginsQueue = new Array<>(AbstractPlugin.class);
 
 	@Override
 	public void act(float delta) {

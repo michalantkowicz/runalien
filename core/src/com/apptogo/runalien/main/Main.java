@@ -15,59 +15,65 @@ public class Main extends Game {
     // 20x40 in box2d units
     public static final float SCREEN_WIDTH = 1280f, SCREEN_HEIGHT = 800f;
     public final static float GROUND_LEVEL = -3.5f;
-	public static final int DAYTIME_CHANGE_INTERVAL = 120; //seconds
+    public static final int DAYTIME_CHANGE_INTERVAL = 120; //seconds
     public static final int MAX_SPEED_LEVEL = 14;
-	public static final int SPEEDUP_INTERVAL = 100;
-	public static final short GROUND_BITS = 2;
-	public static final short PLAYER_BITS = 4;
-    
+    public static final int SPEEDUP_INTERVAL = 100;
+    public static final short GROUND_BITS = 2;
+    public static final short PLAYER_BITS = 4;
+
     public static GameCallback gameCallback;
-    
+
     private Screen screenToSet;
 
     public static Main getInstance() {
-    	return (Main)Gdx.app.getApplicationListener();
+        return (Main) Gdx.app.getApplicationListener();
     }
-    
+
     public Main(GameCallback gameCallback) {
-    	super();
-    	Main.gameCallback = gameCallback;
+        super();
+        Main.gameCallback = gameCallback;
     }
-    
+
     public GameScreen getGameScreen() {
-    	return (GameScreen)getScreen();
+        return (GameScreen) getScreen();
     }
-    
+
     @Override
     public void setScreen(Screen screen) {
         if (this.screen != null && this.screen instanceof BasicScreen) {
-        	((BasicScreen)this.screen).fadeOut(screen);
-    	}
-        else
-        	doSetScreen(screen);
+            ((BasicScreen) this.screen).fadeOut(screen);
+        } else
+            doSetScreen(screen);
     }
-    
+
     public void doSetScreen(Screen screen) {
         if (this.screen != null) {
-        	this.screen.dispose();
-    	}
+            this.screen.dispose();
+        }
         super.setScreen(screen);
     }
 
     @Override
     public void create() {
-    	//use this to define log level. It overrides local settings
-		Gdx.app.setLogLevel(Application.LOG_ERROR);
+        //use this to define log level. It overrides local settings
+        Gdx.app.setLogLevel(Application.LOG_ERROR);
 
-		//set handle back button
+        //set handle back button
         Gdx.input.setCatchBackKey(true);
-        
+
         ResourcesManager.create();
         CustomActionManager.create();
-//        ResourcesManager.getInstance().loadResources();
-//        ResourcesManager.getInstance().manager.finishLoading();
-//        ResourcesManager.getInstance().loadSkin();
-//        this.setScreen(new GameScreen(this));
+        setGameScreen();
+    }
+
+    private void setGameScreen() {
+        ResourcesManager.getInstance().loadResources();
+        ResourcesManager.getInstance().manager.finishLoading();
+        ResourcesManager.getInstance().loadSkin();
+        this.setScreen(new GameScreen(this));
+    }
+
+    private void setSplashScreen() {
         this.setScreen(new SplashScreen(this));
     }
 

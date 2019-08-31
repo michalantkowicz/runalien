@@ -45,8 +45,8 @@ public class LevelGenerator {
 	
 	private final Logger logger = new Logger(getClass().getName(), Logger.ERROR);
 
-	Array<Pool<GameActor>> pools = new Array<Pool<GameActor>>();
-	Array<GameActor> activeActors = new Array<GameActor>();
+	Array<Pool<GameActor>> pools = new Array<>(Pool.class);
+	Array<GameActor> activeActors = new Array<>(GameActor.class);
 	
 	Map<Integer, IntArray> poolsLevel = new HashMap<Integer, IntArray>();  
 	
@@ -298,7 +298,7 @@ public class LevelGenerator {
 	}
 	
 	private void fulfillPool(Pool<GameActor> pool, int objectsCount) {
-		Array<GameActor> gameActors = new Array<GameActor>();
+		Array<GameActor> gameActors = new Array<>(GameActor.class);
 		
 		for(int i = 0; i < objectsCount; i++)
 			gameActors.add(pool.obtain());

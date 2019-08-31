@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
@@ -57,12 +58,12 @@ public class Animation extends AnimationActor {
 
     /**-------- CONSTRUCTORS -------- **/
     
-    public Animation(float frameDuration, Array<? extends TextureRegion> keyFrames)
+    public Animation(float frameDuration, Array<TextureAtlas.AtlasRegion> keyFrames)
     {
         super(frameDuration, keyFrames);
     }
 
-    public Animation(float frameDuration, Array<? extends TextureRegion> keyFrames, PlayMode playMode)
+    public Animation(float frameDuration, Array<TextureAtlas.AtlasRegion> keyFrames, PlayMode playMode)
     {
         super(frameDuration, keyFrames, playMode);
     }

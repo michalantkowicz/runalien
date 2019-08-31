@@ -32,7 +32,7 @@ public abstract class BasicScreen implements Screen {
 
     protected String[] backgroundTextureNames = new String[] {};
 
-    protected Array<Table> tables = new Array<Table>(new Table[] { new Table(), new Table(), new Table() });
+    protected Array<Table> tables = new Array<>(new Table[] { new Table(), new Table(), new Table() });
     
     Movement movement = new Movement();
 

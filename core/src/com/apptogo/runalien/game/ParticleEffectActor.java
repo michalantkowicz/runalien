@@ -17,7 +17,7 @@ public class ParticleEffectActor extends Image {
 	private boolean pooled;
 	public ParticleEffectPool particleEffectPool;
 	private String particleName;
-	private Array<PooledEffect> pooledEffects = new Array<PooledEffect>();
+	private Array<PooledEffect> pooledEffects = new Array<>(PooledEffect.class);
 	private boolean culling = true;
 	
 	public ParticleEffectActor(String particleName, TextureAtlas atlas) {
@@ -34,7 +34,7 @@ public class ParticleEffectActor extends Image {
 		tempEffect.scaleEffect(effectScale);
 		particleEffectPool = new ParticleEffectPool(tempEffect, initialPoolCapacity, maxPool);
 		pooled = true;
-		Array<PooledEffect> tempArray = new Array<PooledEffect>();
+		Array<PooledEffect> tempArray = new Array<>(PooledEffect.class);
 		for (int i=0; i<initialValue; i++){
 			PooledEffect effect = particleEffectPool.obtain();
 			tempArray.add(effect);

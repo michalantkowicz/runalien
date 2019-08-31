@@ -72,7 +72,7 @@ public class ResourcesManager {
 	public AtlasRegion getAtlasRegion(String regionName) {
 		AtlasRegion region = null;
 
-		for (TextureAtlas atlas : manager.getAll(TextureAtlas.class, new Array<TextureAtlas>())) {
+		for (TextureAtlas atlas : manager.getAll(TextureAtlas.class, new Array<>(TextureAtlas.class))) {
 			region = atlas.findRegion(regionName);
 
 			if (region != null) {
@@ -86,10 +86,10 @@ public class ResourcesManager {
 	}
 
 	public Array<AtlasRegion> getRegions(String pattern) {
-		Array<AtlasRegion> regions = new Array<AtlasRegion>();
+		Array<AtlasRegion> regions = new Array<>(AtlasRegion.class);
 
 		//TODO handle pattern with same beginning sorting without numbers
-		for (TextureAtlas atlas : manager.getAll(TextureAtlas.class, new Array<TextureAtlas>())) {
+		for (TextureAtlas atlas : manager.getAll(TextureAtlas.class, new Array<>(TextureAtlas.class))) {
 			for (AtlasRegion region : atlas.getRegions())
 				if (region.name.startsWith(pattern))
 					regions.add(region);

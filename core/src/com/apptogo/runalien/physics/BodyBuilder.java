@@ -17,8 +17,8 @@ public class BodyBuilder {
 	World world;
 	
 	BodyDef bodyDef;
-	Array<FixtureDef> fixtureDefs = new Array<FixtureDef>();
-	Array<UserData> fixtureDatas = new Array<UserData>();
+	Array<FixtureDef> fixtureDefs = new Array<>(FixtureDef.class);
+	Array<UserData> fixtureDatas = new Array<>(UserData.class);
 	
 	public static BodyBuilder get()
 	{
