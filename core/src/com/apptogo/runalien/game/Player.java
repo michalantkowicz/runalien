@@ -9,14 +9,14 @@ import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.KeyboardSteeringPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
 import com.apptogo.runalien.plugin.SoundPlugin;
-import com.apptogo.runalien.plugin.TouchSteeringPlugin;
 import com.apptogo.runalien.scene2d.Animation;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+
 public class Player extends GameActor {
-    public Player(Stage gameworldStage, GameEventService eventService) {
-        super("player");
+    public Player(Stage gameworldStage, GameEventService eventService, String name) {
+        super(name);
         setAvailableAnimations("diebottom", "dietop", "jump", "land", "slide", "standup", "startrunning");
         addAvailableAnimation(Animation.get(0.03f, "run", com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP));
         addAvailableAnimation(Animation.get(0.04f, "idle", com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP));
@@ -34,7 +34,7 @@ public class Player extends GameActor {
         addPlugin(new CameraFollowingPlugin());
         addPlugin(new DeathPlugin());
         addPlugin(new RunningPlugin());
-        addPlugin(new TouchSteeringPlugin(eventService));
-        addPlugin(new KeyboardSteeringPlugin(eventService));
+//        addPlugin(new TouchSteeringPlugin(eventService));
+        addPlugin(new KeyboardSteeringPlugin(eventService, getName()));
     }
 }

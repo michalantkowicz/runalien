@@ -36,7 +36,7 @@ public abstract class GameEvent<T> {
      * creates immortal game event (will be deleted on demand)
      */
     protected GameEvent(GameEventType gameEventType, T eventObject, String topic) {
-        this(gameEventType, eventObject, IMMORTAL);
+        this(gameEventType, eventObject, /*IMMORTAL*/1);
 
         if (DEFAULT_TOPIC.equals(topic)) {
             throw new IllegalArgumentException(format("The topic [%s] cannot have the same value as default topic [%s]", topic, DEFAULT_TOPIC));

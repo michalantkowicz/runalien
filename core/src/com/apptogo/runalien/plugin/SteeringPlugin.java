@@ -14,7 +14,7 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 
     private final Logger logger = new Logger(getClass().getName(), Logger.DEBUG);
 
-    private final GameEventService eventService;
+    protected final GameEventService eventService;
     protected RunningPlugin running;
     protected DeathPlugin deathPlugin;
     private SoundPlugin soundHandler;
