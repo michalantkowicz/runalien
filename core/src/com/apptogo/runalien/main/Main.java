@@ -82,7 +82,7 @@ public class Main extends Game {
 
     @Override
     public void render() {
-        super.render();
+        if (screen != null) screen.render(1f/60f);
     }
 
     @Override

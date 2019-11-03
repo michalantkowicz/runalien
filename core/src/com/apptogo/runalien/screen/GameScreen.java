@@ -3,6 +3,10 @@ package com.apptogo.runalien.screen;
 import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.feature.Feature;
 import com.apptogo.runalien.feature.KeyboardSteeringFeature;
+import com.apptogo.runalien.feature.MoveRecord;
+import com.apptogo.runalien.feature.PlayerMoveRecorderFeature;
+import com.apptogo.runalien.feature.SerializedMoveSteeringFeature;
+import com.apptogo.runalien.game.Enemy;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.game.ParticleEffectActor;
@@ -21,6 +25,7 @@ import com.apptogo.runalien.scene2d.Label;
 import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -37,11 +42,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameScreen extends BasicScreen {
+
+    private Gson gson = new Gson();
 
     private List<Feature> features = new ArrayList<>();
 
@@ -66,6 +74,8 @@ public class GameScreen extends BasicScreen {
     protected float shaderBrightness, shaderSaturation;
 
     protected boolean endGame = false, gameFinished = false;
+    private PlayerMoveRecorderFeature moveRecorder;
+    private Enemy enemy;
 
     public GameScreen(Main game, GameEventService eventService) {
         super(game, eventService);
@@ -122,8 +132,12 @@ public class GameScreen extends BasicScreen {
 
         //create player
         this.player = new Player(gameworldStage, eventService, "alien");
+        this.enemy = new Enemy(gameworldStage, eventService, "enemy");
 
-        features.add(new KeyboardSteeringFeature(eventService, (Player) player));
+        moveRecorder = new PlayerMoveRecorderFeature(eventService, player.getName());
+        features.add(new SerializedMoveSteeringFeature(eventService, enemy));
+        features.add(new KeyboardSteeringFeature(eventService, player));
+        features.add(moveRecorder);
 
         //workaround for screen blink after loading gameScreen on Android
         //setting camera position immediately
@@ -186,7 +200,7 @@ public class GameScreen extends BasicScreen {
 
         //simulate physics and handle body contacts
         ContactListener.SNAPSHOT.clear();
-        world.step(delta, 3, 3);
+        world.step(1f / 60f, 3, 3);
 
         //generate obstacles
         levelGenerator.generate();
@@ -213,6 +227,7 @@ public class GameScreen extends BasicScreen {
         //		debugRenderer.render(world, gameworldStage.getCamera().combined);
 
         //make player always on top
+        enemy.toFront();
         player.toFront();
         grass.toFront();
 
@@ -256,6 +271,13 @@ public class GameScreen extends BasicScreen {
 
             endGame = false;
             gameFinished = true;
+
+            if (moveRecorder != null) {
+                List<MoveRecord> records = moveRecorder.getRecords();
+                Preferences preferences = Gdx.app.getPreferences("moveRecording");
+                preferences.putString("recording", gson.toJson(records));
+                preferences.flush();
+            }
         } else if (!gameFinished) {
             score = (int) (player.getBody().getPosition().x / 10);
             scoreLabel.setText("score: " + String.valueOf(score));

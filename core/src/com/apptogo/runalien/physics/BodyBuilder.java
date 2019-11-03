@@ -165,6 +165,11 @@ public class BodyBuilder {
 		fixtureDefs.peek().filter.maskBits = maskBits;
 		return this;
 	}
+
+	public BodyBuilder groupIndex(int groupIndex) {
+		fixtureDefs.peek().filter.groupIndex = (short) groupIndex;
+		return this;
+	}
 		
 	public Body create()
 	{

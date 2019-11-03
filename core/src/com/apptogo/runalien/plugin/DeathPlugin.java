@@ -14,9 +14,11 @@ public class DeathPlugin extends AbstractPlugin {
 	
 	private SoundPlugin soundHandler;
 	private AchievementPlugin achievementPlugin;
+	private boolean shouldFinishGame;
 
-	public DeathPlugin() {
+	public DeathPlugin(boolean shouldFinishGame) {
 		super();
+		this.shouldFinishGame = shouldFinishGame;
 		dead = false;
 	}
 	
@@ -64,8 +66,10 @@ public class DeathPlugin extends AbstractPlugin {
 					actor.changeAnimation("diebottom");
 				
 				handleAchievements();
-				
-				Main.getInstance().getGameScreen().setEndGame(true);
+
+				if(shouldFinishGame) {
+					Main.getInstance().getGameScreen().setEndGame(true);
+				}
 				
 				break;
 			}
