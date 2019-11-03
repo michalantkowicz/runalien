@@ -1,5 +1,6 @@
 package com.apptogo.runalien.screen;
 
+import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.scene2d.Image;
@@ -12,8 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
-public class SplashScreen implements Screen
-{
+public class SplashScreen implements Screen {
     private Main game;
 
     private Stage stage;
@@ -21,16 +21,18 @@ public class SplashScreen implements Screen
 
     Image logo;
 
-    private enum SplashPhase
-    {
+    private enum SplashPhase {
         LOADING,
         END
     }
 
     private SplashPhase currentPhase;
 
-    public SplashScreen(Main game) {
+    private GameEventService eventService;
+
+    public SplashScreen(Main game, GameEventService eventService) {
         this.game = game;
+        this.eventService = eventService;
     }
 
     @Override
@@ -54,25 +56,22 @@ public class SplashScreen implements Screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        switch (currentPhase)
-        {
-        case LOADING:
-            if (ResourcesManager.getInstance().manager.update() && logo.getActions().size == 0)
-            {
-                ResourcesManager.getInstance().loadSkin();
+        switch (currentPhase) {
+            case LOADING:
+                if (ResourcesManager.getInstance().manager.update() && logo.getActions().size == 0) {
+                    ResourcesManager.getInstance().loadSkin();
 
-                logo.addAction(Actions.sequence(Actions.alpha(1, 0), Actions.alpha(0, 0.2f)));
+                    logo.addAction(Actions.sequence(Actions.alpha(1, 0), Actions.alpha(0, 0.2f)));
 
-                currentPhase = SplashPhase.END;
-            }
-            break;
+                    currentPhase = SplashPhase.END;
+                }
+                break;
 
-        case END:
-            if (logo.getActions().size == 0)
-            {
-                game.setScreen(new MenuScreen(game));
-            }
-            break;
+            case END:
+                if (logo.getActions().size == 0) {
+                    game.setScreen(new MenuScreen(game, eventService));
+                }
+                break;
         }
 
         stage.act();
