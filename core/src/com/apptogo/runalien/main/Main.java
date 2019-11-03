@@ -1,5 +1,6 @@
 package com.apptogo.runalien.main;
 
+import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
@@ -24,6 +25,8 @@ public class Main extends Game {
     public static GameCallback gameCallback;
 
     private Screen screenToSet;
+
+    private GameEventService eventService = new GameEventService();
 
     public static Main getInstance() {
         return (Main) Gdx.app.getApplicationListener();
@@ -70,11 +73,11 @@ public class Main extends Game {
         ResourcesManager.getInstance().loadResources();
         ResourcesManager.getInstance().manager.finishLoading();
         ResourcesManager.getInstance().loadSkin();
-        this.setScreen(new GameScreen(this));
+        this.setScreen(new GameScreen(this, eventService));
     }
 
     private void setSplashScreen() {
-        this.setScreen(new SplashScreen(this));
+        this.setScreen(new SplashScreen(this, eventService));
     }
 
     @Override

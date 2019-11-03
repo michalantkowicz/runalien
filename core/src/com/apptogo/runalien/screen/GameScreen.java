@@ -1,8 +1,10 @@
 package com.apptogo.runalien.screen;
 
+import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.game.ParticleEffectActor;
+import com.apptogo.runalien.game.Player;
 import com.apptogo.runalien.level.LevelGenerator;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.manager.CustomAction;
@@ -10,18 +12,19 @@ import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.physics.BodyBuilder;
 import com.apptogo.runalien.physics.ContactListener;
-import com.apptogo.runalien.plugin.*;
-import com.apptogo.runalien.scene2d.*;
+import com.apptogo.runalien.plugin.SoundPlugin;
+import com.apptogo.runalien.scene2d.Button;
+import com.apptogo.runalien.scene2d.Image;
+import com.apptogo.runalien.scene2d.Label;
+import com.apptogo.runalien.scene2d.Listener;
 import com.apptogo.runalien.tools.UnitConverter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -56,8 +59,8 @@ public class GameScreen extends BasicScreen {
 
     protected boolean endGame = false, gameFinished = false;
 
-    public GameScreen(Main game) {
-        super(game);
+    public GameScreen(Main game, GameEventService eventService) {
+        super(game, eventService);
         //TODO steps not disposed after going to menu
         //TODO check the daytime changing
     }
@@ -110,25 +113,7 @@ public class GameScreen extends BasicScreen {
         }
 
         //create player
-        player = new GameActor("player");
-        player.setAvailableAnimations("diebottom", "dietop", "jump", "land", "slide", "standup", "startrunning");
-        player.addAvailableAnimation(Animation.get(0.03f, "run", PlayMode.LOOP));
-        player.addAvailableAnimation(Animation.get(0.04f, "idle", PlayMode.LOOP));
-        player.queueAnimation("idle");
-
-        player.setBody(BodyBuilder.get().type(BodyType.DynamicBody).position(0, Main.GROUND_LEVEL).fixedRotation(true).addFixture("player").box(0.6f, 1.9f).friction(0.5f)
-                .addFixture("player", "sliding").box(1.9f, 0.6f, -0.65f, -0.65f).sensor(true).ignore(true).friction(0.5f).create());
-
-        player.modifyCustomOffsets(-0.4f, 0f);
-        gameworldStage.addActor(player);
-
-        player.addPlugin(new AchievementPlugin());
-        player.addPlugin(new SoundPlugin("runscream", "slide", "chargeDown", "land", "jump", "doubleJump", "bell", "die", "explosion", "ballHit", "weaselHit"));
-        player.addPlugin(new CameraFollowingPlugin());
-        player.addPlugin(new DeathPlugin());
-        player.addPlugin(new RunningPlugin());
-        player.addPlugin(new TouchSteeringPlugin());
-        player.addPlugin(new KeyboardSteeringPlugin());
+        this.player = new Player(gameworldStage, eventService);
 
         //workaround for screen blink after loading gameScreen on Android
         //setting camera position immediately
@@ -146,7 +131,7 @@ public class GameScreen extends BasicScreen {
         grass = ParallaxActor.get(gameworldStage.getCamera(), "grass").moveToY(Main.GROUND_LEVEL - 0.01f);
         gameworldStage.addActor(grass);
 
-        tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game)));
+        tutorialButton = Button.get("tutorial").position(-600, -350).setListener(Listener.click(game, new TutorialScreen(game, eventService)));
         //To not start running when clicking tutorialButton
 //		tutorialButton.setListener(new ClickListener() {
 //			@Override
@@ -356,7 +341,7 @@ public class GameScreen extends BasicScreen {
     }
 
     protected void createStage() {
-        stage.addActor(Button.get("menu").position(0, Main.SCREEN_HEIGHT / 2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game))));
+        stage.addActor(Button.get("menu").position(0, Main.SCREEN_HEIGHT / 2f + 540).centerX().setListener(Listener.click(game, new MenuScreen(game, eventService))));
 
         submitButton = Button.get("submit").position(0, Main.SCREEN_HEIGHT / 2f + 390).centerX().setListener(new ClickListener() {
             @Override

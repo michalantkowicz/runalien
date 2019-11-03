@@ -1,10 +1,15 @@
 package com.apptogo.runalien.plugin;
 
+import com.apptogo.runalien.event.GameEventService;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class KeyboardSteeringPlugin extends SteeringPlugin {
-	@Override
+    public KeyboardSteeringPlugin(GameEventService eventService) {
+        super(eventService);
+    }
+
+    @Override
 	public void run() {
 		super.run();
 				

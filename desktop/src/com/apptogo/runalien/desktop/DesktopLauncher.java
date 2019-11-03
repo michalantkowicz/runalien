@@ -6,6 +6,7 @@ import com.apptogo.runalien.screen.GameScreen;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Logger;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class DesktopLauncher {
 
@@ -40,7 +41,8 @@ public class DesktopLauncher {
 		@Override
 		public void showFullscreenAd() {
 			logger.debug("showFullscreenAd() is available only in Android");
-			Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
+			throw new NotImplementedException();
+//			Main.getInstance().setScreen(new GameScreen(Main.getInstance()));
 		}
 
 		@Override

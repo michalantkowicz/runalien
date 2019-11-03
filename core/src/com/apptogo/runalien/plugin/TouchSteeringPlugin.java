@@ -1,11 +1,16 @@
 package com.apptogo.runalien.plugin;
 
+import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.main.Main;
 import com.badlogic.gdx.Gdx;
 
 public class TouchSteeringPlugin extends SteeringPlugin {
 	private float CENTER = Gdx.app.getGraphics().getWidth()/2f;
-	
+
+	public TouchSteeringPlugin(GameEventService eventService) {
+		super(eventService);
+	}
+
 	@Override
 	public void run() {
 		super.run();
