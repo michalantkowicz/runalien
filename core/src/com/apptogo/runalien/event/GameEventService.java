@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import static com.apptogo.runalien.event.GameEvent.DEFAULT_TOPIC;
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 public class GameEventService {
     private Map<Class<? extends GameEvent>, Map<String, List<GameEvent>>> queue = new HashMap<>();
@@ -31,7 +30,7 @@ public class GameEventService {
     @SuppressWarnings("unchecked")
     public <T extends GameEvent> Optional<T> getEvent(Class<T> type, String topic) {
         if (queue.containsKey(type) && queue.get(type).containsKey(topic)) {
-            return of((T) queue.get(type).get(topic));
+            return (Optional<T>) queue.get(type).get(topic).stream().findFirst();
         } else {
             return empty();
         }

@@ -1,6 +1,8 @@
 package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.event.GameEventService;
+import com.apptogo.runalien.feature.Feature;
+import com.apptogo.runalien.feature.KeyboardSteeringFeature;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.game.ParticleEffectActor;
@@ -36,7 +38,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameScreen extends BasicScreen {
+
+    private List<Feature> features = new ArrayList<>();
+
     protected Box2DDebugRenderer debugRenderer;
     protected World world;
     protected Stage middleBackgroundStage;
@@ -113,7 +121,9 @@ public class GameScreen extends BasicScreen {
         }
 
         //create player
-        this.player = new Player(gameworldStage, eventService);
+        this.player = new Player(gameworldStage, eventService, "alien");
+
+        features.add(new KeyboardSteeringFeature(eventService, (Player) player));
 
         //workaround for screen blink after loading gameScreen on Android
         //setting camera position immediately
@@ -169,6 +179,11 @@ public class GameScreen extends BasicScreen {
 
     @Override
     protected void step(float delta) {
+
+        for (Feature feature : features) {
+            feature.run(delta);
+        }
+
         //simulate physics and handle body contacts
         ContactListener.SNAPSHOT.clear();
         world.step(delta, 3, 3);
