@@ -1,7 +1,6 @@
 package com.apptogo.runalien.main;
 
 import com.apptogo.runalien.event.GameEventService;
-import com.apptogo.runalien.interfaces.GameCallback;
 import com.apptogo.runalien.manager.CustomActionManager;
 import com.apptogo.runalien.manager.ResourcesManager;
 import com.apptogo.runalien.screen.BasicScreen;
@@ -22,19 +21,12 @@ public class Main extends Game {
     public static final short GROUND_BITS = 2;
     public static final short PLAYER_BITS = 4;
 
-    public static GameCallback gameCallback;
-
     private Screen screenToSet;
 
     private GameEventService eventService = new GameEventService();
 
     public static Main getInstance() {
         return (Main) Gdx.app.getApplicationListener();
-    }
-
-    public Main(GameCallback gameCallback) {
-        super();
-        Main.gameCallback = gameCallback;
     }
 
     public GameScreen getGameScreen() {
@@ -82,7 +74,7 @@ public class Main extends Game {
 
     @Override
     public void render() {
-        if (screen != null) screen.render(1f/60f);
+        if (screen != null) screen.render(1f / 60f);
     }
 
     @Override

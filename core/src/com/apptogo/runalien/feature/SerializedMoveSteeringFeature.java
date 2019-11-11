@@ -41,7 +41,7 @@ public class SerializedMoveSteeringFeature implements Feature {
 
     @Override
     public void run(float delta) {
-        if (currentMove != null && player.getX() >= currentMove.getPosition().x) {
+        if (currentMove != null && player.getBody().getPosition().x >= currentMove.getPosition().x) {
             if (currentMove.getType() == 1)
                 eventService.pushEvent(new JumpMovementEvent(getPlayerPosition(), player.getName()));
             if (currentMove.getType() == 2) {

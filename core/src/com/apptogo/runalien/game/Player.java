@@ -3,7 +3,6 @@ package com.apptogo.runalien.game;
 import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.BodyBuilder;
-import com.apptogo.runalien.plugin.AchievementPlugin;
 import com.apptogo.runalien.plugin.CameraFollowingPlugin;
 import com.apptogo.runalien.plugin.DeathPlugin;
 import com.apptogo.runalien.plugin.KeyboardSteeringPlugin;
@@ -29,7 +28,6 @@ public class Player extends GameActor {
 
         gameworldStage.addActor(this);
 
-        addPlugin(new AchievementPlugin());
         addPlugin(new SoundPlugin("runscream", "slide", "chargeDown", "land", "jump", "doubleJump", "bell", "die", "explosion", "ballHit", "weaselHit"));
         addPlugin(new CameraFollowingPlugin());
         addPlugin(new DeathPlugin(true));
