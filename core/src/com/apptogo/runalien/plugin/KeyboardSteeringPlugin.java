@@ -24,11 +24,11 @@ public class KeyboardSteeringPlugin extends SteeringPlugin {
 
         if (running.isStarted()) {
             if (eventService.getEvent(JumpMovementEvent.class, name).isPresent()/*Gdx.input.isKeyJustPressed(Keys.L)*/) {
-                System.out.println("JUMP " + actor.getX() + " " + actor.getY());
+                System.out.println("JUMP " + actor.getBody().getPosition().x + " " + actor.getBody().getPosition().y);
                 jump();
             }
             if (eventService.getEvent(SlideMovementEvent.class, name).isPresent()/*Gdx.input.isKeyJustPressed(Keys.A)*/) {
-                System.out.println("SLIDE " + actor.getX() + " " + actor.getY());
+                System.out.println("SLIDE " + actor.getBody().getPosition().x + " " + actor.getBody().getPosition().y);
                 chargeDown();
             }
         }

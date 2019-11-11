@@ -2,11 +2,9 @@ package com.apptogo.runalien.screen;
 
 import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.feature.Feature;
-import com.apptogo.runalien.feature.KeyboardSteeringFeature;
 import com.apptogo.runalien.feature.MoveRecord;
 import com.apptogo.runalien.feature.PlayerMoveRecorderFeature;
 import com.apptogo.runalien.feature.SerializedMoveSteeringFeature;
-import com.apptogo.runalien.game.Enemy;
 import com.apptogo.runalien.game.GameActor;
 import com.apptogo.runalien.game.ParallaxActor;
 import com.apptogo.runalien.game.ParticleEffectActor;
@@ -75,7 +73,7 @@ public class GameScreen extends BasicScreen {
 
     protected boolean endGame = false, gameFinished = false;
     private PlayerMoveRecorderFeature moveRecorder;
-    private Enemy enemy;
+//    private Enemy enemy;
 
     public GameScreen(Main game, GameEventService eventService) {
         super(game, eventService);
@@ -131,13 +129,14 @@ public class GameScreen extends BasicScreen {
         }
 
         //create player
-        this.player = new Player(gameworldStage, eventService, "alien");
-        this.enemy = new Enemy(gameworldStage, eventService, "enemy");
+//        this.enemy = new Enemy(gameworldStage, eventService, "enemy");
 
-        moveRecorder = new PlayerMoveRecorderFeature(eventService, player.getName());
-        features.add(new SerializedMoveSteeringFeature(eventService, enemy));
-        features.add(new KeyboardSteeringFeature(eventService, player));
-        features.add(moveRecorder);
+        this.player = new Player(gameworldStage, eventService, "alien");
+
+//        moveRecorder = new PlayerMoveRecorderFeature(eventService, player.getName());
+        features.add(new SerializedMoveSteeringFeature(eventService, player));
+//        features.add(new KeyboardSteeringFeature(eventService, player));
+//        features.add(moveRecorder);
 
         //workaround for screen blink after loading gameScreen on Android
         //setting camera position immediately
@@ -227,13 +226,11 @@ public class GameScreen extends BasicScreen {
         //		debugRenderer.render(world, gameworldStage.getCamera().combined);
 
         //make player always on top
-        enemy.toFront();
+//        enemy.toFront();
         player.toFront();
         grass.toFront();
 
         if (endGame) {
-            Main.gameCallback.setBannerVisible(true);
-
             //TODO Once I had PluginException here caused by ball hit - WHY?
             player.removePlugin("CameraFollowingPlugin");
 
@@ -297,7 +294,6 @@ public class GameScreen extends BasicScreen {
         debugRenderer.dispose();
         world.dispose();
         gameworldStage.dispose();
-        Main.gameCallback.setBannerVisible(false);
         player.getPlugin(SoundPlugin.class).stopAllSounds();
     }
 
@@ -383,7 +379,7 @@ public class GameScreen extends BasicScreen {
         submitButton = Button.get("submit").position(0, Main.SCREEN_HEIGHT / 2f + 390).centerX().setListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.gameCallback.submitScore(score);
+                //DO NOTHING
             }
         });
 
@@ -392,7 +388,7 @@ public class GameScreen extends BasicScreen {
         stage.addActor(Button.get("replay").position(0, Main.SCREEN_HEIGHT / 2f + 240).centerX().setListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.gameCallback.showFullscreenAd();
+                // DO NOTHING
             }
         }));
 

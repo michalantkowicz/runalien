@@ -33,20 +33,20 @@ public class MenuScreen extends BasicScreen {
         ClickListener showAchievementsListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.gameCallback.showAchievements();
+                // DO NOTHING
             }
         };
         ClickListener showLeaderboardListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.gameCallback.showLeaderboard();
+                // DO NOTHING
             }
         };
 
         ClickListener shareOnGooglePlusListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.gameCallback.shareOnGooglePlus();
+                // DO NOTHING
             }
         };
 
@@ -70,7 +70,7 @@ public class MenuScreen extends BasicScreen {
                         vibrationOn.setVisible(true);
                         vibrationOff.setVisible(false);
 
-                        Main.gameCallback.vibrate();
+                        // DO VIBRATE
                     }
                 });
 

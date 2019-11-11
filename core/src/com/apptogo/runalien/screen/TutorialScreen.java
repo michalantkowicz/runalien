@@ -3,7 +3,6 @@ package com.apptogo.runalien.screen;
 import com.apptogo.runalien.event.GameEventService;
 import com.apptogo.runalien.main.Main;
 import com.apptogo.runalien.physics.ContactListener;
-import com.apptogo.runalien.plugin.AchievementPlugin;
 import com.apptogo.runalien.plugin.RunningPlugin;
 import com.apptogo.runalien.plugin.SteeringPlugin;
 import com.apptogo.runalien.scene2d.Image;
@@ -251,7 +250,6 @@ public class TutorialScreen extends GameScreen {
                 break;
             case END:
                 if (currentGroup.getActions().size == 0) {
-                    player.getPlugin(AchievementPlugin.class).fire(AchievementPlugin.EDUCATED);
                     game.setScreen(new GameScreen(game, eventService));
                     currentPhase = TutorialPhase.NONE;
                 }

@@ -18,7 +18,6 @@ public abstract class SteeringPlugin extends AbstractPlugin {
     protected RunningPlugin running;
     protected DeathPlugin deathPlugin;
     private SoundPlugin soundHandler;
-    private AchievementPlugin achievementPlugin;
 
     protected Fixture defaultFixture, slidingFixture;
 
@@ -50,8 +49,6 @@ public abstract class SteeringPlugin extends AbstractPlugin {
 
             soundHandler.stopSound("runscream");
             soundHandler.playSound("jump");
-
-            achievementPlugin.handleJump();
         } else {
             doubleJump();
         }
@@ -88,8 +85,6 @@ public abstract class SteeringPlugin extends AbstractPlugin {
             actor.changeAnimation("slide");
             soundHandler.stopSound("runscream");
             soundHandler.playSound("slide");
-
-            achievementPlugin.fire(AchievementPlugin.SLIDER);
         }
 
         sliding = true;
@@ -156,7 +151,6 @@ public abstract class SteeringPlugin extends AbstractPlugin {
         soundHandler = actor.getPlugin(SoundPlugin.class);
         running = actor.getPlugin(RunningPlugin.class);
         deathPlugin = actor.getPlugin(DeathPlugin.class);
-        achievementPlugin = actor.getPlugin(AchievementPlugin.class);
 
         //Default fixture check
         for (Fixture fixture : body.getFixtureList())
